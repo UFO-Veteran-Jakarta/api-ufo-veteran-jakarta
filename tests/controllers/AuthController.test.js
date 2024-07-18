@@ -74,4 +74,57 @@ describe("Auth Controller", () => {
       expect(res.body.message).toBe("Successfully registered new user!");
     });
   });
+
+  describe("POST /api/v1/login", () => {
+    it("should be rejected if method http is not POST", async () => {
+      const data = {
+        username: "admin",
+        password: "Ad@123",
+      };
+      const res = await request(app).put("/api/v1/login").send(data);
+
+      expect(res.statusCode).toEqual(405);
+      expect(res.body.status).toEqual(405);
+      expect(res.body.message).toBe("Wrong method");
+    });
+    it("should be rejected if username / password not string", async () => {
+      const data = {
+        username: 123213,
+        password: "Ad@123",
+      };
+      const res = await request(app).post("/api/v1/login").send(data);
+
+      expect(res.statusCode).toEqual(500);
+      expect(res.body.status).toEqual(500);
+      expect(res.body.message).toBe(
+        "The username and password must be strings"
+      );
+    });
+    it("should be rejected if login fails or username/password wrong", async () => {
+      const data = {
+        username: "admin",
+        password: "admin12345",
+      };
+      const res = await request(app).post("/api/v1/login").send(data);
+
+      expect(res.statusCode).toEqual(500);
+      expect(res.body.status).toEqual(500);
+      expect(res.body.message).toBe("Failed to login!");
+    });
+    it("should be able to login", async () => {
+      const data = {
+        username: "admin",
+        password: "Admin@12345678",
+      };
+      const res = await request(app).post("/api/v1/login").send(data);
+
+      expect(res.statusCode).toEqual(200);
+      expect(res.body.message).toBe("Successfully logged in!");
+      expect(res.body.status).toEqual(200);
+      expect(res.body.data.id).toBeDefined();
+      expect(res.body.data.username).toBeDefined();
+      expect(res.body.authorization.token).toBeDefined();
+      expect(res.body.authorization.type).toBeDefined();
+    });
+  });
 });
