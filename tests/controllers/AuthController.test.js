@@ -6,6 +6,7 @@ const {
   createUser,
 } = require("../../src/models/userModel");
 const app = require("../../src/app");
+const jwt = require("jsonwebtoken");
 
 describe("Auth Controller", () => {
   describe("POST /api/v1/register", () => {
@@ -148,6 +149,7 @@ describe("Auth Controller", () => {
         .send({ username: "admin", password: "Admin@12345678" });
       const res = await request(app).post("/api/v1/login").send(data);
       await deleteUserByUsername("admin");
+
       expect(res.statusCode).toEqual(200);
       expect(res.body.message).toBe("Successfully logged in!");
       expect(res.body.status).toEqual(200);
