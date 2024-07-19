@@ -75,8 +75,8 @@ describe("Auth Controller", () => {
         password: "Admin@12345",
       };
       const res = await request(app).post("/api/v1/register").send(data);
-      console.log("WEIOW", await getUserByUsername("adam"));
-      console.log("AAA", res.body);
+      const result = await getUserByUsername("adam");
+      expect(result?.[0]?.username).toBe("adam");
       expect(res.statusCode).toEqual(200);
       expect(res.body.status).toEqual(200);
       expect(res.body.message).toBe("Successfully registered new user!");
