@@ -6,7 +6,7 @@ const {
   createUser,
 } = require("../../src/models/userModel");
 const app = require("../../src/app");
-const jwt = require("jsonwebtoken");
+const cookie = require("cookie");
 
 describe("Auth Controller", () => {
   describe("POST /api/v1/register", () => {
@@ -157,6 +157,53 @@ describe("Auth Controller", () => {
       expect(res.body.data.username).toBeDefined();
       expect(res.body.authorization.token).toBeDefined();
       expect(res.body.authorization.type).toBeDefined();
+    });
+    it("should be exist cookie token", async () => {
+      const data = {
+        username: "admin",
+        password: "Admin@12345678",
+      };
+      await request(app)
+        .post("/api/v1/register")
+        .send({ username: "admin", password: "Admin@12345678" });
+      const res = await request(app).post("/api/v1/login").send(data);
+      await deleteUserByUsername("admin");
+      expect(cookie.parse(res.headers["set-cookie"][0]).token).toBeDefined();
+      expect(res.statusCode).toEqual(200);
+      expect(res.body.message).toBe("Successfully logged in!");
+      expect(res.body.status).toEqual(200);
+      expect(res.body.data.id).toBeDefined();
+      expect(res.body.data.username).toBeDefined();
+      expect(res.body.authorization.token).toBeDefined();
+      expect(res.body.authorization.type).toBeDefined();
+    });
+  });
+
+  describe("DELETE /api/v1/logout", () => {
+    it("should be rejected if token invalid", async () => {
+      const res = await request(app)
+        .delete("/api/v1/logout")
+        .set("Authorization", `bearer 3242432343`);
+
+      expect(res.body.status).toEqual(401);
+      expect(res.body.message).toBeDefined();
+    });
+    it("should be able to logout", async () => {
+      await deleteUserByUsername("admin");
+      const data = {
+        username: "admin",
+        password: "Admin@12345",
+      };
+      await request(app).post("/api/v1/register").send(data);
+      const login = await request(app).post("/api/v1/login").send(data);
+
+      const res = await request(app)
+        .delete("/api/v1/logout")
+        .set("Cookie", `token=${login.body.authorization.token}`)
+        .set("Authorization", `bearer ${login.body.authorization.token}`);
+      expect(res.statusCode).toEqual(200);
+      expect(res.body.message).toBe("Success Logout!");
+      expect(cookie.parse(res.headers["set-cookie"][0]).token).toBe("");
     });
   });
 });

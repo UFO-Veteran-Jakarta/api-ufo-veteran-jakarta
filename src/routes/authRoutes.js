@@ -1,11 +1,16 @@
 const express = require("express");
 const authController = require("../controllers/AuthController");
+const { expressjwt } = require("express-jwt");
 const {
   registerValidationRules,
   validate,
   loginValidationRules,
 } = require("../validators/authValidator");
-const { checkMethod } = require("../middlewares/authMiddleware");
+const {
+  checkMethod,
+  authentication,
+} = require("../middlewares/authMiddleware");
+
 const router = express.Router();
 
 router.use(
@@ -23,5 +28,21 @@ router.use(
   validate,
   authController.login
 );
+
+router.use(
+  "/logout",
+  checkMethod(["DELETE"]),
+  authentication(),
+
+  authController.logout
+);
+
+router.use(function (err, req, res, next) {
+  if (err.name === "UnauthorizedError") {
+    res.status(401).send("Unauthorized");
+  } else {
+    next(err);
+  }
+});
 
 module.exports = router;

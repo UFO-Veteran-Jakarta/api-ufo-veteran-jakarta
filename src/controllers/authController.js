@@ -1,6 +1,6 @@
 const authService = require("../services/authService");
 const { sendResponse } = require("../helpers/response");
-const { sign } = require("../utils/jwtSign");
+const { sign } = require("../utils/jwt");
 
 exports.register = async (req, res) => {
   try {
@@ -19,12 +19,14 @@ exports.register = async (req, res) => {
 };
 
 exports.login = async (req, res) => {
+  console.log(req.auth);
   try {
     const user = await authService.login(req.body);
     if (!user) {
       return sendResponse(res, 500, "Failed to login!");
     }
     const token = sign(user);
+    res.cookie("token", token, { maxAge: 3 * 60 * 60 * 1000, httpOnly: true });
     return sendResponse(
       res,
       200,
@@ -38,4 +40,12 @@ exports.login = async (req, res) => {
   } catch (err) {
     return sendResponse(res, 500, err.message);
   }
+};
+
+exports.logout = async (req, res) => {
+  if (!req?.cookies?.token) {
+    return sendResponse(res, 401, "Unauthorized");
+  }
+  res.clearCookie("token");
+  return sendResponse(res, 200, "Success Logout!");
 };
