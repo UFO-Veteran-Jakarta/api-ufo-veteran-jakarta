@@ -31,20 +31,22 @@ const registerValidationRules = () => {
   ];
 };
 
-// const loginValidationRules = () => {
-//   return [
-//     check("username")
-//       .isString()
-//       .not()
-//       .isEmpty()
-//       .withMessage("Username is required"),
-//     check("password")
-//       .isString()
-//       .not()
-//       .isEmpty()
-//       .withMessage("Password is required"),
-//   ];
-// };
+const loginValidationRules = () => {
+  return [
+    check("username")
+      .isString()
+      .withMessage("The username and password must be strings")
+      .not()
+      .isEmpty()
+      .withMessage("Username is required"),
+    check("password")
+      .isString()
+      .withMessage("The username and password must be strings")
+      .not()
+      .isEmpty()
+      .withMessage("Password is required"),
+  ];
+};
 
 const validate = (req, res, next) => {
   const errors = validationResult(req);
@@ -56,6 +58,6 @@ const validate = (req, res, next) => {
 
 module.exports = {
   registerValidationRules,
-  //   loginValidationRules,
+  loginValidationRules,
   validate,
 };

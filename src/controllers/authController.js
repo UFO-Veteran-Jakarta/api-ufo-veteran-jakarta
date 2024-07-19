@@ -1,25 +1,41 @@
 const authService = require("../services/authService");
+const { sendResponse } = require("../helpers/response");
+const { sign } = require("../utils/jwtSign");
 
 exports.register = async (req, res) => {
   try {
-    console.log("WWWWW", req.body);
     const data = await authService.getUserByUsername(req.body.username);
-    console.log("WEOFJWEOFJ", data);
+
     if (data.length > 0) {
-      return res
-        .status(500)
-        .json({ status: 500, message: "Username already taken" });
+      return sendResponse(res, 500, "Username already taken");
     }
 
-    const createUser = await authService.createUser(req.body);
-    console.log(createUser);
-    const response = {
-      message: "Successfully registered new user!",
-      status: 200,
-    };
+    await authService.createUser(req.body);
 
-    return res.status(200).json(response);
+    return sendResponse(res, 200, "Successfully registered new user!");
   } catch (error) {
-    res.status(500).json({ status: 500, message: error.message });
+    return sendResponse(res, 500, error.message);
+  }
+};
+
+exports.login = async (req, res) => {
+  try {
+    const user = await authService.login(req.body);
+    if (!user) {
+      return sendResponse(res, 500, "Failed to login!");
+    }
+    const token = sign(user);
+    return sendResponse(
+      res,
+      200,
+      "Successfully logged in!",
+      {
+        id: user.id,
+        username: user.username,
+      },
+      { token, type: "bearer" }
+    );
+  } catch (err) {
+    return sendResponse(res, 500, err.message);
   }
 };
