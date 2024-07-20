@@ -183,7 +183,7 @@ describe("Auth Controller", () => {
     it("should be rejected if token invalid", async () => {
       const res = await request(app)
         .delete("/api/v1/logout")
-        .set("Authorization", `bearer 3242432343`);
+        .set("Authorization", `Bearer 3242432343`);
 
       expect(res.body.status).toEqual(401);
       expect(res.body.message).toBeDefined();
@@ -200,7 +200,7 @@ describe("Auth Controller", () => {
       const res = await request(app)
         .delete("/api/v1/logout")
         .set("Cookie", `token=${login.body.authorization.token}`)
-        .set("Authorization", `bearer ${login.body.authorization.token}`);
+        .set("Authorization", `Bearer ${login.body.authorization.token}`);
       expect(res.statusCode).toEqual(200);
       expect(res.body.message).toBe("Success Logout!");
       expect(cookie.parse(res.headers["set-cookie"][0]).token).toBe("");
