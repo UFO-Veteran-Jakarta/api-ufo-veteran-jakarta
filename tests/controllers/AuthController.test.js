@@ -1,10 +1,10 @@
 const request = require("supertest");
 
-const {
-  getUserByUsername,
-  deleteUserByUsername,
-  createUser,
-} = require("models/userModel");
+// const {
+//   getUserByUsername,
+//   deleteUserByUsername,
+//   createUser,
+// } = require("models/userModel");
 const app = require("app");
 const cookie = require("cookie");
 
