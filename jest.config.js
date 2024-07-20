@@ -1,12 +1,7 @@
 module.exports = {
   testEnvironment: "node",
-  setupFilesAfterEnv: ["../tests/setup/setupTestEnvironment.js"],
-  moduleDirectories: ["node_modules", "src"],
-  rootDir: "src",
+  setupFilesAfterEnv: ["./tests/setup/setupTestEnvironment.js"],
   moduleNameMapper: {
-    "^src/(.*)": "<rootDir>/$1",
+    "^@/(.*)$": "<rootDir>/src/$1",
   },
-  // moduleNameMapper: {
-  //   "^@/(.*)$": "<rootDir>/src/$1",
-  // },
 };
