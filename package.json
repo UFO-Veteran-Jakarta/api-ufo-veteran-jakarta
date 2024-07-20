@@ -1,7 +1,7 @@
 {
   "scripts": {
     "start": "nodemon src/server.js",
-    "test": "jest --detectOpenHandles",
+    "test": "jest --detectOpenHandles --runInBand",
     "dev": "nodemon --exec babel-node src/server.js"
   },
   "dependencies": {
