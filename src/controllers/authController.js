@@ -1,7 +1,7 @@
-const authService = require("../services/authService");
-const { sendResponse } = require("../helpers/response");
-const { sign } = require("../utils/jwt");
-const logger = require("../utils/logger");
+const authService = require("services/authService");
+const { sendResponse } = require("helpers/response");
+const { sign } = require("utils/jwt");
+const logger = require("utils/logger");
 
 exports.register = async (req, res) => {
   try {

@@ -1,5 +1,5 @@
-const { sendResponse } = require("../helpers/response");
-const { verify } = require("../utils/jwt");
+const { sendResponse } = require("helpers/response");
+const { verify } = require("utils/jwt");
 
 exports.checkMethod = (allowedMethods) => {
   return (req, res, next) => {
