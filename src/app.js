@@ -1,10 +1,10 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const routes = require("routes");
+const routes = require("./routes");
 const cookieParser = require("cookie-parser");
-const migrate = require("migration/users");
-const limiter = require("utils/limiter");
+const migrate = require("./migration/users");
+const limiter = require("./utils/limiter");
 
 const app = express();
 // (async () => {

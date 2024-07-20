@@ -1,4 +1,4 @@
-const pool = require("config/database");
+const pool = require("../config/database");
 
 exports.createUser = async () => {
   await pool.query(`INSERT INTO users (username, password, created_at, updated_at, deleted_at)

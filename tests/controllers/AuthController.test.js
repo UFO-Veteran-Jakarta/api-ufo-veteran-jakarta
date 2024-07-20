@@ -4,8 +4,8 @@ const {
   getUserByUsername,
   deleteUserByUsername,
   createUser,
-} = require("../../src/models/userModel");
-const app = require("../../src/app");
+} = require("models/userModel");
+const app = require("app");
 const cookie = require("cookie");
 
 describe("Auth Controller", () => {
