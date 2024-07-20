@@ -13,13 +13,15 @@ exports.checkMethod = (allowedMethods) => {
 exports.authentication = () => {
   return (req, res, next) => {
     try {
-      const token = req.headers.authorization.split(" ")[1];
+      const token = req.headers.authorization?.split(" ")[1];
+      const refreshToken = req?.cookies?.token;
 
-      if (!token) {
+      if (!(token && refreshToken)) {
         return sendResponse(res, 401, "Unauthorized");
       }
 
       verify(token);
+      verify(refreshToken);
     } catch (err) {
       return sendResponse(res, 401, err.message);
     }

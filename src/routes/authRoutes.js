@@ -1,6 +1,6 @@
 const express = require("express");
 const authController = require("../controllers/AuthController");
-const { expressjwt } = require("express-jwt");
+
 const {
   registerValidationRules,
   validate,

@@ -1,11 +1,14 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const routes = require("./routes/authRoutes");
+const routes = require("./routes");
 const cookieParser = require("cookie-parser");
+const migrate = require("./migration/users");
 
 const app = express();
-
+(async () => {
+  await migrate.createTable();
+})();
 app.use(cors());
 app.use(cookieParser());
 app.use(bodyParser.json());

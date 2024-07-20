@@ -19,14 +19,16 @@ exports.register = async (req, res) => {
 };
 
 exports.login = async (req, res) => {
-  console.log(req.auth);
   try {
     const user = await authService.login(req.body);
     if (!user) {
       return sendResponse(res, 500, "Failed to login!");
     }
     const token = sign(user);
-    res.cookie("token", token, { maxAge: 3 * 60 * 60 * 1000, httpOnly: true });
+    res.cookie("token", token, {
+      maxAge: 3 * 60 * 60 * 1000,
+      httpOnly: true,
+    });
     return sendResponse(
       res,
       200,
