@@ -1,4 +1,8 @@
 {
+  "moduleDirectories": [
+    "node_modules",
+    "src"
+  ],
   "scripts": {
     "start": "nodemon src/server.js",
     "test": "jest --detectOpenHandles",
