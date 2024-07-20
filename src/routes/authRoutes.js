@@ -1,5 +1,5 @@
 const express = require("express");
-const authController = require("src/controllers/authController");
+const authController = require("controllers/authController");
 
 const {
   registerValidationRules,
