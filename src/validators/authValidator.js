@@ -7,6 +7,7 @@ const registerValidationRules = () => {
       .trim()
       .not()
       .isEmpty()
+      .escape()
       .withMessage("Username is required")
       .matches(/^[a-zA-Z0-9]+$/)
       .withMessage("Username should not contain special characters")
@@ -15,6 +16,7 @@ const registerValidationRules = () => {
     check("password")
       .isString()
       .isLength({ min: 8, max: 64 })
+      .escape()
       .withMessage("Password must be between 8 and 64 characters")
       .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[\W]).*$/)
       .withMessage(
@@ -38,12 +40,14 @@ const loginValidationRules = () => {
       .withMessage("The username and password must be strings")
       .not()
       .isEmpty()
+      .escape()
       .withMessage("Username is required"),
     check("password")
       .isString()
       .withMessage("The username and password must be strings")
       .not()
       .isEmpty()
+      .escape()
       .withMessage("Password is required"),
   ];
 };
