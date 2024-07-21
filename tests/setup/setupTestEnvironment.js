@@ -1,12 +1,14 @@
 const pool = require("../../src/config/database");
+const migrate = require("../../src/migration/users");
 
 beforeAll(async () => {
-  await pool.query(
-    "CREATE TABLE IF NOT EXISTS example (id SERIAL PRIMARY KEY, data VARCHAR(100));"
-  );
+  await migrate.createTable();
+
+  //   const p = await pool.query("SELECT * FROM users");
+  //   console.log(p.rows);
 });
 
 afterAll(async () => {
-  await pool.query("DROP TABLE IF EXISTS example;");
+  await migrate.dropTable();
   await pool.end();
 });
