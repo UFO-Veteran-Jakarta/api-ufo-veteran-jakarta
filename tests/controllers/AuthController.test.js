@@ -9,6 +9,9 @@ const app = require("app");
 const cookie = require("cookie");
 
 describe("Auth Controller", () => {
+  beforeEach(async () => {
+    await deleteUserByUsername("admin");
+  });
   describe("POST /api/v1/register", () => {
     it("should be rejected if method http is not POST", async () => {
       const data = {
@@ -53,7 +56,7 @@ describe("Auth Controller", () => {
         password: "Admin@12345",
       };
       const res = await request(app).post("/api/v1/register").send(data);
-      deleteUserByUsername("admin");
+
       expect(res.statusCode).toEqual(500);
       expect(res.body.status).toEqual(500);
       expect(res.body.message).toBe("Username already taken");
@@ -70,14 +73,13 @@ describe("Auth Controller", () => {
     // //   expect(res.body.message).toBe("Failed to register new user!");
     // // });
     it("should be able to register", async () => {
-      await deleteUserByUsername("adam");
       const data = {
         username: "adam",
         password: "Admin@12345",
       };
       const res = await request(app).post("/api/v1/register").send(data);
       const result = await getUserByUsername("adam");
-      await deleteUserByUsername("adam");
+
       expect(result?.[0]?.username).toBe("adam");
       expect(res.statusCode).toEqual(200);
       expect(res.body.status).toEqual(200);
@@ -124,7 +126,6 @@ describe("Auth Controller", () => {
       );
     });
     it("should be rejected if login fails or username/password wrong", async () => {
-      await deleteUserByUsername("adam");
       const data = {
         username: "adam",
         password: "Admin@123",
@@ -148,7 +149,6 @@ describe("Auth Controller", () => {
         .post("/api/v1/register")
         .send({ username: "admin", password: "Admin@12345678" });
       const res = await request(app).post("/api/v1/login").send(data);
-      await deleteUserByUsername("admin");
 
       expect(res.statusCode).toEqual(200);
       expect(res.body.message).toBe("Successfully logged in!");
@@ -167,7 +167,7 @@ describe("Auth Controller", () => {
         .post("/api/v1/register")
         .send({ username: "admin", password: "Admin@12345678" });
       const res = await request(app).post("/api/v1/login").send(data);
-      await deleteUserByUsername("admin");
+
       expect(cookie.parse(res.headers["set-cookie"][0]).token).toBeDefined();
       expect(res.statusCode).toEqual(200);
       expect(res.body.message).toBe("Successfully logged in!");
@@ -189,7 +189,6 @@ describe("Auth Controller", () => {
       expect(res.body.message).toBeDefined();
     });
     it("should be able to logout", async () => {
-      await deleteUserByUsername("admin");
       const data = {
         username: "admin",
         password: "Admin@12345",

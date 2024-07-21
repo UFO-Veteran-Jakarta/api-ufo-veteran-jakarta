@@ -11,7 +11,7 @@ exports.register = async (req, res) => {
       logger.error("Register Error: Username already taken");
       return sendResponse(res, 500, "Username already taken");
     }
-
+    logger.info("Register Success: User Success Registered");
     await authService.createUser(req.body);
 
     return sendResponse(res, 200, "Successfully registered new user!");

@@ -21,7 +21,17 @@ exports.createTable = async () => {
         deleted_at TIMESTAMP
       )
     `);
+  await pool.query(`
+      CREATE TABLE IF NOT EXISTS myschema.contents (
+        id SERIAL PRIMARY KEY,
+        link VARCHAR(255) NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        deleted_at TIMESTAMP
+      )
+    `);
 };
 exports.dropTable = async () => {
   await pool.query(`DROP TABLE IF EXISTS myschema.users;`);
+  await pool.query(`DROP TABLE IF EXISTS myschema.contents;`);
 };

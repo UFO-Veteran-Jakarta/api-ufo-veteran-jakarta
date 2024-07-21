@@ -10,34 +10,69 @@ const cookie = require("cookie");
 const { deleteContentAll } = require("../../src/models/contentModel");
 
 describe("Content Controller", () => {
+  beforeEach(async () => {
+    await deleteUserByUsername("admin");
+    await deleteContentAll();
+  });
   describe("POST /api/v1/contents", () => {
-    it("should be rejected if user not authenticated", async () => {
-      const res = await request(app).post("/api/v1/contents");
-
-      expect(res.statusCode).toEqual(401);
-      expect(res.body.status).toEqual(401);
-      expect(res.body.message).toBeDefined();
-    });
     it("should be rejected if link field not https", async () => {
-      const res = await request(app)
-        .post("/api/v1/contents")
-        .send({ link: "http://dslafalsd.com" });
-
-      expect(res.statusCode).toEqual(500);
-      expect(res.body.status).toEqual(500);
-      expect(res.body.errors[0].msg).toBe(
-        "link must be a string and a link evidenced by https:// at the beginning"
-      );
-    });
-
-    it("should be able to add content", async () => {
-      await deleteUserByUsername("admin");
-      await deleteContentAll();
       const data = {
         username: "admin",
         password: "Admin@12345",
       };
       await request(app).post("/api/v1/register").send(data);
+
+      const login = await request(app).post("/api/v1/login").send(data);
+
+      const res = await request(app)
+        .post("/api/v1/contents")
+        .set("Cookie", `token=${login.body.authorization.token}`)
+        .set("Authorization", `Bearer ${login.body.authorization.token}`)
+        .send({ link: "http://blablabla.com" });
+
+      expect(res.statusCode).toEqual(500);
+      expect(res.body.status).toEqual(500);
+      expect(res.body.errors[0].msg).toBe(
+        "The link must be a string and a link evidenced by https:// at the beginning"
+      );
+    });
+    it("should be rejected if link field not valid url", async () => {
+      const data = {
+        username: "admin",
+        password: "Admin@12345",
+      };
+      await request(app).post("/api/v1/register").send(data);
+
+      const login = await request(app).post("/api/v1/login").send(data);
+
+      const res = await request(app)
+        .post("/api/v1/contents")
+        .set("Cookie", `token=${login.body.authorization.token}`)
+        .set("Authorization", `Bearer ${login.body.authorization.token}`)
+        .send({ link: "https://blablabl" });
+
+      expect(res.statusCode).toEqual(500);
+      expect(res.body.status).toEqual(500);
+      expect(res.body.errors[0].msg).toBe("The link must valid a url");
+    });
+
+    it("should be rejected if token not valid", async () => {
+      const res = await request(app)
+        .post("/api/v1/contents")
+        .set("Cookie", `token=asfsf`)
+        .set("Authorization", `Bearer asdfsadf`)
+        .send({ link: "https://blablabla.com" });
+
+      expect(res.statusCode).toEqual(401);
+      expect(res.body.status).toEqual(401);
+    });
+    it("should be able to add content", async () => {
+      const data = {
+        username: "admin",
+        password: "Admin@12345",
+      };
+      await request(app).post("/api/v1/register").send(data);
+
       const login = await request(app).post("/api/v1/login").send(data);
 
       const res = await request(app)
@@ -45,7 +80,7 @@ describe("Content Controller", () => {
         .set("Cookie", `token=${login.body.authorization.token}`)
         .set("Authorization", `Bearer ${login.body.authorization.token}`)
         .send({ link: "https://blablabla.com" });
-
+      console.log("WOIIOIIOOI", res.body);
       expect(res.statusCode).toEqual(200);
       expect(res.body.status).toEqual(200);
       expect(res.body.message).toBe("Successfully Add New Content");
@@ -53,8 +88,6 @@ describe("Content Controller", () => {
   });
   describe("GET /api/v1/contents", () => {
     it("should be able get contents", async () => {
-      await deleteUserByUsername("admin");
-      await deleteContentAll();
       const data = {
         username: "admin",
         password: "Admin@12345",
@@ -81,8 +114,6 @@ describe("Content Controller", () => {
   });
   describe("GET /api/v1/contents?id=id_content", () => {
     it("should be able get contents", async () => {
-      await deleteContentAll();
-      await deleteUserByUsername("admin");
       const data = {
         username: "admin",
         password: "Admin@12345",
@@ -126,7 +157,6 @@ describe("Content Controller", () => {
       );
     });
     it("should be rejected if id params null", async () => {
-      await deleteUserByUsername("admin");
       const data = {
         username: "admin",
         password: "Admin@12345",
@@ -146,8 +176,6 @@ describe("Content Controller", () => {
       expect(res.body.message).toBe("Failed to Edit This Content");
     });
     it("should be able to edit content", async () => {
-      await deleteContentAll();
-      await deleteUserByUsername("admin");
       const data = {
         username: "admin",
         password: "Admin@12345",
@@ -179,7 +207,6 @@ describe("Content Controller", () => {
     });
 
     it("should be rejected if id params null", async () => {
-      await deleteUserByUsername("admin");
       const data = {
         username: "admin",
         password: "Admin@12345",
@@ -199,7 +226,6 @@ describe("Content Controller", () => {
       expect(res.body.message).toBe("Failed to Delete This Content");
     });
     it("should be able to delete content", async () => {
-      await deleteUserByUsername("admin");
       const data = {
         username: "admin",
         password: "Admin@12345",
