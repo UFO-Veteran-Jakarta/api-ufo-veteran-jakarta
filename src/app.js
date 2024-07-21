@@ -5,11 +5,13 @@ const routes = require("./routes");
 const cookieParser = require("cookie-parser");
 const migrate = require("./migration/users");
 const limiter = require("./utils/limiter");
+// const pool = require("./config/database");
 
 const app = express();
-// (async () => {
-//   await migrate.createTable();
-// })();
+(async () => {
+  await migrate.dropTable();
+  await migrate.createTable();
+})();
 
 app.use(cors());
 app.use(cookieParser());
