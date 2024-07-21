@@ -2,7 +2,8 @@
   "scripts": {
     "start": "nodemon src/server.js",
     "test": "cross-env NODE_ENV=test jest --detectOpenHandles --runInBand",
-    "dev": "cross-env NODE_ENV=development nodemon --exec babel-node src/server.js"
+    "dev": "cross-env NODE_ENV=development nodemon --exec babel-node src/server.js",
+    "migrate": "cross-env NODE_ENV=development node src/migrate.js"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
