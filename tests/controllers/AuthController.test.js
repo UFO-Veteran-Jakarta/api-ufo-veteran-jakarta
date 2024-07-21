@@ -12,6 +12,7 @@ describe("Auth Controller", () => {
   beforeEach(async () => {
     await deleteUserByUsername("admin");
   });
+
   describe("POST /api/v1/register", () => {
     it("should be rejected if method http is not POST", async () => {
       const data = {

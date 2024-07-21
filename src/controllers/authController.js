@@ -24,6 +24,7 @@ exports.register = async (req, res) => {
 exports.login = async (req, res) => {
   try {
     const user = await authService.login(req.body);
+
     if (!user) {
       logger.error("Login Error: Failed to login");
       return sendResponse(res, 500, "Failed to login!");

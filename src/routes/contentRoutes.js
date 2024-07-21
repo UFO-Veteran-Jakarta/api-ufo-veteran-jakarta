@@ -20,15 +20,16 @@ router.post(
   contentController.addContent
 );
 
+router.get("/", contentController.getAll);
+
 router.put(
   "/",
-
   authentication(),
-
-  authController.logout
+  postValidationRules(),
+  validate,
+  contentController.updateContent
 );
-
-router.delete("/", authentication(), authController.login);
+router.delete("/", authentication(), contentController.deleteContent);
 
 router.use(function (err, req, res, next) {
   if (err.name === "UnauthorizedError") {

@@ -1,8 +1,8 @@
 {
   "scripts": {
     "start": "nodemon src/server.js",
-    "test": "jest --detectOpenHandles --runInBand",
-    "dev": "nodemon --exec babel-node src/server.js"
+    "test": "cross-env NODE_ENV=test jest --detectOpenHandles --runInBand",
+    "dev": "cross-env NODE_ENV=development nodemon --exec babel-node src/server.js"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
@@ -26,6 +26,7 @@
     "@babel/core": "^7.24.9",
     "@babel/node": "^7.24.8",
     "@babel/preset-env": "^7.24.8",
+    "cross-env": "^7.0.3",
     "eslint": "^8.57.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-import": "^2.29.1",
