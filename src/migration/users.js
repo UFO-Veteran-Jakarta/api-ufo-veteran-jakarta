@@ -12,7 +12,7 @@ exports.createTable = async () => {
   //   await pool.query(`DROP TABLE users;`);
 
   await pool.query(`
-      CREATE TABLE IF NOT EXISTS users (
+      CREATE TABLE IF NOT EXISTS myschema.users (
         id SERIAL PRIMARY KEY,
         username VARCHAR(50) NOT NULL,
         password VARCHAR(255) NOT NULL,
@@ -23,5 +23,5 @@ exports.createTable = async () => {
     `);
 };
 exports.dropTable = async () => {
-  await pool.query(`DROP TABLE IF EXISTS users;`);
+  await pool.query(`DROP TABLE IF EXISTS myschema.users;`);
 };
