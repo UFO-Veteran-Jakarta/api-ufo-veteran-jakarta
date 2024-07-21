@@ -1,11 +1,11 @@
 const pool = require("../config/database");
 
 exports.createUser = async () => {
-  await pool.query(`INSERT INTO users (username, password, created_at, updated_at, deleted_at)
+  await pool.query(`INSERT INTO myschema.users (username, password, created_at, updated_at, deleted_at)
       VALUES ('john_doe', 'securepassword123', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL);`);
 };
 exports.deleteUser = async () => {
-  await pool.query(`DELETE FROM users`);
+  await pool.query(`DELETE FROM myschema.users`);
 };
 
 exports.createTable = async () => {

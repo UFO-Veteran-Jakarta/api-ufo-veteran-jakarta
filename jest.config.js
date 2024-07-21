@@ -4,5 +4,6 @@ module.exports = {
   moduleNameMapper: {
     "^src/(.*)": "<rootDir>/src/$1",
   },
+  detectOpenHandles: true,
   moduleDirectories: ["node_modules", "src"],
 };
