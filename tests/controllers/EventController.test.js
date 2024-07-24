@@ -28,13 +28,14 @@ describe("Event Controller", () => {
       await request(app).post("/api/v1/register").send(data);
 
       const login = await request(app).post("/api/v1/login").send(data);
+      const filePath = path.resolve(__dirname, "../test.jpg");
       const res = await request(app)
         .post("/api/v1/events")
+        .attach("file", filePath)
         .set("Cookie", `token=${login.body.authorization.token}`)
-        .set("Authorization", `Bearer ${login.body.authorization.token}`)
-        .send();
+        .set("Authorization", `Bearer ${login.body.authorization.token}`);
 
-      console.log(res.body);
+      console.log("eweew", res.body);
 
       expect(res.statusCode).toEqual(400);
       expect(res.body.status).toEqual(400);
@@ -51,12 +52,12 @@ describe("Event Controller", () => {
       await request(app).post("/api/v1/register").send(data);
 
       const login = await request(app).post("/api/v1/login").send(data);
-      const filePath = path.resolve(__dirname, "../test.jpg");
+      const filePath = path.resolve(__dirname, "../test.webp");
       const res = await request(app)
         .post("/api/v1/events")
         .set("Cookie", `token=${login.body.authorization.token}`)
         .set("Authorization", `Bearer ${login.body.authorization.token}`)
-        .attach("cover", filePath);
+        .attach("file", filePath);
 
       expect(res.statusCode).toEqual(400);
       expect(res.body.status).toEqual(400);
