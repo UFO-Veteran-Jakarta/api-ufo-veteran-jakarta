@@ -1,3 +1,7 @@
+const { deleteUserByUsername } = require("src/models/userModel");
+const request = require("supertest");
+const app = require("src/app");
+
 describe("Event Controller", () => {
   beforeEach(async () => {
     await deleteUserByUsername("admin");
@@ -22,12 +26,13 @@ describe("Event Controller", () => {
       await request(app).post("/api/v1/register").send(data);
 
       const login = await request(app).post("/api/v1/login").send(data);
-
+      const filePath = "../test.jpg";
       const res = await request(app)
         .post("/api/v1/events")
         .set("Cookie", `token=${login.body.authorization.token}`)
         .set("Authorization", `Bearer ${login.body.authorization.token}`)
-        .send();
+        .attach("file", filePath);
+      console.log(res.body);
 
       expect(res.statusCode).toEqual(500);
       expect(res.body.status).toEqual(500);
