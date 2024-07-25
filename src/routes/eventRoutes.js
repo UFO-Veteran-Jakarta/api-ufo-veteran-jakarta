@@ -11,8 +11,6 @@ const { checkFile } = require("../middlewares/contentMiddlewareFile");
 
 const router = express.Router();
 
-// router.get("/", contentController.addContent);
-
 router.post(
   "/",
   authentication(),
@@ -23,7 +21,7 @@ router.post(
   eventController.uploadEvent
 );
 
-router.get("/", contentController.getAll);
+router.get("/", eventController.getAllEvents);
 
 router.put(
   "/",
