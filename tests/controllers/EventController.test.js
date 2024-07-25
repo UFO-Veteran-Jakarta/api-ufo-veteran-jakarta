@@ -92,4 +92,14 @@ describe("Event Controller", () => {
       expect(res.body.status).toEqual(200);
     });
   });
+
+  describe("GET /api/v1/events", () => {
+    it("should be return all events", async () => {
+      const res = await request(app).get("/api/v1/events");
+      expect(res.statusCode).toEqual(200);
+      expect(res.body.status).toEqual(200);
+      expect(res.body.message).toEqual("Successfully Get All Events");
+      expect(Array.isArray(res.body.data)).toBe(true);
+    });
+  });
 });
