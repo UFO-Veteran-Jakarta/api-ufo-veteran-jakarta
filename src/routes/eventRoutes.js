@@ -5,14 +5,23 @@ const eventController = require("../controllers/eventController");
 const {
   postValidationRules,
   validate,
-} = require("../validators/contentValidator");
+} = require("../validators/eventValidator");
 const { authentication } = require("../middlewares/authMiddleware");
+const { checkFile } = require("../middlewares/contentMiddlewareFile");
 
 const router = express.Router();
 
 // router.get("/", contentController.addContent);
 
-router.post("/", authentication(), eventController.uploadEvent);
+router.post(
+  "/",
+  authentication(),
+  checkFile("cover"),
+  checkFile("cover_landscape"),
+  postValidationRules(),
+  validate,
+  eventController.uploadEvent
+);
 
 router.get("/", contentController.getAll);
 

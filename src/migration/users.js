@@ -30,8 +30,34 @@ exports.createTable = async () => {
         deleted_at TIMESTAMP
       )
     `);
+
+  await pool.query(`
+      CREATE TABLE IF NOT EXISTS myschema.events (
+        id SERIAL PRIMARY KEY,
+        slug VARCHAR(255) NOT NULL,
+        cover VARCHAR(255),
+        cover_landscape VARCHAR(255),
+        name VARCHAR(255) NOT NULL,
+        start_event_date DATE NOT NULL,
+        end_event_date DATE NOT NULL,
+        start_event_time TIME NOT NULL,
+        end_event_time TIME NOT NULL,
+        registration_start_date DATE,
+        registration_end_date DATE,
+        registration_start_time TIME,
+        registration_end_time TIME,
+        body TEXT NOT NULL,
+        snippets TEXT,
+        link_registration TEXT,
+        location VARCHAR(255) NOT NULL, 
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        deleted_at TIMESTAMP
+      )
+    `);
 };
 exports.dropTable = async () => {
   await pool.query(`DROP TABLE IF EXISTS myschema.users;`);
   await pool.query(`DROP TABLE IF EXISTS myschema.contents;`);
+  await pool.query(`DROP TABLE IF EXISTS myschema.events;`);
 };
