@@ -25,3 +25,15 @@ exports.addEvent = async function insertEvent(data) {
     console.error("Error inserting event:", err);
   }
 };
+
+exports.getAllEvents = async function getAllEvents() {
+  const query = "SELECT * FROM myschema.events";
+
+  try {
+    const res = await pool.query(query);
+    return res.rows;
+  } catch (err) {
+    console.error("Error fetching events:", err);
+    throw err;
+  }
+};
