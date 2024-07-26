@@ -2,11 +2,20 @@ const logger = require("../utils/logger");
 const { sendResponse } = require("../helpers/response");
 const { addEvent, getAllEvents } = require("../services/eventService");
 const { generateUniqueSlug } = require("../helpers/slug");
+const { uploadSingle } = require("../utils/uploadFile");
 
 exports.uploadEvent = async (req, res) => {
   try {
-    // return sendResponse(res, 200, "wow", req.body);
     req.body.slug = generateUniqueSlug(req.body.name);
+
+    const coverUpload = await uploadSingle(req.files.cover, "cover");
+    const converLandscapeUpload = await uploadSingle(
+      req.files.cover_landscape,
+      "cover_landscape"
+    );
+
+    req.body.cover = coverUpload.secure_url;
+    req.body.cover_landscape = converLandscapeUpload.secure_url;
 
     const result = await addEvent(req.body);
     console.log("INIT", result);
