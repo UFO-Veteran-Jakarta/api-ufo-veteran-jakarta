@@ -4,10 +4,10 @@ const path = require("path");
 
 exports.checkFile = (form) => {
   return async (req, res, next) => {
-    const file = req.files[form];
+    const file = req.files?.[form];
 
     if (!file) {
-      return sendResponse(res, 500, "File not found");
+      return sendResponse(res, 500, "Cover and Cover Landscape Requirements");
     }
 
     const extension =
