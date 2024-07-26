@@ -40,12 +40,12 @@ jobs:
             style
             test
           requireScope: false
-          subjectPattern: "^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test): [A-Za-z].+$"
+          subjectPattern: "^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test): [A-Za-z][a-z]*.+$"
           subjectPatternError: |
             Subjek "{subject}" yang ditemukan dalam judul pull request "{title}"
             tidak sesuai dengan pola yang dikonfigurasi. Pastikan bahwa judul
             diawali dengan tipe diikuti oleh titik dua dan spasi, lalu diikuti oleh
-            subjek yang diawali dengan karakter huruf besar atau kecil. Contoh: "feat: Tambahkan fitur baru".
+            subjek yang diawali dengan karakter huruf besar atau kecil dan diikuti oleh huruf kecil atau spasi. Contoh: "feat: Tambahkan fitur baru".
 
   build:
     runs-on: ubuntu-latest
