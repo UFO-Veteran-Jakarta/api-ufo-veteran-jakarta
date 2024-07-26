@@ -1,0 +1,33 @@
+name: Test Coverage
+
+on:
+  pull_request:
+    branches: ["main", "testing"]
+
+jobs:
+  coverage:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js 20.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20.x
+          cache: "npm"
+
+      - run: npm install
+
+      - name: Run tests with coverage
+        run: npm test -- --coverage
+
+      - name: Check coverage
+        run: |
+          npx check-coverage --branches 60 --functions 65 --lines 70 --statements 75
+
+      - name: Publish coverage report
+        uses: artiomtr/jest-coverage-report-action@v1.3
+        with:
+          github_token: ${{ secrets.TOKEN }}
+          threshold: 70
