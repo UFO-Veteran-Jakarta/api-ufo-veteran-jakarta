@@ -40,6 +40,8 @@ jobs:
             style
             test
           requireScope: false
+          subjectPattern: "^[A-Z].*$"
+          subjectPatternError: "The subject of the PR title must start with a capital letter."
 
   build:
     runs-on: ubuntu-latest
