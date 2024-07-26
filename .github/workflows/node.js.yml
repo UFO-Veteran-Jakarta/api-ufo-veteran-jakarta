@@ -40,7 +40,7 @@ jobs:
             style
             test
           requireScope: false
-          subjectPattern: ^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test): [A-Z].+$
+          subjectPattern: "^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test): [A-Z].+$"
           subjectPatternError: |
             Subjek "{subject}" yang ditemukan dalam judul pull request "{title}"
             tidak sesuai dengan pola yang dikonfigurasi. Pastikan bahwa judul
