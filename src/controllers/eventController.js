@@ -1,6 +1,10 @@
 const logger = require("../utils/logger");
 const { sendResponse } = require("../helpers/response");
-const { addEvent, getAllEvents } = require("../services/eventService");
+const {
+  addEvent,
+  getAllEvents,
+  getEventBySlug,
+} = require("../services/eventService");
 const { generateUniqueSlug } = require("../helpers/slug");
 const { uploadSingle } = require("../utils/uploadFile");
 
@@ -35,5 +39,23 @@ exports.getAllEvents = async (req, res) => {
   } catch (error) {
     logger.error("Failed to Get All Events");
     return sendResponse(res, 500, "Failed to Get All Events");
+  }
+};
+
+exports.getEventBySlug = async (req, res) => {
+  try {
+    const { slug } = req.params;
+    const event = await getEventBySlug(slug);
+
+    if (!event) {
+      logger.error(`Event with slug ${slug} not found`);
+      return sendResponse(res, 404, "Event not found");
+    }
+
+    logger.info(`Successfully Get Event with slug ${slug}`);
+    return sendResponse(res, 200, "Successfully Get Event", event);
+  } catch (error) {
+    logger.error("Failed to Get Event");
+    return sendResponse(res, 500, error.message);
   }
 };
