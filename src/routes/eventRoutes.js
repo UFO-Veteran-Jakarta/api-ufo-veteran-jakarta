@@ -22,22 +22,23 @@ router.post(
 );
 
 router.get("/", eventController.getAllEvents);
+router.get("/:slug", eventController.getEventBySlug);
 
-router.put(
-  "/",
-  authentication(),
-  postValidationRules(),
-  validate,
-  contentController.updateContent
-);
-router.delete("/", authentication(), contentController.deleteContent);
+// router.put(
+//   "/",
+//   authentication(),
+//   postValidationRules(),
+//   validate,
+//   contentController.updateContent
+// );
+// router.delete("/", authentication(), contentController.deleteContent);
 
-router.use(function (err, req, res, next) {
-  if (err.name === "UnauthorizedError") {
-    res.status(401).send("Unauthorized");
-  } else {
-    next(err);
-  }
-});
+// router.use(function (err, req, res, next) {
+//   if (err.name === "UnauthorizedError") {
+//     res.status(401).send("Unauthorized");
+//   } else {
+//     next(err);
+//   }
+// });
 
 module.exports = router;
