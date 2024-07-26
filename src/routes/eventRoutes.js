@@ -7,7 +7,7 @@ const {
   validate,
 } = require("../validators/eventValidator");
 const { authentication } = require("../middlewares/authMiddleware");
-const { checkFile } = require("../middlewares/contentMiddlewareFile");
+const { checkFile } = require("../middlewares/eventMiddlewareFile");
 
 const router = express.Router();
 
