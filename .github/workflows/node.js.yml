@@ -23,7 +23,11 @@ jobs:
     permissions:
       pull-requests: write
     steps:
-      - uses: amannn/action-semantic-pull-request@v5
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Validate PR
+        id: validate
+        uses: amannn/action-semantic-pull-request@v5
         env:
           GITHUB_TOKEN: ${{ secrets.SECRET_TOKEN }}
         with:
@@ -42,6 +46,21 @@ jobs:
           requireScope: false
           subjectPattern: "^[A-Z].*$"
           subjectPatternError: "The subject of the PR title must start with a capital letter."
+        continue-on-error: true
+      - name: Comment PR
+        if: steps.validate.outcome == 'failure'
+        uses: actions/github-script@v5
+        with:
+          github-token: ${{secrets.SECRET_TOKEN}}
+          script: |
+            const issue_number = context.payload.pull_request.number;
+            const message = 'Validasi gagal! Judul PR harus dimulai dengan huruf kapital dan mengikuti format "type(scope): Subject".';
+            github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issue_number,
+              body: message
+            });
 
   build:
     runs-on: ubuntu-latest
