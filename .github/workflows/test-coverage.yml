@@ -20,7 +20,7 @@ jobs:
       - run: npm install
 
       - name: Run tests with coverage
-        run: npm test-coverage --coverageReporters="cobertura"
+        run: npm coverage --coverageReporters="cobertura"
 
       - name: Check coverage
         run: |
