@@ -37,3 +37,15 @@ exports.getAllEvents = async function getAllEvents() {
     throw err;
   }
 };
+
+exports.getEventBySlug = async function getEventBySlug(slug) {
+  const query = "SELECT * FROM myschema.events WHERE slug = $1";
+
+  try {
+    const res = await pool.query(query, [slug]);
+    return res.rows[0];
+  } catch (error) {
+    console.error("Error fetching event by slug:", error);
+    throw error;
+  }
+};
