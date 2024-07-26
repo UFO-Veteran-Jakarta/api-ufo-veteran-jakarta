@@ -1,34 +1,29 @@
 const cloudinary = require("../config/cloudinary");
 const streamifier = require("streamifier");
-export const uploadSingle = async (req, folder) => {
-  // await runMiddleware(req, res, multer.single("image"));
+const sharp = require("sharp");
 
+const uploadSingle = async (file, folder) => {
   return new Promise((resolve, reject) => {
-    if (!req?.file) {
-      return resolve(false);
-    }
-    const extension = req.file.originalname.split(".").reverse()[0];
     const stream = cloudinary.uploader.upload_stream(
       {
-        format: extension,
+        format: "webp",
         resource_type: "raw",
         folder,
       },
       (error, result) => {
-        if (error) return console.error(error);
-
-        return resolve({
-          secure_url: result?.secure_url,
-          name: req.file?.originalname,
+        if (error) return reject(error);
+        resolve({
+          secure_url: result.secure_url,
+          name: file.name,
         });
       }
     );
-    streamifier.createReadStream(req.file.buffer).pipe(stream);
+
+    sharp(file.data).toFormat("webp").pipe(stream);
   });
 };
 
-export const deleteFiles = async (name) => {
-  // const fi = name.split("/").reverse().slice(0, 2).reverse().join("/").split(".");
+const deleteFiles = async (name) => {
   const arr = name.split("/");
   const fi = arr.slice(arr.length - 2).join("/");
 
@@ -37,11 +32,9 @@ export const deleteFiles = async (name) => {
   });
 };
 
-export const uploadMultiple = async (req, folder) => {
-  // await runMiddleware(req, res, multer.single("image"));
-
+const uploadMultiple = async (req, folder) => {
   return new Promise((resolve, reject) => {
-    if (req?.files?.length == 0) {
+    if (req && req.files && req.files.length === 0) {
       return resolve(false);
     }
 
@@ -61,10 +54,10 @@ export const uploadMultiple = async (req, folder) => {
             if (error) return console.error(error);
             newAll.push({
               name: file.originalname,
-              file: result?.secure_url,
+              file: result && result.secure_url,
             });
 
-            if (newAll.length == req.files?.length) {
+            if (req.files && newAll.length == req.files.length) {
               return resolve(newAll);
             }
           }
@@ -75,9 +68,11 @@ export const uploadMultiple = async (req, folder) => {
     } else {
       throw Error("Files Not Array");
     }
-
-    // streamifier.createReadStream(req.file.buffer).pipe(stream);
   });
 };
 
-export default { uploadMultiple, uploadSingle };
+module.exports = {
+  uploadSingle,
+  deleteFiles,
+  uploadMultiple,
+};
