@@ -25,7 +25,7 @@ jobs:
     steps:
       - uses: amannn/action-semantic-pull-request@v5
         env:
-          GITHUB_TOKEN: ${{ secrets.ENV_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.SECRET_TOKEN }}
         with:
           types: |
             build
