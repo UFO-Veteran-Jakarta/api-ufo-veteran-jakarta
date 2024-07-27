@@ -18,3 +18,5 @@ router.post(
   validate,
   partnerController.uploadPartner
 );
+
+module.exports = router;
