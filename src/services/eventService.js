@@ -3,6 +3,7 @@ const {
   getAllEvents,
   getEventBySlug,
   updateEventInDb,
+  softDeleteEventBySlug,
 } = require("../models/eventModel");
 
 exports.addEvent = async (data) => {
@@ -29,4 +30,8 @@ exports.getEventBySlug = async (slug) => {
 
 exports.updateEvent = async (slug, data) => {
   return await updateEventInDb(slug, data);
+};
+
+exports.deleteEvent = async (slug) => {
+  return await softDeleteEventBySlug(slug);
 };

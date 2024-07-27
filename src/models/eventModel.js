@@ -75,3 +75,20 @@ exports.updateEventInDb = async (slug, data) => {
     throw err;
   }
 };
+
+exports.softDeleteEventBySlug = async function softDeleteEventBySlug(slug) {
+  const query = `
+    UPDATE myschema.events
+    SET deleted_at = NOW()
+    WHERE slug = $1
+    RETURNING *;
+  `;
+
+  try {
+    const res = await pool.query(query, [slug]);
+    return res.rows[0];
+  } catch (error) {
+    console.error("Error soft deleting event by slug:", error);
+    throw error;
+  }
+};

@@ -209,147 +209,227 @@ describe("Event Controller", () => {
       expect(res.body.message).toEqual("Event not found");
     });
   });
-});
 
-describe("PUT /api/v1/events/:slug", () => {
-  it("should be rejected if user not authenticated", async () => {
-    const res = await request(app).post("/api/v1/events");
+  describe("PUT /api/v1/events/:slug", () => {
+    it("should be rejected if user not authenticated", async () => {
+      const res = await request(app).post("/api/v1/events");
 
-    expect(res.statusCode).toEqual(401);
-    expect(res.body.status).toEqual(401);
-    expect(res.body.message).toBeDefined();
+      expect(res.statusCode).toEqual(401);
+      expect(res.body.status).toEqual(401);
+      expect(res.body.message).toBeDefined();
+    });
+
+    it("should be able to edit event", async () => {
+      const data = {
+        username: "admin",
+        password: "Admin@12345",
+      };
+      await request(app).post("/api/v1/register").send(data);
+      const login = await request(app).post("/api/v1/login").send(data);
+
+      const filePathCover = path.resolve(__dirname, "../test-1080.webp");
+      const filePathLandscape = path.resolve(
+        __dirname,
+        "../test-cc-2000-1047.webp"
+      );
+
+      const eventData = {
+        name: "Event Test",
+        start_event_date: "2024-07-26",
+        end_event_date: "2024-07-26",
+        start_event_time: "1000",
+        end_event_time: "1800",
+        registration_start_date: "2024-07-26",
+        registration_end_date: "2024-07-26",
+        registration_start_time: "1000",
+        registration_end_time: "1800",
+        body: "Event Test Body",
+        link_registration: "https://link-registration.com",
+        location: "Test Location",
+        snippets: "Test Snippets",
+      };
+
+      const event = await request(app)
+        .post("/api/v1/events")
+        .set("Cookie", `token=${login.body.authorization.token}`)
+        .set("Authorization", `Bearer ${login.body.authorization.token}`)
+        .attach("cover", filePathCover)
+        .attach("cover_landscape", filePathLandscape)
+        .field(eventData);
+
+      const updateData = {
+        name: "Updated Event",
+        start_event_date: "2024-08-26",
+        end_event_date: "2024-08-26",
+        start_event_time: "1100",
+        end_event_time: "1900",
+        registration_start_date: "2024-08-26",
+        registration_end_date: "2024-08-26",
+        registration_start_time: "1100",
+        registration_end_time: "1900",
+        body: "Updated Event Body",
+        link_registration: "https://updated-link-registration.com",
+        location: "Updated Location",
+        snippets: "Updated Snippets",
+      };
+
+      const formattedUpdateData = {
+        ...updateData,
+        start_event_date: moment(
+          updateData.start_event_date,
+          "YYYY-MM-DD"
+        ).toISOString(),
+        end_event_date: moment(
+          updateData.end_event_date,
+          "YYYY-MM-DD"
+        ).toISOString(),
+        start_event_time: moment(updateData.start_event_time, "HHmm").format(
+          "HH:mm:ss"
+        ),
+        end_event_time: moment(updateData.end_event_time, "HHmm").format(
+          "HH:mm:ss"
+        ),
+        registration_start_date: moment(
+          updateData.registration_start_date,
+          "YYYY-MM-DD"
+        ).toISOString(),
+        registration_end_date: moment(
+          updateData.registration_end_date,
+          "YYYY-MM-DD"
+        ).toISOString(),
+        registration_start_time: moment(
+          updateData.registration_start_time,
+          "HHmm"
+        ).format("HH:mm:ss"),
+        registration_end_time: moment(
+          updateData.registration_end_time,
+          "HHmm"
+        ).format("HH:mm:ss"),
+      };
+
+      const res = await request(app)
+        .put(`/api/v1/events/${event.body.data.slug}`)
+        .set("Cookie", `token=${login.body.authorization.token}`)
+        .set("Authorization", `Bearer ${login.body.authorization.token}`)
+        .send(updateData);
+
+      expect(res.statusCode).toEqual(200);
+      expect(res.body.status).toEqual(200);
+      expect(res.body.data).toMatchObject(formattedUpdateData);
+    }, 30000);
+
+    it("should return 404 if event is not found", async () => {
+      const data = {
+        username: "admin",
+        password: "Admin@12345",
+      };
+      await request(app).post("/api/v1/register").send(data);
+
+      const login = await request(app).post("/api/v1/login").send(data);
+      const updateData = {
+        name: "Updated Event",
+        start_event_date: "2024-08-26",
+        end_event_date: "2024-08-26",
+        start_event_time: "1100",
+        end_event_time: "1900",
+        registration_start_date: "2024-08-26",
+        registration_end_date: "2024-08-26",
+        registration_start_time: "1100",
+        registration_end_time: "1900",
+        body: "Updated Event Body",
+        link_registration: "https://updated-link-registration.com",
+        location: "Updated Location",
+        snippets: "Updated Snippets",
+      };
+
+      const res = await request(app)
+        .put(`/api/v1/events/non-existing-slug`)
+        .set("Cookie", `token=${login.body.authorization.token}`)
+        .set("Authorization", `Bearer ${login.body.authorization.token}`)
+        .send(updateData);
+
+      expect(res.statusCode).toEqual(404);
+      expect(res.body.message).toEqual("Event Not Found");
+    });
   });
 
-  it("should be able to edit event", async () => {
-    const data = {
-      username: "admin",
-      password: "Admin@12345",
-    };
-    await request(app).post("/api/v1/register").send(data);
-    const login = await request(app).post("/api/v1/login").send(data);
+  describe("DELETE /api/v1/events/:slug", () => {
+    it("should be rejected if user not authenticated", async () => {
+      const res = await request(app).delete("/api/v1/events/slug");
 
-    const filePathCover = path.resolve(__dirname, "../test-1080.webp");
-    const filePathLandscape = path.resolve(
-      __dirname,
-      "../test-cc-2000-1047.webp"
-    );
+      expect(res.statusCode).toEqual(401);
+      expect(res.body.status).toEqual(401);
+      expect(res.body.message).toBeDefined();
+    }, 45000);
 
-    const eventData = {
-      name: "Event Test",
-      start_event_date: "2024-07-26",
-      end_event_date: "2024-07-26",
-      start_event_time: "1000",
-      end_event_time: "1800",
-      registration_start_date: "2024-07-26",
-      registration_end_date: "2024-07-26",
-      registration_start_time: "1000",
-      registration_end_time: "1800",
-      body: "Event Test Body",
-      link_registration: "https://link-registration.com",
-      location: "Test Location",
-      snippets: "Test Snippets",
-    };
+    it("should be able to delete event", async () => {
+      const data = {
+        username: "admin",
+        password: "Admin@12345",
+      };
+      await request(app).post("/api/v1/register").send(data);
+      const login = await request(app).post("/api/v1/login").send(data);
 
-    const event = await request(app)
-      .post("/api/v1/events")
-      .set("Cookie", `token=${login.body.authorization.token}`)
-      .set("Authorization", `Bearer ${login.body.authorization.token}`)
-      .attach("cover", filePathCover)
-      .attach("cover_landscape", filePathLandscape)
-      .field(eventData);
+      const filePathCover = path.resolve(__dirname, "../test-1080.webp");
+      const filePathLandscape = path.resolve(
+        __dirname,
+        "../test-cc-2000-1047.webp"
+      );
 
-    const updateData = {
-      name: "Updated Event",
-      start_event_date: "2024-08-26",
-      end_event_date: "2024-08-26",
-      start_event_time: "1100",
-      end_event_time: "1900",
-      registration_start_date: "2024-08-26",
-      registration_end_date: "2024-08-26",
-      registration_start_time: "1100",
-      registration_end_time: "1900",
-      body: "Updated Event Body",
-      link_registration: "https://updated-link-registration.com",
-      location: "Updated Location",
-      snippets: "Updated Snippets",
-    };
+      const eventData = {
+        name: "Event Test",
+        start_event_date: "2024-07-26",
+        end_event_date: "2024-07-26",
+        start_event_time: "1000",
+        end_event_time: "1800",
+        registration_start_date: "2024-07-26",
+        registration_end_date: "2024-07-26",
+        registration_start_time: "1000",
+        registration_end_time: "1800",
+        body: "Event Test Body",
+        link_registration: "https://link-registration.com",
+        location: "Test Location",
+        snippets: "Test Snippets",
+      };
 
-    const formattedUpdateData = {
-      ...updateData,
-      start_event_date: moment(
-        updateData.start_event_date,
-        "YYYY-MM-DD"
-      ).toISOString(),
-      end_event_date: moment(
-        updateData.end_event_date,
-        "YYYY-MM-DD"
-      ).toISOString(),
-      start_event_time: moment(updateData.start_event_time, "HHmm").format(
-        "HH:mm:ss"
-      ),
-      end_event_time: moment(updateData.end_event_time, "HHmm").format(
-        "HH:mm:ss"
-      ),
-      registration_start_date: moment(
-        updateData.registration_start_date,
-        "YYYY-MM-DD"
-      ).toISOString(),
-      registration_end_date: moment(
-        updateData.registration_end_date,
-        "YYYY-MM-DD"
-      ).toISOString(),
-      registration_start_time: moment(
-        updateData.registration_start_time,
-        "HHmm"
-      ).format("HH:mm:ss"),
-      registration_end_time: moment(
-        updateData.registration_end_time,
-        "HHmm"
-      ).format("HH:mm:ss"),
-    };
+      const event = await request(app)
+        .post("/api/v1/events")
+        .set("Cookie", `token=${login.body.authorization.token}`)
+        .set("Authorization", `Bearer ${login.body.authorization.token}`)
+        .attach("cover", filePathCover)
+        .attach("cover_landscape", filePathLandscape)
+        .field(eventData);
 
-    const res = await request(app)
-      .put(`/api/v1/events/${event.body.data.slug}`)
-      .set("Cookie", `token=${login.body.authorization.token}`)
-      .set("Authorization", `Bearer ${login.body.authorization.token}`)
-      .send(updateData);
+      if (!event.body.data) {
+        throw new Error("Event data is not present in the response");
+      }
 
-    expect(res.statusCode).toEqual(200);
-    expect(res.body.status).toEqual(200);
-    expect(res.body.data).toMatchObject(formattedUpdateData);
-  }, 30000);
+      const res = await request(app)
+        .delete(`/api/v1/events/${event.body.data.slug}`)
+        .set("Cookie", `token=${login.body.authorization.token}`)
+        .set("Authorization", `Bearer ${login.body.authorization.token}`);
 
-  it("should return 404 if event is not found", async () => {
-    const data = {
-      username: "admin",
-      password: "Admin@12345",
-    };
-    await request(app).post("/api/v1/register").send(data);
+      expect(res.statusCode).toEqual(200);
+      expect(res.body.status).toEqual(200);
+      expect(res.body.message).toEqual("Event deleted successfully");
+    }, 45000);
 
-    const login = await request(app).post("/api/v1/login").send(data);
-    const updateData = {
-      name: "Updated Event",
-      start_event_date: "2024-08-26",
-      end_event_date: "2024-08-26",
-      start_event_time: "1100",
-      end_event_time: "1900",
-      registration_start_date: "2024-08-26",
-      registration_end_date: "2024-08-26",
-      registration_start_time: "1100",
-      registration_end_time: "1900",
-      body: "Updated Event Body",
-      link_registration: "https://updated-link-registration.com",
-      location: "Updated Location",
-      snippets: "Updated Snippets",
-    };
+    it("should return 404 if event is not found", async () => {
+      const data = {
+        username: "admin",
+        password: "Admin@12345",
+      };
+      await request(app).post("/api/v1/register").send(data);
 
-    const res = await request(app)
-      .put(`/api/v1/events/non-existing-slug`)
-      .set("Cookie", `token=${login.body.authorization.token}`)
-      .set("Authorization", `Bearer ${login.body.authorization.token}`)
-      .send(updateData);
+      const login = await request(app).post("/api/v1/login").send(data);
 
-    expect(res.statusCode).toEqual(404);
-    expect(res.body.message).toEqual("Event Not Found");
+      const res = await request(app)
+        .delete(`/api/v1/events/non-existing-slug`)
+        .set("Cookie", `token=${login.body.authorization.token}`)
+        .set("Authorization", `Bearer ${login.body.authorization.token}`);
+
+      expect(res.statusCode).toEqual(404);
+      expect(res.body.message).toEqual("Event Not Found");
+    }, 45000);
   });
 });

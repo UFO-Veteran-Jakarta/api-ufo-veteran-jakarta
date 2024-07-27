@@ -36,4 +36,6 @@ router.put(
   eventController.updateEvent
 );
 
+router.delete("/:slug", authentication(), eventController.deleteEventBySlug);
+
 module.exports = router;

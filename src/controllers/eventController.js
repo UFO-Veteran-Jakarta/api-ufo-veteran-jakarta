@@ -5,6 +5,7 @@ const {
   getAllEvents,
   getEventBySlug,
   updateEvent,
+  deleteEvent,
 } = require("../services/eventService");
 const { generateUniqueSlug } = require("../helpers/slug");
 const { uploadSingle } = require("../utils/uploadFile");
@@ -99,5 +100,29 @@ exports.updateEvent = async (req, res) => {
   } catch (error) {
     logger.error(`Failed to update event with slug ${slug}: ${error.message}`);
     return sendResponse(res, 500, error.message);
+  }
+};
+
+exports.deleteEventBySlug = async (req, res) => {
+  try {
+    const slug = req.params.slug;
+    const result = await deleteEvent(slug);
+
+    if (!result) {
+      return res.status(404).json({
+        status: 404,
+        message: "Event Not Found",
+      });
+    }
+
+    return res.status(200).json({
+      status: 200,
+      message: "Event deleted successfully",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: 500,
+      message: "Failed to Delete This Event",
+    });
   }
 };
