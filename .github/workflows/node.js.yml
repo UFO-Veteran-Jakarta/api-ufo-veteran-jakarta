@@ -49,20 +49,6 @@ jobs:
           subjectPattern: "^[A-Z].*$"
           subjectPatternError: "The subject of the PR title must start with a capital letter."
         continue-on-error: true
-      - name: Comment PR
-        if: steps.validate.outcome == 'failure'
-        uses: actions/github-script@v5
-        with:
-          github-token: ${{ secrets.SECRET_TOKEN }}
-          script: |
-            const issue_number = context.payload.pull_request.number;
-            const message = 'Validasi gagal! Judul PR harus dimulai dengan huruf kapital dan mengikuti format "type(scope): Subject".';
-            github.rest.issues.createComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: issue_number,
-              body: message
-            });
 
   build:
     name: Build and Test
