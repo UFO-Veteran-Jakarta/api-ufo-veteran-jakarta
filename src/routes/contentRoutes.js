@@ -10,8 +10,6 @@ const { authentication } = require("../middlewares/authMiddleware");
 
 const router = express.Router();
 
-// router.get("/", contentController.addContent);
-
 router.post(
   "/",
   authentication(),

@@ -11,15 +11,12 @@ describe("Event Controller", () => {
   });
 
   describe("POST /api/v1/events", () => {
-    it("should be rejected if token not valid", async () => {
-      const res = await request(app)
-        .post("/api/v1/events")
-        .set("Cookie", `token=asfsf`)
-        .set("Authorization", `Bearer asdfsadf`)
-        .send({ link: "httpsablabla.com" });
+    it("should be rejected if user not authenticated", async () => {
+      const res = await request(app).post("/api/v1/events");
 
       expect(res.statusCode).toEqual(401);
       expect(res.body.status).toEqual(401);
+      expect(res.body.message).toBeDefined();
     });
 
     it("should be rejected if cover and cover landscape not exist", async () => {

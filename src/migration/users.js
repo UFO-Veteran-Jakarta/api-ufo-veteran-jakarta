@@ -9,8 +9,6 @@ exports.deleteUser = async () => {
 };
 
 exports.createTable = async () => {
-  //   await pool.query(`DROP TABLE users;`);
-
   await pool.query(`
       CREATE TABLE IF NOT EXISTS myschema.users (
         id SERIAL PRIMARY KEY,

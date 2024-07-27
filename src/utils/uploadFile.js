@@ -11,7 +11,7 @@ const uploadSingle = async (file, folder) => {
         folder,
       },
       (error, result) => {
-        if (error) return reject(error);
+        if (error) return reject(new Error(error));
         resolve({
           secure_url: result.secure_url,
           name: file.name,
@@ -34,7 +34,7 @@ const deleteFiles = async (name) => {
 
 const uploadMultiple = async (req, folder) => {
   return new Promise((resolve, reject) => {
-    if (req && req.files && req.files.length === 0) {
+    if (req?.files?.length === 0) {
       return resolve(false);
     }
 
@@ -54,7 +54,7 @@ const uploadMultiple = async (req, folder) => {
             if (error) return console.error(error);
             newAll.push({
               name: file.originalname,
-              file: result && result.secure_url,
+              file: result?.secure_url,
             });
 
             if (req.files && newAll.length == req.files.length) {

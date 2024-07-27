@@ -80,12 +80,12 @@ exports.updateEvent = async (req, res) => {
       req.body.slug = generateUniqueSlug(req.body.name);
     }
 
-    if (req.files && req.files.cover) {
+    if (req?.files?.cover) {
       const coverUpload = await uploadSingle(req.files.cover, "cover");
       req.body.cover = coverUpload.secure_url;
     }
 
-    if (req.files && req.files.cover_landscape) {
+    if (req?.files?.cover_landscape) {
       const coverLandscapeUpload = await uploadSingle(
         req.files.cover_landscape,
         "cover_landscape"
