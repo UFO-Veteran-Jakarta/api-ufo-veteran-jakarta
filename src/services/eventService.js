@@ -2,6 +2,7 @@ const {
   addEvent,
   getAllEvents,
   getEventBySlug,
+  updateEventInDb,
 } = require("../models/eventModel");
 
 exports.addEvent = async (data) => {
@@ -24,4 +25,8 @@ exports.getEventBySlug = async (slug) => {
     console.error("Error fetching event by slug:", error);
     throw error;
   }
+};
+
+exports.updateEvent = async (slug, data) => {
+  return await updateEventInDb(slug, data);
 };
