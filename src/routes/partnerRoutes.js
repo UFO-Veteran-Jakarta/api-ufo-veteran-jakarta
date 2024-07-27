@@ -2,7 +2,7 @@ const express = require("express");
 const partnerController = require("../controllers/partnerController");
 
 const {
-  postValidationRules,
+  postPartnerValidationRules,
   validate,
 } = require("../validators/partnerValidator");
 const { authentication } = require("../middlewares/authMiddleware");
@@ -14,7 +14,7 @@ router.post(
   "/",
   authentication(),
   checkFile("logo"),
-  postValidationRules(),
+  postPartnerValidationRules(),
   validate,
   partnerController.uploadPartner
 );
