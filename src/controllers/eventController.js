@@ -4,6 +4,7 @@ const {
   addEvent,
   getAllEvents,
   getEventBySlug,
+  updateEvent,
 } = require("../services/eventService");
 const { generateUniqueSlug } = require("../helpers/slug");
 const { uploadSingle } = require("../utils/uploadFile");
@@ -56,6 +57,50 @@ exports.getEventBySlug = async (req, res) => {
     return sendResponse(res, 200, "Successfully Get Event", event);
   } catch (error) {
     logger.error("Failed to Get Event");
+    return sendResponse(res, 500, error.message);
+  }
+};
+
+exports.updateEvent = async (req, res) => {
+  const slug = req.params.slug;
+
+  console.log(req.params.slug);
+
+  if (!slug) {
+    return sendResponse(res, 404, "Event Not Found");
+  }
+
+  try {
+    const existingEvent = await getEventBySlug(slug);
+
+    if (!existingEvent) {
+      logger.error(`Event with slug ${slug} not found`);
+      return sendResponse(res, 404, "Event Not Found");
+    }
+
+    if (req.body.name) {
+      req.body.slug = generateUniqueSlug(req.body.name);
+    }
+
+    if (req.files && req.files.cover) {
+      const coverUpload = await uploadSingle(req.files.cover, "cover");
+      req.body.cover = coverUpload.secure_url;
+    }
+
+    if (req.files && req.files.cover_landscape) {
+      const coverLandscapeUpload = await uploadSingle(
+        req.files.cover_landscape,
+        "cover_landscape"
+      );
+      req.body.cover_landscape = coverLandscapeUpload.secure_url;
+    }
+
+    const updatedEvent = await updateEvent(slug, req.body);
+
+    logger.info(`Successfully updated event with slug ${slug}`);
+    return sendResponse(res, 200, "Successfully Edit This Event", updatedEvent);
+  } catch (error) {
+    logger.error(`Failed to update event with slug ${slug}: ${error.message}`);
     return sendResponse(res, 500, error.message);
   }
 };
