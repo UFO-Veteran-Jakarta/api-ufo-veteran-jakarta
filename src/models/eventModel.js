@@ -49,3 +49,30 @@ exports.getEventBySlug = async function getEventBySlug(slug) {
     throw error;
   }
 };
+
+exports.updateEventInDb = async (slug, data) => {
+  const fields = [];
+  const values = [];
+  let index = 1;
+
+  Object.keys(data).forEach((key) => {
+    fields.push(`${key} = $${index}`);
+    values.push(data[key]);
+    index++;
+  });
+
+  const query = `
+    UPDATE myschema.events
+    SET ${fields.join(", ")}, updated_at = NOW()
+    WHERE slug = $${index}
+    RETURNING *;
+  `;
+
+  try {
+    const res = await pool.query(query, [...values, slug]);
+    return res.rows[0];
+  } catch (err) {
+    console.error(`Error updating event with slug ${slug}:`, err);
+    throw err;
+  }
+};
