@@ -10,7 +10,7 @@ exports.checkFile = (form) => {
     }
 
     const extension = path.extname(file.name).toLowerCase();
-    const mimeType = file.mimeType;
+    const mimeType = file.mimetype;
 
     if (extension !== ".webp" || mimeType !== "image/webp") {
       return sendResponse(res, 500, "Partner logo must be in WEBP format");
