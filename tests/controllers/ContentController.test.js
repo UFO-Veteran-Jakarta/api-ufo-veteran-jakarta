@@ -176,6 +176,7 @@ describe("Content Controller", () => {
       expect(res.body.status).toEqual(404);
       expect(res.body.message).toBe("Content Not Found");
     });
+
     it("should be rejected if link is not http", async () => {
       const data = {
         username: "admin",
@@ -226,6 +227,7 @@ describe("Content Controller", () => {
       expect(res.body.status).toEqual(500);
       expect(res.body.errors[0].msg).toBe("The link must valid a url");
     });
+
     it("should be reject cause content not found", async () => {
       const data = {
         username: "admin",
@@ -250,6 +252,7 @@ describe("Content Controller", () => {
       expect(res.body.status).toEqual(404);
       expect(res.body.message).toBe("Content Not Found");
     });
+
     it("should be able to edit content", async () => {
       const data = {
         username: "admin",
