@@ -23,7 +23,6 @@ exports.uploadEvent = async (req, res) => {
     req.body.cover_landscape = converLandscapeUpload.secure_url;
 
     const result = await addEvent(req.body);
-    console.log("INIT", result);
     logger.info("Add Success: Success Add Event");
     return sendResponse(res, 200, "Successfully Add New Event", result);
   } catch (error) {
@@ -63,8 +62,6 @@ exports.getEventBySlug = async (req, res) => {
 
 exports.updateEvent = async (req, res) => {
   const slug = req.params.slug;
-
-  console.log(req.params.slug);
 
   if (!slug) {
     return sendResponse(res, 404, "Event Not Found");

@@ -19,7 +19,6 @@ exports.addEvent = async function insertEvent(data) {
 
   try {
     const res = await pool.query(query, values);
-    console.log("Inserted event:", res.rows[0]);
     return res.rows[0];
   } catch (err) {
     console.error("Error inserting event:", err);
