@@ -7,9 +7,11 @@ exports.getAllUser = async () => {
   );
   return res.rows;
 };
+
 exports.getUserByUsername = async (username) => {
   const res = await pool.query(
-    `SELECT * FROM myschema.users WHERE username = '${username}' AND deleted_at IS NULL`
+    `SELECT * FROM myschema.users WHERE username = $1 AND deleted_at IS NULL`,
+    [username]
   );
 
   return res.rows;
@@ -25,9 +27,11 @@ exports.deleteUserByUsername = async (username) => {
 exports.createUser = async (data) => {
   data.password = await hash(data.password);
 
-  const result =
-    await pool.query(`INSERT INTO myschema.users (username, password, created_at, updated_at, deleted_at)
-      VALUES ('${data.username}', '${data.password}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL);`);
+  const result = await pool.query(
+    `INSERT INTO myschema.users (username, password, created_at, updated_at, deleted_at)
+      VALUES ($1, $2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL) RETURNING *;`,
+    [data.username, data.password]
+  );
 
   return result.rows;
 };

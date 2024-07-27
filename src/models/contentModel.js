@@ -6,10 +6,12 @@ exports.getAllContent = async () => {
   );
   return res.rows;
 };
+
 exports.getContentById = async (id) => {
   try {
     const res = await pool.query(
-      `SELECT * FROM myschema.contents WHERE id = ${id} AND deleted_at IS NULL`
+      `SELECT * FROM myschema.contents WHERE id = $1 AND deleted_at IS NULL`,
+      [id]
     );
     return res.rows;
   } catch (err) {
@@ -35,8 +37,10 @@ exports.getUserByUsername = async (username) => {
 
 exports.updateContent = async (id, link) => {
   const res = await pool.query(
-    `UPDATE  myschema.contents SET link = '${link}' WHERE id = ${id} RETURNING *`
+    `UPDATE  myschema.contents SET link = $1 WHERE id = $2 RETURNING *`,
+    [link, id]
   );
+
   return res.rows;
 };
 
@@ -46,9 +50,12 @@ exports.deleteContentAll = async () => {
   );
   return res.rows;
 };
+
 exports.deleteContent = async (id) => {
   const res = await pool.query(
-    `UPDATE myschema.contents SET deleted_at = NOW() WHERE id = ${id}`
+    `UPDATE myschema.contents SET deleted_at = NOW() WHERE id = $1`,
+    [id]
   );
+
   return res.rows;
 };
