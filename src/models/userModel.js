@@ -1,6 +1,5 @@
 const pool = require("../config/database");
 const { hash } = require("../helpers/bcrypt");
-const { compare } = require("../helpers/bcrypt");
 
 exports.getAllUser = async () => {
   const res = await pool.query(
