@@ -5,7 +5,7 @@ const { uploadSingle } = require("../utils/uploadFile");
 
 exports.uploadPartner = async (req, res) => {
   try {
-    const logoUplaod = await uploadSingle(req.files.logo, "cover");
+    const logoUplaod = await uploadSingle(req.files.logo, "logo");
 
     req.body.logo = logoUplaod.secure_url;
 
