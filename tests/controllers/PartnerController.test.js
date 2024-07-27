@@ -119,4 +119,8 @@ describe("Partner Controller", () => {
       expect(res.body.message).toBe("Successfully Add New Partner");
     });
   });
+
+  describe("GET /api/v1/partners", () => {
+    console.log("Halo ini test");
+  });
 });
