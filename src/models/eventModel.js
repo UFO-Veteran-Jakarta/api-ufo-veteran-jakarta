@@ -1,5 +1,4 @@
 const pool = require("../config/database");
-const cookie = require("cookie");
 
 exports.addEvent = async function insertEvent(data) {
   const fields = [];
