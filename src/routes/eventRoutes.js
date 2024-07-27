@@ -1,5 +1,4 @@
 const express = require("express");
-const contentController = require("../controllers/contentController");
 const eventController = require("../controllers/eventController");
 
 const {
@@ -7,7 +6,10 @@ const {
   validate,
 } = require("../validators/eventValidator");
 const { authentication } = require("../middlewares/authMiddleware");
-const { checkFile } = require("../middlewares/eventMiddlewareFile");
+const {
+  checkFile,
+  checkFileForUpdate,
+} = require("../middlewares/eventMiddlewareFile");
 
 const router = express.Router();
 
@@ -24,21 +26,14 @@ router.post(
 router.get("/", eventController.getAllEvents);
 router.get("/:slug", eventController.getEventBySlug);
 
-// router.put(
-//   "/",
-//   authentication(),
-//   postValidationRules(),
-//   validate,
-//   contentController.updateContent
-// );
-// router.delete("/", authentication(), contentController.deleteContent);
-
-// router.use(function (err, req, res, next) {
-//   if (err.name === "UnauthorizedError") {
-//     res.status(401).send("Unauthorized");
-//   } else {
-//     next(err);
-//   }
-// });
+router.put(
+  "/:slug",
+  authentication(),
+  checkFileForUpdate("cover"),
+  checkFileForUpdate("cover_landscape"),
+  postValidationRules(),
+  validate,
+  eventController.updateEvent
+);
 
 module.exports = router;
