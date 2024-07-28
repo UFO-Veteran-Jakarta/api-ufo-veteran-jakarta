@@ -24,3 +24,15 @@ exports.addAchievement = async function insertAchievement(data) {
     console.error("Error inserting achievement:", error);
   }
 };
+
+exports.getAllAchievements = async function getAllAchievements() {
+  const query = "SELECT * FROM myschema.achievements WHERE deleted_at IS NULL";
+
+  try {
+    const res = await pool.query(query);
+    return res.rows;
+  } catch (error) {
+    console.error("Error fetching partners:", error);
+    throw error;
+  }
+};
