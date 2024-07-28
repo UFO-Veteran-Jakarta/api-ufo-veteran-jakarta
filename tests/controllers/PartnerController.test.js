@@ -2,7 +2,6 @@ const { deleteUserByUsername } = require("src/models/userModel");
 const request = require("supertest");
 const app = require("src/app");
 const path = require("path");
-const fs = require("fs");
 require("dotenv").config();
 
 const registerAndLogin = async (userData) => {
@@ -11,45 +10,34 @@ const registerAndLogin = async (userData) => {
   return loginResponse.body.authorization.token;
 };
 
-const postPartner = async (
-  token,
-  logoPath,
-  partnerData = { name: "Default Name" }
-) => {
+const makeRequest = (method, token, endpoint, data = {}, logoPath) => {
   let req = request(app)
-    .post("/api/v1/partners")
+    [method](endpoint)
     .set("Cookie", `token=${token}`)
-    .set("Authorization", `Bearer ${token}`)
-    .field("name", partnerData.name);
+    .set("Authorization", `Bearer ${token}`);
 
-  if (logoPath) {
-    req = req.attach("logo", logoPath);
+  if (method === "post" || method === "put") {
+    if (logoPath) {
+      req = req.field("name", data.name).attach("logo", logoPath);
+    } else {
+      req = req.send(data);
+    }
   }
 
-  return await req;
+  return req;
 };
 
-const getPartnerById = async (token, id) => {
-  return await request(app)
-    .get(`/api/v1/partners/?id=${id}`)
-    .set("Cookie", `token=${token}`)
-    .set("Authorization", `Bearer ${token}`);
-};
+const postPartner = (token, logoPath, partnerData = { name: "Default Name" }) =>
+  makeRequest("post", token, "/api/v1/partners", partnerData, logoPath);
 
-const updatePartner = async (token, id, updateData) => {
-  return await request(app)
-    .put(`/api/v1/partners?id=${id}`)
-    .set("Cookie", `token=${token}`)
-    .set("Authorization", `Bearer ${token}`)
-    .send(updateData);
-};
+const getPartnerById = (token, id) =>
+  makeRequest("get", token, `/api/v1/partners/?id=${id}`);
 
-const deletePartner = async (token, id) => {
-  return await request(app)
-    .delete(`/api/v1/partners?id=${id}`)
-    .set("Cookie", `token=${token}`)
-    .set("Authorization", `Bearer ${token}`);
-};
+const updatePartner = (token, id, updateData) =>
+  makeRequest("put", token, `/api/v1/partners?id=${id}`, updateData);
+
+const deletePartner = (token, id) =>
+  makeRequest("delete", token, `/api/v1/partners?id=${id}`);
 
 describe("Partner Controller", () => {
   let data;
@@ -112,7 +100,7 @@ describe("Partner Controller", () => {
   });
 
   describe("GET /api/v1/partners", () => {
-    it("should be return all partners", async () => {
+    it("should return all partners", async () => {
       const res = await request(app).get("/api/v1/partners");
       expect(res.statusCode).toEqual(200);
       expect(res.body.status).toEqual(200);
@@ -122,7 +110,7 @@ describe("Partner Controller", () => {
   });
 
   describe("GET /api/v1/partners/?id=id_partner", () => {
-    it("should be return partner by id", async () => {
+    it("should return partner by id", async () => {
       const filePathLogo = path.resolve(__dirname, "../test-small.webp");
       const partnerData = { name: "Test Partner" };
       const partnerResponse = await postPartner(
@@ -155,7 +143,7 @@ describe("Partner Controller", () => {
       expect(res.body.message).toEqual("Partner not found");
     });
 
-    it("should be update partner", async () => {
+    it("should update partner", async () => {
       const filePathLogo = path.resolve(__dirname, "../test-small.webp");
       const partnerData = { name: "Test Partner" };
       const partnerResponse = await postPartner(
@@ -191,7 +179,7 @@ describe("Partner Controller", () => {
       expect(res.body.message).toEqual("Partner not found");
     });
 
-    it("should be delete partner", async () => {
+    it("should delete partner", async () => {
       const filePathLogo = path.resolve(__dirname, "../test-small.webp");
       const partnerData = { name: "Test Partner" };
       const partnerResponse = await postPartner(
