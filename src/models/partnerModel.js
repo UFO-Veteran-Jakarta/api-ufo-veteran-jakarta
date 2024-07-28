@@ -36,3 +36,46 @@ exports.getAllPartners = async function getAllPartners() {
     throw error;
   }
 };
+
+exports.getPartnerById = async (id) => {
+  try {
+    const res = await pool.query(
+      `SELECT * FROM myschema.partners WHERE id = $1 AND deleted_at IS NULL`,
+      [id]
+    );
+
+    if (res.rows.length === 0) {
+      return null;
+    }
+    return res.rows[0];
+  } catch (error) {
+    return [];
+  }
+};
+
+exports.updatePartner = async (id, data) => {
+  const fields = [];
+  const values = [];
+  let index = 1;
+
+  Object.keys(data).forEach((key) => {
+    fields.push(`${key} = $${index}`);
+    values.push(data[key]);
+    index++;
+  });
+
+  const query = `
+    UPDATE myschema.events
+    SET ${fields.join(", ")}, updated_at = NOW()
+    WHERE id = $${index}
+    RETURNING *;
+  `;
+
+  try {
+    const res = await pool.query(query, [...values, id]);
+    return res.rows[0];
+  } catch (err) {
+    console.error(`Error updating partner with id ${id}:`, err);
+    throw err;
+  }
+};
