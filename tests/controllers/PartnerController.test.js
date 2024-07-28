@@ -5,31 +5,55 @@ const path = require("path");
 const fs = require("fs");
 require("dotenv").config();
 
+const registerAndLogin = async (userData) => {
+  await request(app).post("/api/v1/register").send(userData);
+  const loginResponse = await request(app).post("/api/v1/login").send(userData);
+  return loginResponse.body.authorization.token;
+};
+
+const postPartner = async (
+  token,
+  logoPath,
+  partnerData = { name: "Default Name" }
+) => {
+  let req = request(app)
+    .post("/api/v1/partners")
+    .set("Cookie", `token=${token}`)
+    .set("Authorization", `Bearer ${token}`)
+    .field("name", partnerData.name);
+
+  if (logoPath) {
+    req = req.attach("logo", logoPath);
+  }
+
+  return await req;
+};
+
+const getPartnerById = async (token, id) => {
+  return await request(app)
+    .get(`/api/v1/partners/?id=${id}`)
+    .set("Cookie", `token=${token}`)
+    .set("Authorization", `Bearer ${token}`);
+};
+
+const updatePartner = async (token, id, updateData) => {
+  return await request(app)
+    .put(`/api/v1/partners?id=${id}`)
+    .set("Cookie", `token=${token}`)
+    .set("Authorization", `Bearer ${token}`)
+    .send(updateData);
+};
+
+const deletePartner = async (token, id) => {
+  return await request(app)
+    .delete(`/api/v1/partners?id=${id}`)
+    .set("Cookie", `token=${token}`)
+    .set("Authorization", `Bearer ${token}`);
+};
+
 describe("Partner Controller", () => {
   let data;
-  let login;
-
-  const registerAndLogin = async () => {
-    await request(app).post("/api/v1/register").send(data);
-    login = await request(app).post("/api/v1/login").send(data);
-  };
-
-  const postPartners = async (logoPath) => {
-    if (logoPath && !fs.existsSync(logoPath)) {
-      throw new Error(`File does not exist: ${logoPath}`);
-    }
-
-    let req = request(app)
-      .post("/api/v1/partners")
-      .set("Cookie", `token=${login.body.authorization.token}`)
-      .set("Authorization", `Bearer ${login.body.authorization.token}`);
-
-    if (logoPath) {
-      req = req.attach("logo", logoPath);
-    }
-
-    return await req;
-  };
+  let token;
 
   beforeEach(async () => {
     await deleteUserByUsername(process.env.TEST_USERNAME);
@@ -37,7 +61,7 @@ describe("Partner Controller", () => {
       username: process.env.TEST_USERNAME,
       password: process.env.TEST_PASSWORD,
     };
-    await registerAndLogin();
+    token = await registerAndLogin(data);
   });
 
   describe("POST /api/v1/partner", () => {
@@ -49,7 +73,7 @@ describe("Partner Controller", () => {
     });
 
     it("logo should be provided", async () => {
-      const res = await postPartners();
+      const res = await postPartner(token);
       expect(res.statusCode).toEqual(500);
       expect(res.body.status).toEqual(500);
       expect(res.body.message).toBe("Partner logo are required");
@@ -57,7 +81,9 @@ describe("Partner Controller", () => {
 
     it("logo should be webp", async () => {
       const filePathLogo = path.resolve(__dirname, "../test.jpg");
-      const res = await postPartners(filePathLogo);
+      const res = await postPartner(token, filePathLogo, {
+        name: "Test Partner",
+      });
       expect(res.statusCode).toEqual(500);
       expect(res.body.status).toEqual(500);
       expect(res.body.message).toBe("Partner logo must be in WEBP format");
@@ -65,7 +91,9 @@ describe("Partner Controller", () => {
 
     it("should be accept if logo partner is less than 500kb", async () => {
       const filePathLogo = path.resolve(__dirname, "../tes-large.webp");
-      const res = await postPartners(filePathLogo);
+      const res = await postPartner(token, filePathLogo, {
+        name: "Test Partner",
+      });
       expect(res.statusCode).toEqual(500);
       expect(res.body.status).toEqual(500);
       expect(res.body.message).toBe(
@@ -75,18 +103,8 @@ describe("Partner Controller", () => {
 
     it("should be upload partner logo", async () => {
       const filePathLogo = path.resolve(__dirname, "../test-small.webp");
-      const partnerData = {
-        name: "Test Partner",
-        logo: filePathLogo,
-      };
-
-      const res = await request(app)
-        .post("/api/v1/partners")
-        .set("Cookie", `token=${login.body.authorization.token}`)
-        .set("Authorization", `Bearer ${login.body.authorization.token}`)
-        .field("name", partnerData.name)
-        .attach("logo", partnerData.logo);
-
+      const partnerData = { name: "Test Partner" };
+      const res = await postPartner(token, filePathLogo, partnerData);
       expect(res.statusCode).toEqual(200);
       expect(res.body.status).toEqual(200);
       expect(res.body.message).toBe("Successfully Add New Partner");
@@ -106,27 +124,19 @@ describe("Partner Controller", () => {
   describe("GET /api/v1/partners/?id=id_partner", () => {
     it("should be return partner by id", async () => {
       const filePathLogo = path.resolve(__dirname, "../test-small.webp");
-      const partnerData = {
-        name: "Test Partner",
-        logo: filePathLogo,
-      };
-
-      const partner = await request(app)
-        .post("/api/v1/partners")
-        .set("Cookie", `token=${login.body.authorization.token}`)
-        .set("Authorization", `Bearer ${login.body.authorization.token}`)
-        .field("name", partnerData.name)
-        .attach("logo", partnerData.logo);
-
-      const res = await request(app).get(
-        `/api/v1/partners/?id=${partner.body.data.id}`
+      const partnerData = { name: "Test Partner" };
+      const partnerResponse = await postPartner(
+        token,
+        filePathLogo,
+        partnerData
       );
 
+      const res = await getPartnerById(token, partnerResponse.body.data.id);
       expect(res.statusCode).toEqual(200);
       expect(res.body.status).toEqual(200);
       expect(res.body.message).toEqual("Successfully Get Partner");
       expect(res.body.data).toBeDefined();
-      expect(res.body.data.slug).toBe(partner.body.data.slug);
+      expect(res.body.data.slug).toBe(partnerResponse.body.data.slug);
     });
   });
 
@@ -139,43 +149,27 @@ describe("Partner Controller", () => {
     });
 
     it("should return 404 if partner not found", async () => {
-      const updateData = {
-        name: "Tes update partner",
-      };
-
-      const res = await request(app)
-        .put(`/api/v1/partners?id=123123`)
-        .set("Cookie", `token=${login.body.authorization.token}`)
-        .set("Authorization", `Bearer ${login.body.authorization.token}`)
-        .send(updateData);
-
+      const updateData = { name: "Tes update partner" };
+      const res = await updatePartner(token, "123123", updateData);
       expect(res.statusCode).toEqual(404);
       expect(res.body.message).toEqual("Partner not found");
     });
 
     it("should be update partner", async () => {
       const filePathLogo = path.resolve(__dirname, "../test-small.webp");
-      const partnerData = {
-        name: "Test Partner",
-        logo: filePathLogo,
-      };
+      const partnerData = { name: "Test Partner" };
+      const partnerResponse = await postPartner(
+        token,
+        filePathLogo,
+        partnerData
+      );
 
-      const partner = await request(app)
-        .post("/api/v1/partners")
-        .set("Cookie", `token=${login.body.authorization.token}`)
-        .set("Authorization", `Bearer ${login.body.authorization.token}`)
-        .field("name", partnerData.name)
-        .attach("logo", partnerData.logo);
-
-      const updateData = {
-        name: "Tes update partner",
-      };
-
-      const res = await request(app)
-        .put(`/api/v1/partners?id=${partner.body.data.id}`)
-        .set("Cookie", `token=${login.body.authorization.token}`)
-        .set("Authorization", `Bearer ${login.body.authorization.token}`)
-        .send(updateData);
+      const updateData = { name: "Tes update partner" };
+      const res = await updatePartner(
+        token,
+        partnerResponse.body.data.id,
+        updateData
+      );
 
       expect(res.statusCode).toEqual(200);
       expect(res.body.status).toEqual(200);
@@ -183,7 +177,7 @@ describe("Partner Controller", () => {
     });
   });
 
-  describe("DELET /api/v1/partners?id=id_partner", () => {
+  describe("DELETE /api/v1/partners?id=id_partner", () => {
     it("should be rejected if user not authenticated", async () => {
       const res = await request(app).post("/api/v1/partners");
       expect(res.statusCode).toEqual(401);
@@ -192,39 +186,21 @@ describe("Partner Controller", () => {
     });
 
     it("should return 404 if partner not found", async () => {
-      const updateData = {
-        name: "Tes update partner",
-      };
-
-      const res = await request(app)
-        .put(`/api/v1/partners?id=123123`)
-        .set("Cookie", `token=${login.body.authorization.token}`)
-        .set("Authorization", `Bearer ${login.body.authorization.token}`)
-        .send(updateData);
-
+      const res = await deletePartner(token, "123123");
       expect(res.statusCode).toEqual(404);
       expect(res.body.message).toEqual("Partner not found");
     });
 
     it("should be delete partner", async () => {
       const filePathLogo = path.resolve(__dirname, "../test-small.webp");
-      const partnerData = {
-        name: "Test Partner",
-        logo: filePathLogo,
-      };
+      const partnerData = { name: "Test Partner" };
+      const partnerResponse = await postPartner(
+        token,
+        filePathLogo,
+        partnerData
+      );
 
-      const partner = await request(app)
-        .post("/api/v1/partners")
-        .set("Cookie", `token=${login.body.authorization.token}`)
-        .set("Authorization", `Bearer ${login.body.authorization.token}`)
-        .field("name", partnerData.name)
-        .attach("logo", partnerData.logo);
-
-      const res = await request(app)
-        .delete(`/api/v1/partners?id=${partner.body.data.id}`)
-        .set("Cookie", `token=${login.body.authorization.token}`)
-        .set("Authorization", `Bearer ${login.body.authorization.token}`);
-
+      const res = await deletePartner(token, partnerResponse.body.data.id);
       expect(res.statusCode).toEqual(200);
       expect(res.body.status).toEqual(200);
       expect(res.body.message).toEqual("Successfully Delete Partner");

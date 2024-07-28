@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1722136146973" clover="3.2.0">
-  <project timestamp="1722136146973" name="All files">
-    <metrics statements="677" coveredstatements="566" conditionals="138" coveredconditionals="92" methods="102" coveredmethods="93" elements="917" coveredelements="751" complexity="0" loc="677" ncloc="677" packages="11" files="35" classes="35"/>
+<coverage generated="1722137149253" clover="3.2.0">
+  <project timestamp="1722137149253" name="All files">
+    <metrics statements="677" coveredstatements="568" conditionals="138" coveredconditionals="93" methods="102" coveredmethods="93" elements="917" coveredelements="754" complexity="0" loc="677" ncloc="677" packages="11" files="35" classes="35"/>
     <package name="src">
       <metrics statements="17" coveredstatements="17" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
       <file name="app.js" path="C:\Users\Nugraha Adhitama\Documents\api-ufo-veteran-jakarta\src\app.js">
@@ -44,7 +44,7 @@
       </file>
     </package>
     <package name="src.controllers">
-      <metrics statements="199" coveredstatements="154" conditionals="40" coveredconditionals="31" methods="17" coveredmethods="17"/>
+      <metrics statements="199" coveredstatements="156" conditionals="40" coveredconditionals="32" methods="17" coveredmethods="17"/>
       <file name="authController.js" path="C:\Users\Nugraha Adhitama\Documents\api-ufo-veteran-jakarta\src\controllers\authController.js">
         <metrics statements="32" coveredstatements="26" conditionals="6" coveredconditionals="5" methods="3" coveredmethods="3"/>
         <line num="1" count="4" type="stmt"/>
@@ -195,7 +195,7 @@
         <line num="123" count="0" type="stmt"/>
       </file>
       <file name="partnerController.js" path="C:\Users\Nugraha Adhitama\Documents\api-ufo-veteran-jakarta\src\controllers\partnerController.js">
-        <metrics statements="59" coveredstatements="43" conditionals="10" coveredconditionals="7" methods="5" coveredmethods="5"/>
+        <metrics statements="59" coveredstatements="45" conditionals="10" coveredconditionals="8" methods="5" coveredmethods="5"/>
         <line num="1" count="4" type="stmt"/>
         <line num="2" count="4" type="stmt"/>
         <line num="8" count="4" type="stmt"/>
@@ -230,12 +230,12 @@
         <line num="54" count="0" type="stmt"/>
         <line num="55" count="0" type="stmt"/>
         <line num="59" count="4" type="stmt"/>
-        <line num="60" count="3" type="stmt"/>
-        <line num="61" count="3" type="stmt"/>
-        <line num="63" count="3" type="stmt"/>
-        <line num="65" count="3" type="cond" truecount="2" falsecount="0"/>
-        <line num="66" count="2" type="stmt"/>
-        <line num="67" count="2" type="stmt"/>
+        <line num="60" count="2" type="stmt"/>
+        <line num="61" count="2" type="stmt"/>
+        <line num="63" count="2" type="stmt"/>
+        <line num="65" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="66" count="1" type="stmt"/>
+        <line num="67" count="1" type="stmt"/>
         <line num="70" count="1" type="cond" truecount="1" falsecount="1"/>
         <line num="71" count="0" type="stmt"/>
         <line num="72" count="0" type="stmt"/>
@@ -245,12 +245,12 @@
         <line num="85" count="0" type="stmt"/>
         <line num="86" count="0" type="stmt"/>
         <line num="90" count="4" type="stmt"/>
-        <line num="91" count="1" type="stmt"/>
-        <line num="92" count="1" type="stmt"/>
-        <line num="94" count="1" type="stmt"/>
-        <line num="96" count="1" type="cond" truecount="1" falsecount="1"/>
-        <line num="97" count="0" type="stmt"/>
-        <line num="98" count="0" type="stmt"/>
+        <line num="91" count="2" type="stmt"/>
+        <line num="92" count="2" type="stmt"/>
+        <line num="94" count="2" type="stmt"/>
+        <line num="96" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="97" count="1" type="stmt"/>
+        <line num="98" count="1" type="stmt"/>
         <line num="101" count="1" type="stmt"/>
         <line num="102" count="1" type="stmt"/>
         <line num="104" count="0" type="stmt"/>
@@ -365,15 +365,15 @@
         <line num="28" count="4" type="stmt"/>
         <line num="32" count="4" type="stmt"/>
         <line num="33" count="4" type="stmt"/>
-        <line num="34" count="3" type="stmt"/>
-        <line num="36" count="3" type="cond" truecount="1" falsecount="1"/>
+        <line num="34" count="2" type="stmt"/>
+        <line num="36" count="2" type="cond" truecount="1" falsecount="1"/>
         <line num="37" count="0" type="stmt"/>
         <line num="38" count="0" type="stmt"/>
         <line num="40" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="41" count="0" type="stmt"/>
         <line num="44" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="46" count="0" type="stmt"/>
-        <line num="54" count="3" type="stmt"/>
+        <line num="54" count="2" type="stmt"/>
       </file>
     </package>
     <package name="src.migration">
@@ -810,10 +810,10 @@
         <line num="3" count="4" type="stmt"/>
         <line num="4" count="8" type="stmt"/>
         <line num="16" count="4" type="stmt"/>
-        <line num="17" count="7" type="stmt"/>
-        <line num="18" count="7" type="cond" truecount="1" falsecount="1"/>
+        <line num="17" count="6" type="stmt"/>
+        <line num="18" count="6" type="cond" truecount="1" falsecount="1"/>
         <line num="19" count="0" type="stmt"/>
-        <line num="21" count="7" type="stmt"/>
+        <line num="21" count="6" type="stmt"/>
         <line num="24" count="4" type="stmt"/>
       </file>
     </package>
