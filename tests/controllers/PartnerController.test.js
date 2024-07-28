@@ -91,4 +91,14 @@ describe("Partner Controller", () => {
       expect(res.body.message).toBe("Successfully Add New Partner");
     });
   });
+
+  describe("GET /api/v1/partners", () => {
+    it("should be return all partners", async () => {
+      const res = await request(app).get("/api/v1/partners");
+      expect(res.statusCode).toEqual(200);
+      expect(res.body.status).toEqual(200);
+      expect(res.body.message).toBe("Successfully Get All Partners");
+      expect(Array.isArray(res.body.data)).toBe(true);
+    });
+  });
 });
