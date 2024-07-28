@@ -30,5 +30,5 @@ exports.updateAchievement = async (id, data) => {
 };
 
 exports.deleteAchievement = async (id) => {
-  return await updateAchievementById(id); // ini nanti diganti
+  return await updateAchievementById(id);
 };
