@@ -4,6 +4,7 @@ const { uploadSingle } = require("src/utils/uploadFile");
 const {
   addAchievemnt,
   getAllAchievements,
+  getAchievementById,
 } = require("src/services/achievementService");
 
 exports.addAchievement = async (req, res) => {
@@ -40,5 +41,23 @@ exports.getAllAchievements = async (req, res, next) => {
   } catch (error) {
     logger.error("Failed to Get All Achievements", error);
     return sendResponse(res, 500, "Failed to Get All Achievements");
+  }
+};
+
+exports.getAchievementById = exports.updateAchievement = async (req, res) => {
+  try {
+    const { id } = req.query;
+    const achievement = await getAchievementById(id);
+
+    if (!achievement) {
+      logger.error(`Achievement with id ${id} not found`);
+      return sendResponse(res, 404, "Achievement not found");
+    }
+
+    logger.info(`Successfully Get Achievement with id ${id}`);
+    return sendResponse(res, 200, "Successfully Get Achievement", achievement);
+  } catch (error) {
+    logger.error("Failed to Get Achievement");
+    return sendResponse(res, 500, error.message);
   }
 };
