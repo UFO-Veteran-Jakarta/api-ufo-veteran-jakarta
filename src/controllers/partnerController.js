@@ -1,6 +1,6 @@
 const logger = require("../utils/logger");
 const { sendResponse } = require("../helpers/response");
-const { addPartner } = require("../services/partnerService");
+const { addPartner, getAllPartners } = require("../services/partnerService");
 const { uploadSingle } = require("../utils/uploadFile");
 
 exports.uploadPartner = async (req, res) => {
@@ -15,5 +15,16 @@ exports.uploadPartner = async (req, res) => {
   } catch (error) {
     logger.error("Add Error: Failed Add Partner");
     return sendResponse(res, 500, error.message);
+  }
+};
+
+exports.getAllPartners = async (req, res) => {
+  try {
+    const partners = await getAllPartners();
+    logger.info("Successfully Get All Partners");
+    return sendResponse(res, 200, "Successfully Get All Partners", partners);
+  } catch (error) {
+    logger.error("Failed to Get All Partners");
+    return sendResponse(res, 500, "Failed to Get All Partners");
   }
 };
