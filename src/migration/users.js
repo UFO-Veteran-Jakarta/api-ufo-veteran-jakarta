@@ -69,4 +69,5 @@ exports.dropTable = async () => {
   await pool.query(`DROP TABLE IF EXISTS myschema.users;`);
   await pool.query(`DROP TABLE IF EXISTS myschema.contents;`);
   await pool.query(`DROP TABLE IF EXISTS myschema.events;`);
+  await pool.query(`DROP TABLE IF EXISTS myschema.partners;`);
 };

@@ -33,7 +33,7 @@ exports.getAllPartners = async (req, res, next) => {
     logger.info("Successfully Get All Partners");
     return sendResponse(res, 200, "Successfully Get All Partners", partners);
   } catch (error) {
-    logger.error("Failed to Get All Partners");
+    logger.error("Failed to Get All Partners", error);
     return sendResponse(res, 500, "Failed to Get All Partners");
   }
 };
