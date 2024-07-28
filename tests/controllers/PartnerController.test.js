@@ -73,6 +73,25 @@ describe("Partner Controller", () => {
       await testUnauthorizedAccess("/api/v1/partners");
     });
 
+    it("partner name should be provided", async () => {
+      const filePathLogo = path.resolve(__dirname, "../test-small.webp");
+      const res = await postPartner(token, filePathLogo, { name: "" });
+      expect(res.statusCode).toEqual(500);
+      expect(res.body.status).toEqual(500);
+      expect(res.body.errors[0].msg).toBe("partner name is required");
+    });
+
+    it("partner name should not exceed 255 characters", async () => {
+      const filePathLogo = path.resolve(__dirname, "../test-small.webp");
+      const longName = "a".repeat(256);
+      const res = await postPartner(token, filePathLogo, { name: longName });
+      expect(res.statusCode).toEqual(500);
+      expect(res.body.status).toEqual(500);
+      expect(res.body.errors[0].msg).toBe(
+        "Partner name must be no more than 255 characters"
+      );
+    });
+
     it("logo should be provided", async () => {
       const res = await postPartner(token);
       expect(res.statusCode).toEqual(500);
