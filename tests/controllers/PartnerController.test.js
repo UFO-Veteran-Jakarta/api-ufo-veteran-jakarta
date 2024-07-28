@@ -3,6 +3,7 @@ const request = require("supertest");
 const app = require("src/app");
 const path = require("path");
 const fs = require("fs");
+require("dotenv").config();
 
 describe("Partner Controller", () => {
   let data;
@@ -31,10 +32,10 @@ describe("Partner Controller", () => {
   };
 
   beforeEach(async () => {
-    await deleteUserByUsername("admin");
+    await deleteUserByUsername(process.env.TEST_USERNAME);
     data = {
-      username: "admin",
-      password: "Admin@12345",
+      username: process.env.TEST_USERNAME,
+      password: process.env.TEST_PASSWORD,
     };
     await registerAndLogin();
   });
