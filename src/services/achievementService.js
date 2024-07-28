@@ -1,6 +1,7 @@
 const {
   addAchievement,
   getAllAchievements,
+  getAchievementById,
 } = require("../models/achievementsModel");
 
 exports.addAchievemnt = async (data) => {
@@ -14,4 +15,8 @@ exports.getAllAchievements = async () => {
     console.error("Error fetching achievements:", error);
     throw error;
   }
+};
+
+exports.getAchievementById = async (id) => {
+  return await getAchievementById(id);
 };
