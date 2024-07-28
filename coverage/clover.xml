@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1722150586675" clover="3.2.0">
-  <project timestamp="1722150586675" name="All files">
+<coverage generated="1722151906191" clover="3.2.0">
+  <project timestamp="1722151906191" name="All files">
     <metrics statements="678" coveredstatements="574" conditionals="138" coveredconditionals="97" methods="102" coveredmethods="93" elements="918" coveredelements="764" complexity="0" loc="678" ncloc="678" packages="11" files="35" classes="35"/>
     <package name="src">
       <metrics statements="17" coveredstatements="17" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
@@ -268,12 +268,12 @@
       <file name="response.js" path="C:\Users\Nugraha Adhitama\Documents\api-ufo-veteran-jakarta\src\helpers\response.js">
         <metrics statements="7" coveredstatements="7" conditionals="6" coveredconditionals="6" methods="1" coveredmethods="1"/>
         <line num="1" count="5" type="stmt"/>
-        <line num="8" count="151" type="stmt"/>
-        <line num="12" count="151" type="cond" truecount="2" falsecount="0"/>
+        <line num="8" count="150" type="stmt"/>
+        <line num="12" count="150" type="cond" truecount="2" falsecount="0"/>
         <line num="13" count="71" type="stmt"/>
-        <line num="15" count="151" type="cond" truecount="2" falsecount="0"/>
+        <line num="15" count="150" type="cond" truecount="2" falsecount="0"/>
         <line num="16" count="41" type="stmt"/>
-        <line num="18" count="151" type="stmt"/>
+        <line num="18" count="150" type="stmt"/>
       </file>
       <file name="slug.js" path="C:\Users\Nugraha Adhitama\Documents\api-ufo-veteran-jakarta\src\helpers\slug.js">
         <metrics statements="6" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
@@ -298,15 +298,15 @@
         <line num="9" count="92" type="stmt"/>
         <line num="13" count="5" type="stmt"/>
         <line num="14" count="50" type="stmt"/>
-        <line num="15" count="66" type="stmt"/>
-        <line num="16" count="66" type="stmt"/>
-        <line num="17" count="66" type="stmt"/>
-        <line num="19" count="66" type="cond" truecount="4" falsecount="0"/>
+        <line num="15" count="65" type="stmt"/>
+        <line num="16" count="65" type="stmt"/>
+        <line num="17" count="65" type="stmt"/>
+        <line num="19" count="65" type="cond" truecount="4" falsecount="0"/>
         <line num="20" count="10" type="stmt"/>
-        <line num="23" count="56" type="stmt"/>
-        <line num="24" count="56" type="stmt"/>
+        <line num="23" count="55" type="stmt"/>
+        <line num="24" count="55" type="stmt"/>
         <line num="26" count="0" type="stmt"/>
-        <line num="29" count="56" type="stmt"/>
+        <line num="29" count="55" type="stmt"/>
       </file>
       <file name="eventMiddlewareFile.js" path="C:\Users\Nugraha Adhitama\Documents\api-ufo-veteran-jakarta\src\middlewares\eventMiddlewareFile.js">
         <metrics statements="36" coveredstatements="24" conditionals="36" coveredconditionals="18" methods="4" coveredmethods="4"/>
@@ -353,15 +353,15 @@
         <line num="2" count="5" type="stmt"/>
         <line num="4" count="5" type="stmt"/>
         <line num="5" count="5" type="stmt"/>
-        <line num="6" count="17" type="stmt"/>
-        <line num="8" count="17" type="cond" truecount="2" falsecount="0"/>
+        <line num="6" count="16" type="stmt"/>
+        <line num="8" count="16" type="cond" truecount="2" falsecount="0"/>
         <line num="9" count="2" type="stmt"/>
-        <line num="12" count="15" type="stmt"/>
-        <line num="13" count="15" type="stmt"/>
-        <line num="15" count="15" type="cond" truecount="4" falsecount="0"/>
+        <line num="12" count="14" type="stmt"/>
+        <line num="13" count="14" type="stmt"/>
+        <line num="15" count="14" type="cond" truecount="4" falsecount="0"/>
         <line num="16" count="2" type="stmt"/>
-        <line num="19" count="13" type="cond" truecount="2" falsecount="0"/>
-        <line num="21" count="3" type="stmt"/>
+        <line num="19" count="12" type="cond" truecount="2" falsecount="0"/>
+        <line num="21" count="2" type="stmt"/>
         <line num="28" count="10" type="stmt"/>
         <line num="32" count="5" type="stmt"/>
         <line num="33" count="5" type="stmt"/>
@@ -711,9 +711,9 @@
         <line num="2" count="5" type="stmt"/>
         <line num="3" count="41" type="stmt"/>
         <line num="10" count="5" type="stmt"/>
-        <line num="11" count="112" type="stmt"/>
-        <line num="12" count="112" type="stmt"/>
-        <line num="13" count="112" type="stmt"/>
+        <line num="11" count="110" type="stmt"/>
+        <line num="12" count="110" type="stmt"/>
+        <line num="13" count="110" type="stmt"/>
         <line num="15" count="0" type="stmt"/>
       </file>
       <file name="limiter.js" path="C:\Users\Nugraha Adhitama\Documents\api-ufo-veteran-jakarta\src\utils\limiter.js">

@@ -19,23 +19,41 @@ describe("Partner Middleware", () => {
     token = await authenticateUser();
   });
 
-  const postPartner = (
-    token,
-    logoPath,
-    partnerData = { name: "Default Name" }
-  ) => {
+  const sendRequest = (method, url, token, bodyData = {}, logoPath) => {
     let req = request(app)
-      .post("/api/v1/partners")
+      [method](url)
       .set("Cookie", `token=${token}`)
       .set("Authorization", `Bearer ${token}`);
 
     if (logoPath) {
-      req = req.field("name", partnerData.name).attach("logo", logoPath);
+      req = req
+        .field("name", bodyData.name || "Default Name")
+        .attach("logo", logoPath);
     } else {
-      req = req.send(partnerData);
+      req = req.send(bodyData);
     }
 
     return req;
+  };
+
+  const postPartner = (
+    token,
+    logoPath,
+    partnerData = { name: "Default Name" }
+  ) => sendRequest("post", "/api/v1/partners", token, partnerData, logoPath);
+
+  const updatePartner = (token, id, updateData, logoPath) =>
+    sendRequest(
+      "put",
+      `/api/v1/partners?id=${id}`,
+      token,
+      updateData,
+      logoPath
+    );
+
+  const prepareTestPartner = async (token, filePathLogo, partnerData) => {
+    const partnerResponse = await postPartner(token, filePathLogo, partnerData);
+    return partnerResponse.body.data;
   };
 
   describe("checkFile Middleware", () => {
@@ -74,30 +92,6 @@ describe("Partner Middleware", () => {
   });
 
   describe("checkUpdateFile Middleware", () => {
-    const updatePartner = (token, id, updateData, logoPath) => {
-      let req = request(app)
-        .put(`/api/v1/partners?id=${id}`)
-        .set("Cookie", `token=${token}`)
-        .set("Authorization", `Bearer ${token}`);
-
-      if (logoPath) {
-        req = req.field("name", updateData.name).attach("logo", logoPath);
-      } else {
-        req = req.send(updateData);
-      }
-
-      return req;
-    };
-
-    const prepareTestPartner = async (token, filePathLogo, partnerData) => {
-      const partnerResponse = await postPartner(
-        token,
-        filePathLogo,
-        partnerData
-      );
-      return partnerResponse.body.data;
-    };
-
     it("should return 500 if new logo is not in WEBP format", async () => {
       const filePathLogo = path.resolve(__dirname, "../test-small.webp");
       const partnerData = { name: "Test Partner" };
@@ -116,18 +110,6 @@ describe("Partner Middleware", () => {
       );
       expect(res.statusCode).toEqual(500);
       expect(res.body.message).toBe("Partner logo must be in WEBP format");
-    }, 60000);
-
-    it("should return 500 if new logo size exceeds 500KB", async () => {
-      const filePathLogo = path.resolve(__dirname, "../tes-large.webp");
-      const res = await postPartner(token, filePathLogo, {
-        name: "Test Partner",
-      });
-      expect(res.statusCode).toEqual(500);
-      expect(res.body.status).toEqual(500);
-      expect(res.body.message).toBe(
-        "Partner logo size is too big, please upload a file smaller than 500 KB"
-      );
     }, 60000);
 
     it("should pass if new logo is provided in WEBP format and is less than 500KB", async () => {
