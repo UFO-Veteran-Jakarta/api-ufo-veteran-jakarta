@@ -36,3 +36,19 @@ exports.getAllAchievements = async function getAllAchievements() {
     throw error;
   }
 };
+
+exports.getAchievementById = async (id) => {
+  try {
+    const res = await pool.query(
+      `SELECT * FROM myschema.achievements WHERE id = $1 AND deleted_at IS NULL`,
+      [id]
+    );
+
+    if (res.rows.length === 0) {
+      return null;
+    }
+    return res.rows[0];
+  } catch (error) {
+    return [];
+  }
+};
