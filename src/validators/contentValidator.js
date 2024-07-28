@@ -13,7 +13,7 @@ const postValidationRules = () => {
         "The link must be a string and a link evidenced by https:// at the beginning"
       )
       .matches(
-        /^https[:\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)$/
+        /^https:\/\/(www\.)?[a-zA-Z0-9@:%._~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_~#?&/=]*)$/
       )
       .withMessage("The link must valid a url"),
   ];

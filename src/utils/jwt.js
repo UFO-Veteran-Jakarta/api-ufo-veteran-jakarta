@@ -8,5 +8,10 @@ exports.sign = (user) => {
 };
 
 exports.verify = (token) => {
-  return jwt.verify(token, process.env.JWT_SECRET);
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    return { valid: true, decoded };
+  } catch (error) {
+    return { valid: false, error };
+  }
 };

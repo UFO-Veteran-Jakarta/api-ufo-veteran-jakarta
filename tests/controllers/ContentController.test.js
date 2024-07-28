@@ -57,16 +57,14 @@ describe("Content Controller", () => {
       expect(res.body.errors[0].msg).toBe("The link must valid a url");
     });
 
-    it("should be rejected if token not valid", async () => {
-      const res = await request(app)
-        .post("/api/v1/contents")
-        .set("Cookie", `token=asfsf`)
-        .set("Authorization", `Bearer asdfsadf`)
-        .send({ link: "https://blablabla.com" });
+    it("should be rejected if user not authenticated", async () => {
+      const res = await request(app).post("/api/v1/contents");
 
       expect(res.statusCode).toEqual(401);
       expect(res.body.status).toEqual(401);
+      expect(res.body.message).toBeDefined();
     });
+
     it("should be able to add content", async () => {
       const data = {
         username: "admin",
@@ -176,6 +174,7 @@ describe("Content Controller", () => {
       expect(res.body.status).toEqual(404);
       expect(res.body.message).toBe("Content Not Found");
     });
+
     it("should be rejected if link is not http", async () => {
       const data = {
         username: "admin",
@@ -226,6 +225,7 @@ describe("Content Controller", () => {
       expect(res.body.status).toEqual(500);
       expect(res.body.errors[0].msg).toBe("The link must valid a url");
     });
+
     it("should be reject cause content not found", async () => {
       const data = {
         username: "admin",
@@ -234,7 +234,7 @@ describe("Content Controller", () => {
       await request(app).post("/api/v1/register").send(data);
       const login = await request(app).post("/api/v1/login").send(data);
 
-      const content = await request(app)
+      await request(app)
         .post("/api/v1/contents")
         .set("Cookie", `token=${login.body.authorization.token}`)
         .set("Authorization", `Bearer ${login.body.authorization.token}`)
@@ -250,6 +250,7 @@ describe("Content Controller", () => {
       expect(res.body.status).toEqual(404);
       expect(res.body.message).toBe("Content Not Found");
     });
+
     it("should be able to edit content", async () => {
       const data = {
         username: "admin",

@@ -18,18 +18,10 @@ const registerValidationRules = () => {
       .isLength({ min: 8, max: 64 })
       .escape()
       .withMessage("Password must be between 8 and 64 characters")
-      .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[\W]).*$/)
+      .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W).*$/)
       .withMessage(
         "Password must consist of at least one lowercase, one uppercase, one special character, and one number"
       ),
-    //   .matches(/[a-z]/)
-    //   .withMessage("Password must contain at least one lowercase letter")
-    //   .matches(/[A-Z]/)
-    //   .withMessage("Password must contain at least one uppercase letter")
-    //   .matches(/[0-9]/)
-    //   .withMessage("Password must contain at least one number")
-    //   .matches(/[\W]/)
-    //   .withMessage("Password must contain at least one special character"),
   ];
 };
 

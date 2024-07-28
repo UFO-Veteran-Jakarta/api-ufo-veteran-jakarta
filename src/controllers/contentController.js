@@ -67,8 +67,7 @@ exports.deleteContent = async (req, res) => {
       return sendResponse(res, 404, "Content Not Found");
     }
 
-    const result = await contentService.deleteContent(req.query.id);
-    console.log("JANCUG", result);
+    await contentService.deleteContent(req.query.id);
     logger.info("Delete Success: Success Deleted Content");
     return sendResponse(res, 200, "Successfully Delete Content");
   } catch (err) {
