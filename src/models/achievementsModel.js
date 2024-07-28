@@ -79,3 +79,20 @@ exports.updateAchievement = async (id, data) => {
     throw error;
   }
 };
+
+exports.deleteAchievement = async (id) => {
+  const query = `
+    UPDATE myschema.achievements
+    SET deleted_at = NOW()
+    WHERE id = $1
+    RETURNING *;
+  `;
+
+  try {
+    const res = await pool.query(query, [id]);
+    return res.rows[0];
+  } catch (error) {
+    console.error(`Error deleting achievement with id ${id}:`, error);
+    throw error;
+  }
+};
