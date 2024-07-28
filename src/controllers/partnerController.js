@@ -93,3 +93,22 @@ exports.updatePartnerById = async (req, res) => {
     return sendResponse(res, 500, error.message);
   }
 };
+
+exports.deletePartnerById = async (req, res) => {
+  try {
+    const id = req.query.id;
+
+    const partner = await getPartnerById(id);
+
+    if (!partner) {
+      logger.error(`Partner with id ${id} not found`);
+      return sendResponse(res, 404, "Partner not found");
+    }
+
+    logger.info(`Successfully Delete Partner with id ${id}`);
+    return sendResponse(res, 200, "Successfully Delete Partner");
+  } catch (error) {
+    logger.error("Failed to Delete Partner");
+    return sendResponse(res, 500, error.message);
+  }
+};
