@@ -19,4 +19,6 @@ router.post(
   partnerController.uploadPartner
 );
 
+router.get("/", partnerController.getAllPartners);
+
 module.exports = router;
