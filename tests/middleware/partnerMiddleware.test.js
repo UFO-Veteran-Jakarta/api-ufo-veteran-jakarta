@@ -56,6 +56,8 @@ describe("Partner Middleware", () => {
     return partnerResponse.body.data;
   };
 
+  // console.log
+
   const testFileMiddleware = (description, setup, assertions) => {
     it(
       description,
