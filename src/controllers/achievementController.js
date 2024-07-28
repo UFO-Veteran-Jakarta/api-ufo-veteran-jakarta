@@ -1,7 +1,10 @@
 const logger = require("../utils/logger");
 const { sendResponse } = require("../helpers/response");
 const { uploadSingle } = require("src/utils/uploadFile");
-const { addAchievemnt } = require("src/services/achievementService");
+const {
+  addAchievemnt,
+  getAllAchievements,
+} = require("src/services/achievementService");
 
 exports.addAchievement = async (req, res) => {
   try {
@@ -16,5 +19,26 @@ exports.addAchievement = async (req, res) => {
   } catch (error) {
     logger.error("Add Error: Failed Add Achievement");
     return sendResponse(res, 500, error.message);
+  }
+};
+
+exports.getAllAchievements = async (req, res, next) => {
+  try {
+    if (req.query.id) {
+      return next();
+    }
+
+    const achievements = await getAllAchievements();
+    logger.info("Successfully Get All Achievements");
+
+    return sendResponse(
+      res,
+      200,
+      "Successfully Get All Achievements",
+      achievements
+    );
+  } catch (error) {
+    logger.error("Failed to Get All Achievements", error);
+    return sendResponse(res, 500, "Failed to Get All Achievements");
   }
 };
