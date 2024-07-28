@@ -44,25 +44,33 @@ const prepareTestPartner = async (token, filePathLogo, partnerData) => {
   return partnerResponse.body.data;
 };
 
+const authenticateUser = async () => {
+  await deleteUserByUsername(process.env.TEST_USERNAME);
+  const data = {
+    username: process.env.TEST_USERNAME,
+    password: process.env.TEST_PASSWORD,
+  };
+  const token = await registerAndLogin(data);
+  return token;
+};
+
+const testUnauthorizedAccess = async (endpoint, method = "post") => {
+  const res = await request(app)[method](endpoint);
+  expect(res.statusCode).toEqual(401);
+  expect(res.body.status).toEqual(401);
+  expect(res.body.message).toBeDefined();
+};
+
 describe("Partner Controller", () => {
-  let data;
   let token;
 
   beforeEach(async () => {
-    await deleteUserByUsername(process.env.TEST_USERNAME);
-    data = {
-      username: process.env.TEST_USERNAME,
-      password: process.env.TEST_PASSWORD,
-    };
-    token = await registerAndLogin(data);
+    token = await authenticateUser();
   });
 
-  describe("POST /api/v1/partner", () => {
+  describe("POST /api/v1/partners", () => {
     it("should be rejected if user not authenticated", async () => {
-      const res = await request(app).post("/api/v1/partners");
-      expect(res.statusCode).toEqual(401);
-      expect(res.body.status).toEqual(401);
-      expect(res.body.message).toBeDefined();
+      await testUnauthorizedAccess("/api/v1/partners");
     });
 
     it("logo should be provided", async () => {
@@ -94,7 +102,7 @@ describe("Partner Controller", () => {
       );
     }, 60000);
 
-    it("should be upload partner logo", async () => {
+    it("should upload partner logo", async () => {
       const filePathLogo = path.resolve(__dirname, "../test-small.webp");
       const partnerData = { name: "Test Partner" };
       const res = await postPartner(token, filePathLogo, partnerData);
@@ -135,10 +143,7 @@ describe("Partner Controller", () => {
 
   describe("PUT /api/v1/partners?id=id_partner", () => {
     it("should be rejected if user not authenticated", async () => {
-      const res = await request(app).post("/api/v1/partners");
-      expect(res.statusCode).toEqual(401);
-      expect(res.body.status).toEqual(401);
-      expect(res.body.message).toBeDefined();
+      await testUnauthorizedAccess("/api/v1/partners", "put");
     });
 
     it("should return 404 if partner not found", async () => {
@@ -168,10 +173,7 @@ describe("Partner Controller", () => {
 
   describe("DELETE /api/v1/partners?id=id_partner", () => {
     it("should be rejected if user not authenticated", async () => {
-      const res = await request(app).post("/api/v1/partners");
-      expect(res.statusCode).toEqual(401);
-      expect(res.body.status).toEqual(401);
-      expect(res.body.message).toBeDefined();
+      await testUnauthorizedAccess("/api/v1/partners", "delete");
     });
 
     it("should return 404 if partner not found", async () => {
