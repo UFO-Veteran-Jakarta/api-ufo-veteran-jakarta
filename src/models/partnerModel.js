@@ -79,3 +79,20 @@ exports.updatePartner = async (id, data) => {
     throw err;
   }
 };
+
+exports.deletePartner = async (id) => {
+  const query = `
+    UPDATE myschema.partners
+    SET deleted_at = NOW()
+    WHERE id = $1
+    RETURNING *;
+  `;
+
+  try {
+    const res = await pool.query(query, [id]);
+    return res.rows[0];
+  } catch (err) {
+    console.error(`Error deleting partner with id ${id}:`, err);
+    throw err;
+  }
+};
