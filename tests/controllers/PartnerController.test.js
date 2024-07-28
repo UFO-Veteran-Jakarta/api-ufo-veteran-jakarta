@@ -33,11 +33,16 @@ const postPartner = (token, logoPath, partnerData = { name: "Default Name" }) =>
 const getPartnerById = (token, id) =>
   makeRequest("get", token, `/api/v1/partners/?id=${id}`);
 
-const updatePartner = (token, id, updateData) =>
-  makeRequest("put", token, `/api/v1/partners?id=${id}`, updateData);
+const updatePartner = (token, id, updateData, logoPath) =>
+  makeRequest("put", token, `/api/v1/partners?id=${id}`, updateData, logoPath);
 
 const deletePartner = (token, id) =>
   makeRequest("delete", token, `/api/v1/partners?id=${id}`);
+
+const prepareTestPartner = async (token, filePathLogo, partnerData) => {
+  const partnerResponse = await postPartner(token, filePathLogo, partnerData);
+  return partnerResponse.body.data;
+};
 
 describe("Partner Controller", () => {
   let data;
@@ -113,18 +118,18 @@ describe("Partner Controller", () => {
     it("should return partner by id", async () => {
       const filePathLogo = path.resolve(__dirname, "../test-small.webp");
       const partnerData = { name: "Test Partner" };
-      const partnerResponse = await postPartner(
+      const partner = await prepareTestPartner(
         token,
         filePathLogo,
         partnerData
       );
 
-      const res = await getPartnerById(token, partnerResponse.body.data.id);
+      const res = await getPartnerById(token, partner.id);
       expect(res.statusCode).toEqual(200);
       expect(res.body.status).toEqual(200);
       expect(res.body.message).toEqual("Successfully Get Partner");
       expect(res.body.data).toBeDefined();
-      expect(res.body.data.slug).toBe(partnerResponse.body.data.slug);
+      expect(res.body.data.slug).toBe(partner.slug);
     });
   });
 
@@ -146,18 +151,14 @@ describe("Partner Controller", () => {
     it("should update partner", async () => {
       const filePathLogo = path.resolve(__dirname, "../test-small.webp");
       const partnerData = { name: "Test Partner" };
-      const partnerResponse = await postPartner(
+      const partner = await prepareTestPartner(
         token,
         filePathLogo,
         partnerData
       );
 
       const updateData = { name: "Tes update partner" };
-      const res = await updatePartner(
-        token,
-        partnerResponse.body.data.id,
-        updateData
-      );
+      const res = await updatePartner(token, partner.id, updateData);
 
       expect(res.statusCode).toEqual(200);
       expect(res.body.status).toEqual(200);
@@ -182,13 +183,13 @@ describe("Partner Controller", () => {
     it("should delete partner", async () => {
       const filePathLogo = path.resolve(__dirname, "../test-small.webp");
       const partnerData = { name: "Test Partner" };
-      const partnerResponse = await postPartner(
+      const partner = await prepareTestPartner(
         token,
         filePathLogo,
         partnerData
       );
 
-      const res = await deletePartner(token, partnerResponse.body.data.id);
+      const res = await deletePartner(token, partner.id);
       expect(res.statusCode).toEqual(200);
       expect(res.body.status).toEqual(200);
       expect(res.body.message).toEqual("Successfully Delete Partner");
