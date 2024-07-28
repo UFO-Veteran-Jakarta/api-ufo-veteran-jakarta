@@ -1,3 +1,4 @@
+const { updatePartnerById } = require("src/controllers/partnerController");
 const {
   addPartner,
   getAllPartners,
@@ -24,4 +25,8 @@ exports.getPartnerById = async (id) => {
 
 exports.updatePartner = async (id, data) => {
   return await updatePartner(id, data);
+};
+
+exports.deletePartner = async (id) => {
+  return await updatePartnerById(id);
 };
