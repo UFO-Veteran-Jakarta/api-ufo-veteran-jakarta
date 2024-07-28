@@ -90,6 +90,75 @@ describe("Achievement Controller", () => {
       );
     });
 
+    it("should be rejected if year is more than 4 characters", async () => {
+      const data = {
+        username: "admin",
+        password: "Admin@123456",
+      };
+
+      await request(app).post("/api/v1/register").send(data);
+
+      const login = await request(app).post("/api/v1/login").send(data);
+
+      const filePathLogo = path.resolve(__dirname, "../test-small.webp");
+
+      if (!fs.existsSync(filePathLogo)) {
+        throw new Error(`File does not exist: ${filePathLogo}`);
+      }
+
+      const achievementData = {
+        name: "tes achievement",
+        logo: filePathLogo,
+        year: "20211",
+      };
+
+      const res = await request(app)
+        .post("/api/v1/achievements")
+        .set("Cookie", `token=${login.body.authorization.token}`)
+        .set("Authorization", `Bearer ${login.body.authorization.token}`)
+        .field("name", achievementData.name)
+        .field("year", achievementData.year)
+        .attach("logo", achievementData.logo);
+
+      expect(res.statusCode).toEqual(500);
+      expect(res.body.status).toEqual(500);
+      expect(res.body.errors[0].msg).toBe(
+        "Achievement year must be no more than 4 characters"
+      );
+    });
+    it("should be rejected if year is not provided", async () => {
+      const data = {
+        username: "admin",
+        password: "Admin@123456",
+      };
+
+      await request(app).post("/api/v1/register").send(data);
+
+      const login = await request(app).post("/api/v1/login").send(data);
+
+      const filePathLogo = path.resolve(__dirname, "../test-small.webp");
+
+      if (!fs.existsSync(filePathLogo)) {
+        throw new Error(`File does not exist: ${filePathLogo}`);
+      }
+
+      const achievementData = {
+        name: "2021",
+        logo: filePathLogo,
+      };
+
+      const res = await request(app)
+        .post("/api/v1/achievements")
+        .set("Cookie", `token=${login.body.authorization.token}`)
+        .set("Authorization", `Bearer ${login.body.authorization.token}`)
+        .field("name", achievementData.name)
+        .attach("logo", achievementData.logo);
+
+      expect(res.statusCode).toEqual(500);
+      expect(res.body.status).toEqual(500);
+      expect(res.body.errors[1].msg).toBe("Achievement year is required");
+    });
+
     it("should be rejected if logo is not provided", async () => {
       const data = {
         username: "admin",
