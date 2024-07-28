@@ -24,3 +24,15 @@ exports.addPartner = async function insertParnter(data) {
     console.error("Error inserting partner:", error);
   }
 };
+
+exports.getAllPartners = async function getAllPartners() {
+  const query = "SELECT * FROM myschema.partners WHERE deleted_at IS NULL";
+
+  try {
+    const res = await pool.query(query);
+    return res.rows;
+  } catch (error) {
+    console.error("Error fetching partners:", error);
+    throw error;
+  }
+};
