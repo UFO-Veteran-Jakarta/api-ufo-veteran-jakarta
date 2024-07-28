@@ -52,3 +52,30 @@ exports.getAchievementById = async (id) => {
     return [];
   }
 };
+
+exports.updateAchievement = async (id, data) => {
+  const fields = [];
+  const values = [];
+  let index = 1;
+
+  Object.keys(data).forEach((key) => {
+    fields.push(`${key} = $${index}`);
+    values.push(data[key]);
+    index++;
+  });
+
+  const query = `
+    UPDATE myschema.achievementss
+    SET ${fields.join(", ")}, updated_at = NOW()
+    WHERE id = $${index}
+    RETURNING *;
+  `;
+
+  try {
+    const res = await pool.query(query, [...values, id]);
+    return res.rows[0];
+  } catch (error) {
+    console.error(`Error updating achievement with id ${id}:`, error);
+    throw error;
+  }
+};
