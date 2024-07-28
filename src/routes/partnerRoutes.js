@@ -37,4 +37,6 @@ router.put(
   partnerController.updatePartnerById
 );
 
+router.delete("/", authentication(), partnerController.deletePartnerById);
+
 module.exports = router;
