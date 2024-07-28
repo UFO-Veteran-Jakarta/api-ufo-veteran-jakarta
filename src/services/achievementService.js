@@ -25,3 +25,7 @@ exports.getAchievementById = async (id) => {
 exports.updateAchievement = async (id, data) => {
   return await updateAchievement(id, data);
 };
+
+exports.deleteAchievement = async (id) => {
+  return await updateAchievement(id);
+};
