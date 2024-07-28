@@ -20,40 +20,38 @@ describe("Achievement Controller", () => {
       expect(res.body.message).toBeDefined();
     });
 
-    // it("should be rejected if name is not provided", async () => {
-    //   const data = {
-    //     username: "admin",
-    //     password: "Admin@123456",
-    //   };
+    it("should be rejected if name is not provided", async () => {
+      const data = {
+        username: "admin",
+        password: "Admin@123456",
+      };
 
-    //   await request(app).post("/api/v1/register").send(data);
+      await request(app).post("/api/v1/register").send(data);
 
-    //   const login = await request(app).post("/api/v1/login").send(data);
+      const login = await request(app).post("/api/v1/login").send(data);
 
-    //   const filePathLogo = path.resolve(__dirname, "../test-small.webp");
+      const filePathLogo = path.resolve(__dirname, "../test-small.webp");
 
-    //   if (!fs.existsSync(filePathLogo)) {
-    //     throw new Error(`File does not exist: ${filePathLogo}`);
-    //   }
+      if (!fs.existsSync(filePathLogo)) {
+        throw new Error(`File does not exist: ${filePathLogo}`);
+      }
 
-    //   const achievementData = {
-    //     year: "2021",
-    //     logo: filePathLogo,
-    //   };
+      const achievementData = {
+        year: "2021",
+        logo: filePathLogo,
+      };
 
-    //   const res = await request(app)
-    //     .post("/api/v1/achievements")
-    //     .set("Cookie", `token=${login.body.authorization.token}`)
-    //     .set("Authorization", `Bearer ${login.body.authorization.token}`)
-    //     .field("year", achievementData.year)
-    //     .attach("logo", achievementData.logo);
+      const res = await request(app)
+        .post("/api/v1/achievements")
+        .set("Cookie", `token=${login.body.authorization.token}`)
+        .set("Authorization", `Bearer ${login.body.authorization.token}`)
+        .field("year", achievementData.year)
+        .attach("logo", achievementData.logo);
 
-    //   console.log(res.body);
-
-    //   expect(res.statusCode).toEqual(500);
-    //   expect(res.body.status).toEqual(500);
-    //   expect(res.body.message).toBe("Achievement name is required");
-    // });
+      expect(res.statusCode).toEqual(500);
+      expect(res.body.status).toEqual(500);
+      expect(res.body.errors[1].msg).toBe("Achievement name is required");
+    });
 
     it("should be rejected if logo is not provided", async () => {
       const data = {
