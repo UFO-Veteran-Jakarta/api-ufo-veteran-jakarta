@@ -1,4 +1,7 @@
 const {
+  updateAchievementById,
+} = require("src/controllers/achievementController");
+const {
   addAchievement,
   getAllAchievements,
   getAchievementById,
@@ -27,5 +30,5 @@ exports.updateAchievement = async (id, data) => {
 };
 
 exports.deleteAchievement = async (id) => {
-  return await updateAchievement(id); // ini nanti diganti
+  return await updateAchievementById(id); // ini nanti diganti
 };
