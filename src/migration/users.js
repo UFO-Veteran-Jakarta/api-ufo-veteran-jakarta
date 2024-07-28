@@ -53,9 +53,21 @@ exports.createTable = async () => {
         deleted_at TIMESTAMP
       )
     `);
+
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS myschema.partners (
+      id SERIAL PRIMARY KEY,
+      name varchar(255) NOT NULL,
+      logo text NOT NULL,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP ,
+      deleted_at TIMESTAMP
+    )
+    `);
 };
 exports.dropTable = async () => {
   await pool.query(`DROP TABLE IF EXISTS myschema.users;`);
   await pool.query(`DROP TABLE IF EXISTS myschema.contents;`);
   await pool.query(`DROP TABLE IF EXISTS myschema.events;`);
+  await pool.query(`DROP TABLE IF EXISTS myschema.partners;`);
 };
