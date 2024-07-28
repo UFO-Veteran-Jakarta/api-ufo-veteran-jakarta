@@ -94,3 +94,27 @@ exports.updateAchievementById = async (req, res) => {
     return sendResponse(res, 500, error.message);
   }
 };
+
+exports.deleteAchievementById = async (req, res) => {
+  try {
+    const id = req.query.id;
+
+    const achievement = await getAchievementById(id);
+
+    if (!achievement) {
+      logger.error(`Achievement with id ${id} not found`);
+      return sendResponse(res, 404, "Achievement not found");
+    }
+
+    logger.info(`Successfully Delete Achievement with id ${id}`);
+    return sendResponse(
+      res,
+      200,
+      "Successfully Delete Achievement",
+      updatedAchievement
+    );
+  } catch (error) {
+    logger.error("Failed to Delete Achievement");
+    return sendResponse(res, 500, error.message);
+  }
+};
