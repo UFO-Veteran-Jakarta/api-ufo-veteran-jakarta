@@ -6,7 +6,10 @@ const {
   validate,
 } = require("../validators/partnerValidator");
 const { authentication } = require("../middlewares/authMiddleware");
-const { checkFile } = require("../middlewares/partnerMiddlewareFile");
+const {
+  checkFile,
+  checkUpdateFile,
+} = require("../middlewares/partnerMiddlewareFile");
 
 const router = express.Router();
 
@@ -19,6 +22,19 @@ router.post(
   partnerController.uploadPartner
 );
 
-router.get("/", partnerController.getAllPartners);
+router.get(
+  "/",
+  partnerController.getAllPartners,
+  partnerController.getPartnerById
+);
+
+router.put(
+  "/",
+  authentication(),
+  checkUpdateFile("logo"),
+  postPartnerValidationRules(),
+  validate,
+  partnerController.updatePartnerById
+);
 
 module.exports = router;
