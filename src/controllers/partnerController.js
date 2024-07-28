@@ -58,12 +58,9 @@ exports.getPartnerById = exports.updatePartner = async (req, res) => {
 
 exports.updatePartnerById = async (req, res) => {
   try {
-    console.log("Request query:", req.query); // Menampilkan seluruh query request
     const id = req.query.id;
-    console.log("ID:", id); // Menampilkan ID yang diambil dari query
 
     const partner = await getPartnerById(id);
-    console.log("Partner:", partner); // Menampilkan partner yang didapatkan dari getPartnerById
 
     if (!partner) {
       logger.error(`Partner with id ${id} not found`);
@@ -75,10 +72,7 @@ exports.updatePartnerById = async (req, res) => {
       req.body.logo = logoUpload.secure_url;
     }
 
-    console.log("Request body:", req.body); // Menampilkan body request setelah logo diupload
-
     const updatedPartner = await updatePartner(id, req.body);
-    console.log("Updated Partner:", updatedPartner); // Menampilkan partner yang telah diupdate
 
     logger.info(`Successfully Update Partner with id ${id}`);
     return sendResponse(
@@ -88,7 +82,6 @@ exports.updatePartnerById = async (req, res) => {
       updatedPartner
     );
   } catch (error) {
-    console.error("Error:", error); // Menampilkan error jika ada
     logger.error("Failed to Update Partner");
     return sendResponse(res, 500, error.message);
   }
