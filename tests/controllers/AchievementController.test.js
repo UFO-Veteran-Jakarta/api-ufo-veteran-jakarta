@@ -5,6 +5,7 @@ const path = require("path");
 const app = require("../../src/app");
 require("dotenv").config();
 const fs = require("fs");
+const { deleteAchievementAll } = require("../../src/models/achievementsModel");
 
 describe("Achievement Controller", () => {
   beforeEach(async () => {
@@ -292,5 +293,31 @@ describe("Achievement Controller", () => {
       expect(res.body.status).toEqual(200);
       expect(res.body.message).toBe("Successfully Add New Achievement");
     }, 60000);
+  });
+
+  describe("GET /api/v1/acchievements", () => {
+    it("Should get all achievements", async () => {
+      const res = await request(app).get("/api/v1/achievements");
+
+      expect(res.statusCode).toEqual(200);
+      expect(res.body.status).toEqual(200);
+      expect(res.body.message).toEqual("Successfully Get All Achievements");
+      expect(Array.isArray(res.body.data)).toBe(true);
+      expect(res.body.data[0].logo).toBeDefined();
+      expect(res.body.data[0].name).toBeDefined();
+      expect(res.body.data[0].year).toBeDefined();
+      expect(res.body.data[0].created_at).toBeDefined();
+    });
+
+    it("Should return 500 if error", async () => {
+      await deleteAchievementAll();
+
+      const res = await request(app).get("/api/v1/achievements");
+      expect(res.statusCode).toEqual(500);
+      expect(res.body.status).toEqual(500);
+      expect(res.body.message).toEqual(
+        "Failed to Get All Achievements: No data found"
+      );
+    });
   });
 });
