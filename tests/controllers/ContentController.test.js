@@ -1,314 +1,339 @@
 const request = require("supertest");
-const { deleteUserByUsername } = require("../../src/models/userModel");
-const app = require("../../src/app");
-const { deleteContentAll } = require("../../src/models/contentModel");
-require("dotenv").config();
 
-const TEST_USERNAME = process.env.TEST_USERNAME;
-const TEST_PASSWORD = process.env.TEST_PASSWORD;
-
-const createTestSuite = ({
-  app,
-  request,
+const {
+  getUserByUsername,
   deleteUserByUsername,
-  deleteContentAll,
-}) => {
-  const cleanDatabase = async () => {
-    await deleteUserByUsername(TEST_USERNAME);
+  createUser,
+} = require("../../src/models/userModel");
+const app = require("../../src/app");
+const cookie = require("cookie");
+const { deleteContentAll } = require("../../src/models/contentModel");
+
+describe("Content Controller", () => {
+  beforeEach(async () => {
+    await deleteUserByUsername("admin");
     await deleteContentAll();
-  };
+  });
 
-  const registerAndLogin = async (username, password) => {
-    const data = { username, password };
-    await request(app).post("/api/v1/register").send(data);
-    return await request(app).post("/api/v1/login").send(data);
-  };
+  describe("POST /api/v1/contents", () => {
+    it("should be rejected if link field not https", async () => {
+      const data = {
+        username: "admin",
+        password: "Admin@12345",
+      };
+      await request(app).post("/api/v1/register").send(data);
 
-  const authenticateUser = async () => {
-    const login = await registerAndLogin(TEST_USERNAME, TEST_PASSWORD);
-    return login.body.authorization.token;
-  };
+      const login = await request(app).post("/api/v1/login").send(data);
 
-  const createContent = async (token, { link }) => {
-    return await request(app)
-      .post("/api/v1/contents")
-      .set("Cookie", `token=${token}`)
-      .set("Authorization", `Bearer ${token}`)
-      .field("link", link);
-  };
+      const res = await request(app)
+        .post("/api/v1/contents")
+        .set("Cookie", `token=${login.body.authorization.token}`)
+        .set("Authorization", `Bearer ${login.body.authorization.token}`)
+        .send({ link: "http://blablabla.com" });
 
-  const setAuthHeaders = (req, token) => {
-    return req
-      .set("Cookie", `token=${token}`)
-      .set("Authorization", `Bearer ${token}`);
-  };
-
-  const validateResponse = (res, { statusCode, status, message, errors }) => {
-    expect(res.statusCode).toEqual(statusCode);
-    expect(res.body.status).toEqual(status);
-    if (message) expect(res.body.message).toBe(message);
-    if (errors && errors.length) {
-      errors.forEach((error, index) => {
-        expect(res.body.errors[index].msg).toBe(error);
-      });
-    }
-  };
-
-  const validatePropertiesDefined = (obj, properties) => {
-    properties.forEach((property) => {
-      expect(obj[property]).toBeDefined();
+      expect(res.statusCode).toEqual(500);
+      expect(res.body.status).toEqual(500);
+      expect(res.body.errors[0].msg).toBe(
+        "The link must be a string and a link evidenced by https:// at the beginning"
+      );
     });
-  };
+    it("should be rejected if link field not valid url", async () => {
+      const data = {
+        username: "admin",
+        password: "Admin@12345",
+      };
+      await request(app).post("/api/v1/register").send(data);
 
-  describe("Content Controller", () => {
-    beforeEach(async () => {
-      await cleanDatabase();
+      const login = await request(app).post("/api/v1/login").send(data);
+
+      const res = await request(app)
+        .post("/api/v1/contents")
+        .set("Cookie", `token=${login.body.authorization.token}`)
+        .set("Authorization", `Bearer ${login.body.authorization.token}`)
+        .send({ link: "https://blablabl" });
+
+      expect(res.statusCode).toEqual(500);
+      expect(res.body.status).toEqual(500);
+      expect(res.body.errors[0].msg).toBe("The link must valid a url");
     });
 
-    describe("POST /api/v1/contents", () => {
-      it("should be rejected if link field not https", async () => {
-        const token = await authenticateUser();
-        const contentData = { link: "http://blablabla.com" };
-        const res = await createContent(token, contentData);
-        validateResponse(res, {
-          statusCode: 500,
-          status: 500,
-          errors: [
-            "The link must be a string and a link evidenced by https:// at the beginning",
-          ],
-        });
-      }, 60000);
+    it("should be rejected if user not authenticated", async () => {
+      const res = await request(app).post("/api/v1/contents");
 
-      it("should be rejected if link field not valid url", async () => {
-        const token = await authenticateUser();
-        const contentData = { link: "https://bla" };
-        const res = await createContent(token, contentData);
-        validateResponse(res, {
-          statusCode: 500,
-          status: 500,
-          errors: ["The link must valid a url"],
-        });
-      }, 60000);
-
-      it("should be rejected if user not authenticated", async () => {
-        const res = await request(app).post("/api/v1/contents");
-        validateResponse(res, {
-          statusCode: 401,
-          status: 401,
-          message: "Unauthorized",
-        });
-      }, 60000);
-
-      it("should be able to add content", async () => {
-        const token = await authenticateUser();
-        const contentData = { link: "https://blablabla.com" };
-        const res = await createContent(token, contentData);
-        validateResponse(res, {
-          statusCode: 200,
-          status: 200,
-          message: "Successfully Add New Content",
-        });
-      }, 60000);
+      expect(res.statusCode).toEqual(401);
+      expect(res.body.status).toEqual(401);
+      expect(res.body.message).toBeDefined();
     });
 
-    describe("GET /api/v1/contents", () => {
-      it("should be able get contents", async () => {
-        const token = await authenticateUser();
-        const contentData = { link: "https://blablabla.com" };
-        await createContent(token, contentData);
-        const res = await request(app).get("/api/v1/contents");
-        validateResponse(res, {
-          statusCode: 200,
-          status: 200,
-          message: "Successfully Get All Contents",
-        });
-        validatePropertiesDefined(res.body.data[0], [
-          "link",
-          "created_at",
-          "updated_at",
-          "deleted_at",
-        ]);
-      }, 60000);
-    });
+    it("should be able to add content", async () => {
+      const data = {
+        username: "admin",
+        password: "Admin@12345",
+      };
+      await request(app).post("/api/v1/register").send(data);
 
-    describe("GET /api/v1/contents?id=id_content", () => {
-      it("should be able get contents by id", async () => {
-        const token = await authenticateUser();
-        const contentData = { link: "https://blablabla.com" };
-        await createContent(token, contentData);
-        const content = await request(app).get("/api/v1/contents");
-        const res = await request(app).get(
-          `/api/v1/contents?id=${content.body.data[0].id}`
-        );
-        validateResponse(res, {
-          statusCode: 200,
-          status: 200,
-          message: "Successfully Get All Contents",
-        });
-        validatePropertiesDefined(res.body.data[0], [
-          "link",
-          "created_at",
-          "updated_at",
-          "deleted_at",
-        ]);
-      }, 60000);
-    });
+      const login = await request(app).post("/api/v1/login").send(data);
 
-    describe("PUT /api/v1/contents?id=id_content", () => {
-      it("should be rejected if user not authenticated", async () => {
-        const res = await request(app).post("/api/v1/contents");
-        validateResponse(res, {
-          statusCode: 401,
-          status: 401,
-          message: "Unauthorized",
-        });
-      }, 60000);
+      const res = await request(app)
+        .post("/api/v1/contents")
+        .set("Cookie", `token=${login.body.authorization.token}`)
+        .set("Authorization", `Bearer ${login.body.authorization.token}`)
+        .send({ link: "https://blablabla.com" });
 
-      it("should be rejected if id params null", async () => {
-        const token = await authenticateUser();
-        const contentData = { link: "https://blablabla.com" };
-        await createContent(token, contentData);
-        const res = await setAuthHeaders(
-          request(app).put(`/api/v1/contents?id=`),
-          token
-        ).send({ link: "https://blablabla.com" });
-        validateResponse(res, {
-          statusCode: 404,
-          status: 404,
-          message: "Content Not Found",
-        });
-      }, 60000);
-
-      it("should be rejected if link is not https", async () => {
-        const token = await authenticateUser();
-        const contentData = { link: "https://blablabla.com" };
-        const content = await createContent(token, contentData);
-        const res = await setAuthHeaders(
-          request(app).put(`/api/v1/contents?id=${content.body.data[0].id}`),
-          token
-        ).send({ link: "http://safljsal" });
-        validateResponse(res, {
-          statusCode: 500,
-          status: 500,
-          errors: [
-            "The link must be a string and a link evidenced by https:// at the beginning",
-          ],
-        });
-      }, 60000);
-
-      it("should be rejected if link is not valid url", async () => {
-        const token = await authenticateUser();
-        const contentData = { link: "https://blablabla.com" };
-        const content = await createContent(token, contentData);
-        const res = await setAuthHeaders(
-          request(app).put(`/api/v1/contents?id=${content.body.data[0].id}`),
-          token
-        ).send({ link: "https://safljsal" });
-        validateResponse(res, {
-          statusCode: 500,
-          status: 500,
-          errors: ["The link must valid a url"],
-        });
-      }, 60000);
-
-      it("should be rejected because content not found", async () => {
-        const token = await authenticateUser();
-        const contentData = { link: "https://blablabla.com" };
-        await createContent(token, contentData);
-        const res = await setAuthHeaders(
-          request(app).put(`/api/v1/contents?id=asdf`),
-          token
-        ).send({ link: "https://dewii.com" });
-        validateResponse(res, {
-          statusCode: 404,
-          status: 404,
-          message: "Content Not Found",
-        });
-      }, 60000);
-
-      it("should be able to edit content", async () => {
-        const token = await authenticateUser();
-        const contentData = { link: "https://blablabla.com" };
-        const content = await createContent(token, contentData);
-        const res = await setAuthHeaders(
-          request(app).put(`/api/v1/contents?id=${content.body.data[0].id}`),
-          token
-        ).send({ link: "https://dewii.com" });
-        validateResponse(res, {
-          statusCode: 200,
-          status: 200,
-          message: "Successfully Update Content",
-        });
-        validatePropertiesDefined(res.body.data[0], [
-          "link",
-          "created_at",
-          "updated_at",
-          "deleted_at",
-        ]);
-      }, 60000);
-    });
-
-    describe("DELETE /api/v1/contents?id=id_content", () => {
-      it("should be rejected if user not authenticated", async () => {
-        const res = await request(app).post("/api/v1/contents");
-        validateResponse(res, {
-          statusCode: 401,
-          status: 401,
-          message: "Unauthorized",
-        });
-      }, 60000);
-
-      it("should be rejected if id params null", async () => {
-        const token = await authenticateUser();
-        const contentData = { link: "https://blablabla.com" };
-        await createContent(token, contentData);
-        const res = await setAuthHeaders(
-          request(app).delete(`/api/v1/contents?id=`),
-          token
-        );
-        validateResponse(res, {
-          statusCode: 404,
-          status: 404,
-          message: "Content Not Found",
-        });
-      }, 60000);
-
-      it("should be rejected because content not found", async () => {
-        const token = await authenticateUser();
-        const contentData = { link: "https://blablabla.com" };
-        await createContent(token, contentData);
-        const res = await setAuthHeaders(
-          request(app).delete(`/api/v1/contents?id=asdf`),
-          token
-        );
-        validateResponse(res, {
-          statusCode: 404,
-          status: 404,
-          message: "Content Not Found",
-        });
-      }, 60000);
-
-      it("should be able to delete content", async () => {
-        const token = await authenticateUser();
-        const contentData = { link: "https://blablabla.com" };
-        const content = await createContent(token, contentData);
-        const res = await setAuthHeaders(
-          request(app).delete(`/api/v1/contents?id=${content.body.data[0].id}`),
-          token
-        );
-        validateResponse(res, {
-          statusCode: 200,
-          status: 200,
-          message: "Successfully Delete Content",
-        });
-      }, 60000);
+      expect(res.statusCode).toEqual(200);
+      expect(res.body.status).toEqual(200);
+      expect(res.body.message).toBe("Successfully Add New Content");
     });
   });
-};
+  describe("GET /api/v1/contents", () => {
+    it("should be able get contents", async () => {
+      const data = {
+        username: "admin",
+        password: "Admin@12345",
+      };
+      await request(app).post("/api/v1/register").send(data);
+      const login = await request(app).post("/api/v1/login").send(data);
+      await request(app)
+        .post("/api/v1/contents")
+        .set("Cookie", `token=${login.body.authorization.token}`)
+        .set("Authorization", `Bearer ${login.body.authorization.token}`)
+        .send({ link: "https://blablabla.com" });
 
-createTestSuite({
-  app,
-  request,
-  deleteUserByUsername,
-  deleteContentAll,
+      const res = await request(app).get("/api/v1/contents");
+
+      expect(res.statusCode).toEqual(200);
+      expect(res.body.status).toEqual(200);
+      expect(res.body.message).toBe("Successfully Get All Contents");
+      expect(res.body.data[0].id).toBeDefined();
+      expect(res.body.data[0].link).toBeDefined();
+      expect(res.body.data[0].created_at).toBeDefined();
+      expect(res.body.data[0].updated_at).toBeDefined();
+      expect(res.body.data[0].deleted_at).toBeDefined();
+    });
+  });
+  describe("GET /api/v1/contents?id=id_content", () => {
+    it("should be able get contents by id", async () => {
+      const data = {
+        username: "admin",
+        password: "Admin@12345",
+      };
+      await request(app).post("/api/v1/register").send(data);
+      const login = await request(app).post("/api/v1/login").send(data);
+      await request(app)
+        .post("/api/v1/contents")
+        .set("Cookie", `token=${login.body.authorization.token}`)
+        .set("Authorization", `Bearer ${login.body.authorization.token}`)
+        .send({ link: "https://blablabla.com" });
+
+      const content = await request(app).get("/api/v1/contents");
+      const res = await request(app).get(
+        `/api/v1/contents?id=${content.body.data[0].id}`
+      );
+
+      expect(res.statusCode).toEqual(200);
+      expect(res.body.status).toEqual(200);
+      expect(res.body.message).toBe("Successfully Get All Contents");
+      expect(res.body.data[0].id).toBeDefined();
+      expect(res.body.data[0].link).toBeDefined();
+      expect(res.body.data[0].created_at).toBeDefined();
+      expect(res.body.data[0].updated_at).toBeDefined();
+      expect(res.body.data[0].deleted_at).toBeDefined();
+    });
+  });
+
+  describe("PUT /api/v1/contents?id=id_content", () => {
+    it("should be rejected if user not authenticated", async () => {
+      const res = await request(app).post("/api/v1/contents");
+
+      expect(res.statusCode).toEqual(401);
+      expect(res.body.status).toEqual(401);
+      expect(res.body.message).toBeDefined();
+    });
+
+    it("should be rejected if id params null", async () => {
+      const data = {
+        username: "admin",
+        password: "Admin@12345",
+      };
+      await request(app).post("/api/v1/register").send(data);
+      const login = await request(app).post("/api/v1/login").send(data);
+
+      await request(app)
+        .post("/api/v1/contents")
+        .set("Cookie", `token=${login.body.authorization.token}`)
+        .set("Authorization", `Bearer ${login.body.authorization.token}`)
+        .send({ link: "https://blablabla.com" });
+
+      const res = await request(app)
+        .put(`/api/v1/contents?id=`)
+        .set("Cookie", `token=${login.body.authorization.token}`)
+        .set("Authorization", `Bearer ${login.body.authorization.token}`)
+        .send({ link: "https://blablabla.com" });
+
+      expect(res.statusCode).toEqual(404);
+      expect(res.body.status).toEqual(404);
+      expect(res.body.message).toBe("Content Not Found");
+    });
+
+    it("should be rejected if link is not http", async () => {
+      const data = {
+        username: "admin",
+        password: "Admin@12345",
+      };
+      await request(app).post("/api/v1/register").send(data);
+      const login = await request(app).post("/api/v1/login").send(data);
+
+      const content = await request(app)
+        .post("/api/v1/contents")
+        .set("Cookie", `token=${login.body.authorization.token}`)
+        .set("Authorization", `Bearer ${login.body.authorization.token}`)
+        .send({ link: "https://safljsalf.com" });
+
+      const res = await request(app)
+        .put(`/api/v1/contents?id=${content.body.data[0].id}`)
+        .set("Cookie", `token=${login.body.authorization.token}`)
+        .set("Authorization", `Bearer ${login.body.authorization.token}`)
+        .send({ link: "http://safljsal" });
+
+      expect(res.statusCode).toEqual(500);
+      expect(res.body.status).toEqual(500);
+      expect(res.body.errors[0].msg).toBe(
+        "The link must be a string and a link evidenced by https:// at the beginning"
+      );
+    });
+    it("should be rejected if link is not valid url", async () => {
+      const data = {
+        username: "admin",
+        password: "Admin@12345",
+      };
+      await request(app).post("/api/v1/register").send(data);
+      const login = await request(app).post("/api/v1/login").send(data);
+
+      const content = await request(app)
+        .post("/api/v1/contents")
+        .set("Cookie", `token=${login.body.authorization.token}`)
+        .set("Authorization", `Bearer ${login.body.authorization.token}`)
+        .send({ link: "https://safljsalf.com" });
+
+      const res = await request(app)
+        .put(`/api/v1/contents?id=${content.body.data[0].id}`)
+        .set("Cookie", `token=${login.body.authorization.token}`)
+        .set("Authorization", `Bearer ${login.body.authorization.token}`)
+        .send({ link: "https://safljsal" });
+
+      expect(res.statusCode).toEqual(500);
+      expect(res.body.status).toEqual(500);
+      expect(res.body.errors[0].msg).toBe("The link must valid a url");
+    });
+
+    it("should be reject cause content not found", async () => {
+      const data = {
+        username: "admin",
+        password: "Admin@12345",
+      };
+      await request(app).post("/api/v1/register").send(data);
+      const login = await request(app).post("/api/v1/login").send(data);
+
+      await request(app)
+        .post("/api/v1/contents")
+        .set("Cookie", `token=${login.body.authorization.token}`)
+        .set("Authorization", `Bearer ${login.body.authorization.token}`)
+        .send({ link: "https://safljsalf.com" });
+
+      const res = await request(app)
+        .put(`/api/v1/contents?id=asdf`)
+        .set("Cookie", `token=${login.body.authorization.token}`)
+        .set("Authorization", `Bearer ${login.body.authorization.token}`)
+        .send({ link: "https://dewii.com" });
+
+      expect(res.statusCode).toEqual(404);
+      expect(res.body.status).toEqual(404);
+      expect(res.body.message).toBe("Content Not Found");
+    });
+
+    it("should be able to edit content", async () => {
+      const data = {
+        username: "admin",
+        password: "Admin@12345",
+      };
+      await request(app).post("/api/v1/register").send(data);
+      const login = await request(app).post("/api/v1/login").send(data);
+
+      const content = await request(app)
+        .post("/api/v1/contents")
+        .set("Cookie", `token=${login.body.authorization.token}`)
+        .set("Authorization", `Bearer ${login.body.authorization.token}`)
+        .send({ link: "https://safljsalf.com" });
+
+      const res = await request(app)
+        .put(`/api/v1/contents?id=${content.body.data[0].id}`)
+        .set("Cookie", `token=${login.body.authorization.token}`)
+        .set("Authorization", `Bearer ${login.body.authorization.token}`)
+        .send({ link: "https://dewii.com" });
+
+      expect(res.statusCode).toEqual(200);
+      expect(res.body.status).toEqual(200);
+      expect(res.body.data[0].link).toBeDefined();
+      expect(res.body.data[0].created_at).toBeDefined();
+      expect(res.body.data[0].updated_at).toBeDefined();
+      expect(res.body.data[0].deleted_at).toBeDefined();
+    });
+  });
+  describe("DELETE /api/v1/contents?id=id_content", () => {
+    it("should be rejected if user not authenticated", async () => {
+      const res = await request(app).post("/api/v1/contents");
+
+      expect(res.statusCode).toEqual(401);
+      expect(res.body.status).toEqual(401);
+      expect(res.body.message).toBeDefined();
+    });
+
+    it("should be rejected if id params null", async () => {
+      const data = {
+        username: "admin",
+        password: "Admin@12345",
+      };
+      await request(app).post("/api/v1/register").send(data);
+      const login = await request(app).post("/api/v1/login").send(data);
+
+      await request(app)
+        .post("/api/v1/contents")
+        .set("Cookie", `token=${login.body.authorization.token}`)
+        .set("Authorization", `Bearer ${login.body.authorization.token}`)
+        .send({ link: "https://blablabla.com" });
+
+      const res = await request(app)
+        .delete(`/api/v1/contents?id=`)
+        .set("Cookie", `token=${login.body.authorization.token}`)
+        .set("Authorization", `Bearer ${login.body.authorization.token}`);
+
+      expect(res.statusCode).toEqual(404);
+      expect(res.body.status).toEqual(404);
+      expect(res.body.message).toBe("Content Not Found");
+    });
+    it("should be able to delete content", async () => {
+      const data = {
+        username: "admin",
+        password: "Admin@12345",
+      };
+      await request(app).post("/api/v1/register").send(data);
+      const login = await request(app).post("/api/v1/login").send(data);
+
+      const content = await request(app)
+        .post("/api/v1/contents")
+        .set("Cookie", `token=${login.body.authorization.token}`)
+        .set("Authorization", `Bearer ${login.body.authorization.token}`)
+        .send({ link: "https://blablabla.com" });
+
+      const res = await request(app)
+        .delete(`/api/v1/contents?id=${content.body.data[0].id}`)
+        .set("Cookie", `token=${login.body.authorization.token}`)
+        .set("Authorization", `Bearer ${login.body.authorization.token}`)
+        .send({ link: "https://blablabla.com" });
+
+      expect(res.statusCode).toEqual(200);
+      expect(res.body.status).toEqual(200);
+      expect(res.body.message).toBe("Successfully Delete Content");
+    });
+  });
 });
