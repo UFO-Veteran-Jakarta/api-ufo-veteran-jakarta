@@ -55,7 +55,7 @@ exports.getAllAchievements = async (req, res, next) => {
   }
 };
 
-exports.getAchievementById = exports.updateAchievement = async (req, res) => {
+exports.getAchievementById = async (req, res) => {
   try {
     const { id } = req.query;
     const achievement = await getAchievementById(id);
@@ -75,8 +75,7 @@ exports.getAchievementById = exports.updateAchievement = async (req, res) => {
 
 exports.updateAchievementById = async (req, res) => {
   try {
-    const id = req.query.id;
-
+    const { id } = req.query;
     const achievement = await getAchievementById(id);
 
     if (!achievement) {
@@ -92,7 +91,6 @@ exports.updateAchievementById = async (req, res) => {
     const updatedAchievement = await updateAchievement(id, req.body);
 
     logger.info(`Successfully Update Achievement with id ${id}`);
-
     return sendResponse(
       res,
       200,
@@ -100,7 +98,7 @@ exports.updateAchievementById = async (req, res) => {
       updatedAchievement
     );
   } catch (error) {
-    logger.error("Failed to Get Achievement");
+    logger.error("Failed to Update Achievement");
     return sendResponse(res, 500, error.message);
   }
 };
