@@ -65,7 +65,7 @@ exports.updateAchievement = async (id, data) => {
   });
 
   const query = `
-    UPDATE myschema.achievementss
+    UPDATE myschema.achievements
     SET ${fields.join(", ")}, updated_at = NOW()
     WHERE id = $${index}
     RETURNING *;
