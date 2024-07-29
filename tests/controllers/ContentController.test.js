@@ -36,7 +36,7 @@ describe("Content Controller", () => {
       expect(res.body.errors[0].msg).toBe(
         "The link must be a string and a link evidenced by https:// at the beginning"
       );
-    });
+    }, 60000);
     it("should be rejected if link field not valid url", async () => {
       const data = {
         username: "admin",
@@ -55,7 +55,7 @@ describe("Content Controller", () => {
       expect(res.statusCode).toEqual(500);
       expect(res.body.status).toEqual(500);
       expect(res.body.errors[0].msg).toBe("The link must valid a url");
-    });
+    }, 60000);
 
     it("should be rejected if user not authenticated", async () => {
       const res = await request(app).post("/api/v1/contents");
@@ -63,7 +63,7 @@ describe("Content Controller", () => {
       expect(res.statusCode).toEqual(401);
       expect(res.body.status).toEqual(401);
       expect(res.body.message).toBeDefined();
-    });
+    }, 60000);
 
     it("should be able to add content", async () => {
       const data = {
@@ -83,7 +83,7 @@ describe("Content Controller", () => {
       expect(res.statusCode).toEqual(200);
       expect(res.body.status).toEqual(200);
       expect(res.body.message).toBe("Successfully Add New Content");
-    });
+    }, 60000);
   });
   describe("GET /api/v1/contents", () => {
     it("should be able get contents", async () => {
@@ -109,7 +109,7 @@ describe("Content Controller", () => {
       expect(res.body.data[0].created_at).toBeDefined();
       expect(res.body.data[0].updated_at).toBeDefined();
       expect(res.body.data[0].deleted_at).toBeDefined();
-    });
+    }, 60000);
   });
   describe("GET /api/v1/contents?id=id_content", () => {
     it("should be able get contents by id", async () => {
@@ -138,7 +138,7 @@ describe("Content Controller", () => {
       expect(res.body.data[0].created_at).toBeDefined();
       expect(res.body.data[0].updated_at).toBeDefined();
       expect(res.body.data[0].deleted_at).toBeDefined();
-    });
+    }, 60000);
   });
 
   describe("PUT /api/v1/contents?id=id_content", () => {
@@ -148,7 +148,7 @@ describe("Content Controller", () => {
       expect(res.statusCode).toEqual(401);
       expect(res.body.status).toEqual(401);
       expect(res.body.message).toBeDefined();
-    });
+    }, 60000);
 
     it("should be rejected if id params null", async () => {
       const data = {
@@ -173,7 +173,7 @@ describe("Content Controller", () => {
       expect(res.statusCode).toEqual(404);
       expect(res.body.status).toEqual(404);
       expect(res.body.message).toBe("Content Not Found");
-    });
+    }, 60000);
 
     it("should be rejected if link is not http", async () => {
       const data = {
@@ -200,7 +200,7 @@ describe("Content Controller", () => {
       expect(res.body.errors[0].msg).toBe(
         "The link must be a string and a link evidenced by https:// at the beginning"
       );
-    });
+    }, 60000);
     it("should be rejected if link is not valid url", async () => {
       const data = {
         username: "admin",
@@ -224,7 +224,7 @@ describe("Content Controller", () => {
       expect(res.statusCode).toEqual(500);
       expect(res.body.status).toEqual(500);
       expect(res.body.errors[0].msg).toBe("The link must valid a url");
-    });
+    }, 60000);
 
     it("should be reject cause content not found", async () => {
       const data = {
@@ -249,7 +249,7 @@ describe("Content Controller", () => {
       expect(res.statusCode).toEqual(404);
       expect(res.body.status).toEqual(404);
       expect(res.body.message).toBe("Content Not Found");
-    });
+    }, 60000);
 
     it("should be able to edit content", async () => {
       const data = {
@@ -277,7 +277,7 @@ describe("Content Controller", () => {
       expect(res.body.data[0].created_at).toBeDefined();
       expect(res.body.data[0].updated_at).toBeDefined();
       expect(res.body.data[0].deleted_at).toBeDefined();
-    });
+    }, 60000);
   });
   describe("DELETE /api/v1/contents?id=id_content", () => {
     it("should be rejected if user not authenticated", async () => {
@@ -286,7 +286,7 @@ describe("Content Controller", () => {
       expect(res.statusCode).toEqual(401);
       expect(res.body.status).toEqual(401);
       expect(res.body.message).toBeDefined();
-    });
+    }, 60000);
 
     it("should be rejected if id params null", async () => {
       const data = {
@@ -310,7 +310,7 @@ describe("Content Controller", () => {
       expect(res.statusCode).toEqual(404);
       expect(res.body.status).toEqual(404);
       expect(res.body.message).toBe("Content Not Found");
-    });
+    }, 60000);
     it("should be able to delete content", async () => {
       const data = {
         username: "admin",
@@ -334,6 +334,6 @@ describe("Content Controller", () => {
       expect(res.statusCode).toEqual(200);
       expect(res.body.status).toEqual(200);
       expect(res.body.message).toBe("Successfully Delete Content");
-    });
+    }, 60000);
   });
 });

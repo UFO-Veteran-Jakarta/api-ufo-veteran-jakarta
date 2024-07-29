@@ -247,6 +247,40 @@ describe("Achievement Controller", () => {
     }, 60000);
   });
 
+  describe("PUT /api/v1/achievements?id=id_achievement", () => {
+    it("Should update achievement by id", async () => {
+      const token = await authenticateUser();
+      const filePathLogo = path.resolve(__dirname, "../test-small.webp");
+      const filePathLogoUpdated = path.resolve(__dirname, "../test-1080.webp");
+      fileExists(filePathLogo);
+      fileExists(filePathLogoUpdated);
+
+      const achievementData = {
+        name: "Achievement",
+        logo: filePathLogo,
+        year: "2021",
+      };
+
+      const achievementDataUpdated = {
+        name: "Achievement Updated",
+        logo: filePathLogoUpdated,
+        year: "2022",
+      };
+      const achievement = await createAchievement(token, achievementData);
+      const res = await request(app)
+        .put(`/api/v1/achievements?id=${achievement.body.data.id}`)
+        .set("Cookie", `token=${token}`)
+        .set("Authorization", `Bearer ${token}`)
+        .field("name", achievementDataUpdated.name)
+        .field("year", achievementDataUpdated.year)
+        .attach("logo", achievementDataUpdated.logo);
+
+      expect(res.statusCode).toEqual(200);
+      expect(res.body.status).toEqual(200);
+      expect(res.body.message).toEqual("Successfully Update Achievement");
+    });
+  });
+
   describe("DELETE /api/v1/achievements?id=id_achievement", () => {
     it("Should delete achievement by id", async () => {
       const token = await authenticateUser();
