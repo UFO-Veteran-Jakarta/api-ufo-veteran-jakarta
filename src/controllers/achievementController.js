@@ -1,12 +1,12 @@
 const logger = require("../utils/logger");
 const { sendResponse } = require("../helpers/response");
-const { uploadSingle } = require("src/utils/uploadFile");
+const { uploadSingle } = require("../utils/uploadFile");
 const {
   addAchievemnt,
   getAllAchievements,
   getAchievementById,
   updateAchievement,
-} = require("src/services/achievementService");
+} = require("../services/achievementService");
 
 exports.addAchievement = async (req, res) => {
   try {
