@@ -320,4 +320,61 @@ describe("Achievement Controller", () => {
       );
     });
   });
+
+  describe("GET /api/v1/achievements?id=id_achievement", () => {
+    it("Should get achievement by id", async () => {
+      const data = {
+        username: "admin",
+        password: "Admin@123456",
+      };
+
+      await request(app).post("/api/v1/register").send(data);
+
+      const login = await request(app).post("/api/v1/login").send(data);
+
+      const filePathLogo = path.resolve(__dirname, "../test-small.webp");
+
+      if (!fs.existsSync(filePathLogo)) {
+        throw new Error(`File does not exist: ${filePathLogo}`);
+      }
+
+      const achievementData = {
+        name: "Achievement",
+        logo: filePathLogo,
+        year: "2021",
+      };
+
+      const achcievement = await request(app)
+        .post("/api/v1/achievements")
+        .set("Cookie", `token=${login.body.authorization.token}`)
+        .set("Authorization", `Bearer ${login.body.authorization.token}`)
+        .field("name", achievementData.name)
+        .field("year", achievementData.year)
+        .attach("logo", achievementData.logo);
+
+      console.log(achcievement.body);
+
+      const res = await request(app).get(
+        `/api/v1/achievements?id=${achcievement.body.data.id}`
+      );
+
+      console.log(res.body);
+
+      expect(res.statusCode).toEqual(200);
+      expect(res.body.status).toEqual(200);
+      expect(res.body.message).toEqual("Successfully Get Achievement");
+      expect(res.body.data.logo).toBeDefined();
+      expect(res.body.data.name).toBeDefined();
+      expect(res.body.data.year).toBeDefined();
+      expect(res.body.data.created_at).toBeDefined();
+    });
+
+    it("Should return 404 if achievement not found", async () => {
+      const res = await request(app).get("/api/v1/achievements?id=100");
+
+      expect(res.statusCode).toEqual(404);
+      expect(res.body.status).toEqual(404);
+      expect(res.body.message).toEqual("Achievement not found");
+    }, 60000);
+  });
 });
