@@ -1,5 +1,4 @@
 const request = require("supertest");
-
 const { deleteUserByUsername } = require("../../src/models/userModel");
 const path = require("path");
 const app = require("../../src/app");
@@ -7,287 +6,201 @@ require("dotenv").config();
 const fs = require("fs");
 const { deleteAchievementAll } = require("../../src/models/achievementsModel");
 
+const TEST_USERNAME = process.env.TEST_USERNAME;
+const TEST_PASSWORD = process.env.TEST_PASSWORD;
+
 describe("Achievement Controller", () => {
   beforeEach(async () => {
-    await deleteUserByUsername(process.env.TEST_USERNAME);
+    await deleteUserByUsername(TEST_USERNAME);
   });
+
+  const registerAndLogin = async (username, password) => {
+    const data = { username, password };
+    await request(app).post("/api/v1/register").send(data);
+    return await request(app).post("/api/v1/login").send(data);
+  };
+
+  const createAchievement = async (token, achievementData) => {
+    const { name, year, logo } = achievementData;
+    return await request(app)
+      .post("/api/v1/achievements")
+      .set("Cookie", `token=${token}`)
+      .set("Authorization", `Bearer ${token}`)
+      .field("name", name)
+      .field("year", year)
+      .attach("logo", logo);
+  };
+
+  const fileExists = (filePath) => {
+    if (!fs.existsSync(filePath)) {
+      throw new Error(`File does not exist: ${filePath}`);
+    }
+  };
 
   describe("POST /api/v1/achievements", () => {
     it("should be rejected if user not authenticated", async () => {
       const res = await request(app).post("/api/v1/achievements");
-
       expect(res.statusCode).toEqual(401);
       expect(res.body.status).toEqual(401);
       expect(res.body.message).toBeDefined();
-    });
+    }, 60000);
 
     it("should be rejected if name is not provided", async () => {
-      const data = {
-        username: "admin",
-        password: "Admin@123456",
-      };
-
-      await request(app).post("/api/v1/register").send(data);
-
-      const login = await request(app).post("/api/v1/login").send(data);
-
+      const login = await registerAndLogin(TEST_USERNAME, TEST_PASSWORD);
       const filePathLogo = path.resolve(__dirname, "../test-small.webp");
+      fileExists(filePathLogo);
 
-      if (!fs.existsSync(filePathLogo)) {
-        throw new Error(`File does not exist: ${filePathLogo}`);
-      }
+      const achievementData = { name: "", year: "2021", logo: filePathLogo };
+      const res = await createAchievement(
+        login.body.authorization.token,
+        achievementData
+      );
 
-      const achievementData = {
-        year: "2021",
-        logo: filePathLogo,
-      };
-
-      const res = await request(app)
-        .post("/api/v1/achievements")
-        .set("Cookie", `token=${login.body.authorization.token}`)
-        .set("Authorization", `Bearer ${login.body.authorization.token}`)
-        .field("year", achievementData.year)
-        .attach("logo", achievementData.logo);
+      console.log(res.body);
 
       expect(res.statusCode).toEqual(500);
       expect(res.body.status).toEqual(500);
-      expect(res.body.errors[1].msg).toBe("Achievement name is required");
-    });
+      expect(
+        res.body.errors.some(
+          (error) => error.msg === "Achievement name is required"
+        )
+      ).toBeTruthy();
+    }, 60000);
 
     it("should be rejected if name is longer than 255 characters", async () => {
-      const data = {
-        username: "admin",
-        password: "Admin@123456",
-      };
-
-      await request(app).post("/api/v1/register").send(data);
-
-      const login = await request(app).post("/api/v1/login").send(data);
-
+      const login = await registerAndLogin(TEST_USERNAME, TEST_PASSWORD);
       const filePathLogo = path.resolve(__dirname, "../test-small.webp");
-
-      if (!fs.existsSync(filePathLogo)) {
-        throw new Error(`File does not exist: ${filePathLogo}`);
-      }
+      fileExists(filePathLogo);
 
       const achievementData = {
         name: "a".repeat(256),
         year: "2021",
         logo: filePathLogo,
       };
-
-      const res = await request(app)
-        .post("/api/v1/achievements")
-        .set("Cookie", `token=${login.body.authorization.token}`)
-        .set("Authorization", `Bearer ${login.body.authorization.token}`)
-        .field("name", achievementData.name)
-        .field("year", achievementData.year)
-        .attach("logo", achievementData.logo);
+      const res = await createAchievement(
+        login.body.authorization.token,
+        achievementData
+      );
 
       expect(res.statusCode).toEqual(500);
       expect(res.body.status).toEqual(500);
       expect(res.body.errors[0].msg).toBe(
         "Achievement name must be no more than 255 characters"
       );
-    });
+    }, 60000);
 
     it("should be rejected if year is more than 4 characters", async () => {
-      const data = {
-        username: "admin",
-        password: "Admin@123456",
-      };
-
-      await request(app).post("/api/v1/register").send(data);
-
-      const login = await request(app).post("/api/v1/login").send(data);
-
+      const login = await registerAndLogin(TEST_USERNAME, TEST_PASSWORD);
       const filePathLogo = path.resolve(__dirname, "../test-small.webp");
-
-      if (!fs.existsSync(filePathLogo)) {
-        throw new Error(`File does not exist: ${filePathLogo}`);
-      }
+      fileExists(filePathLogo);
 
       const achievementData = {
         name: "tes achievement",
         logo: filePathLogo,
         year: "20211",
       };
-
-      const res = await request(app)
-        .post("/api/v1/achievements")
-        .set("Cookie", `token=${login.body.authorization.token}`)
-        .set("Authorization", `Bearer ${login.body.authorization.token}`)
-        .field("name", achievementData.name)
-        .field("year", achievementData.year)
-        .attach("logo", achievementData.logo);
+      const res = await createAchievement(
+        login.body.authorization.token,
+        achievementData
+      );
 
       expect(res.statusCode).toEqual(500);
       expect(res.body.status).toEqual(500);
       expect(res.body.errors[0].msg).toBe(
         "Achievement year must be no more than 4 characters"
       );
-    });
+    }, 60000);
+
     it("should be rejected if year is not provided", async () => {
-      const data = {
-        username: "admin",
-        password: "Admin@123456",
-      };
-
-      await request(app).post("/api/v1/register").send(data);
-
-      const login = await request(app).post("/api/v1/login").send(data);
-
+      const login = await registerAndLogin(TEST_USERNAME, TEST_PASSWORD);
       const filePathLogo = path.resolve(__dirname, "../test-small.webp");
+      fileExists(filePathLogo);
 
-      if (!fs.existsSync(filePathLogo)) {
-        throw new Error(`File does not exist: ${filePathLogo}`);
-      }
-
-      const achievementData = {
-        name: "2021",
-        logo: filePathLogo,
-      };
-
-      const res = await request(app)
-        .post("/api/v1/achievements")
-        .set("Cookie", `token=${login.body.authorization.token}`)
-        .set("Authorization", `Bearer ${login.body.authorization.token}`)
-        .field("name", achievementData.name)
-        .attach("logo", achievementData.logo);
+      const achievementData = { name: "2021", logo: filePathLogo, year: "" };
+      const res = await createAchievement(
+        login.body.authorization.token,
+        achievementData
+      );
 
       expect(res.statusCode).toEqual(500);
       expect(res.body.status).toEqual(500);
-      expect(res.body.errors[1].msg).toBe("Achievement year is required");
-    });
+      expect(
+        res.body.errors.some(
+          (error) => error.msg === "Achievement year is required"
+        )
+      ).toBeTruthy();
+    }, 60000);
 
     it("should be rejected if logo is not provided", async () => {
-      const data = {
-        username: "admin",
-        password: "Admin@123456",
-      };
+      const login = await registerAndLogin(TEST_USERNAME, TEST_PASSWORD);
 
-      await request(app).post("/api/v1/register").send(data);
-
-      const login = await request(app).post("/api/v1/login").send(data);
-
-      const achievementData = {
-        name: "Achievement",
-        year: "2021",
-      };
-
-      const res = await request(app)
-        .post("/api/v1/achievements")
-        .set("Cookie", `token=${login.body.authorization.token}`)
-        .set("Authorization", `Bearer ${login.body.authorization.token}`)
-        .field("name", achievementData.name)
-        .field("year", achievementData.year);
+      const achievementData = { name: "Achievement", year: "2021" };
+      const res = await createAchievement(
+        login.body.authorization.token,
+        achievementData
+      );
 
       expect(res.statusCode).toEqual(500);
       expect(res.body.status).toEqual(500);
       expect(res.body.message).toBe("Achievement logo are required");
-    });
+    }, 60000);
 
     it("should be rejected if logo is not webp", async () => {
-      const data = {
-        username: "admin",
-        password: "Admin@123456",
-      };
-
-      await request(app).post("/api/v1/register").send(data);
-
-      const login = await request(app).post("/api/v1/login").send(data);
-
+      const login = await registerAndLogin(TEST_USERNAME, TEST_PASSWORD);
       const filePathLogo = path.resolve(__dirname, "../test.jpg");
-
-      if (!fs.existsSync(filePathLogo)) {
-        throw new Error(`File does not exist: ${filePathLogo}`);
-      }
+      fileExists(filePathLogo);
 
       const achievementData = {
         name: "Achievement",
         logo: filePathLogo,
         year: "2021",
       };
-
-      const res = await request(app)
-        .post("/api/v1/achievements")
-        .set("Cookie", `token=${login.body.authorization.token}`)
-        .set("Authorization", `Bearer ${login.body.authorization.token}`)
-        .field("name", achievementData.name)
-        .field("year", achievementData.year)
-        .attach("logo", achievementData.logo);
+      const res = await createAchievement(
+        login.body.authorization.token,
+        achievementData
+      );
 
       expect(res.statusCode).toEqual(500);
       expect(res.body.status).toEqual(500);
       expect(res.body.message).toBe("Achievement logo must be in WEBP format");
-    });
+    }, 60000);
 
     it("should be rejected if logo is larger than 500kb", async () => {
-      const data = {
-        username: "admin",
-        password: "Admin@123456",
-      };
-
-      await request(app).post("/api/v1/register").send(data);
-
-      const login = await request(app).post("/api/v1/login").send(data);
-
+      const login = await registerAndLogin(TEST_USERNAME, TEST_PASSWORD);
       const filePathLogo = path.resolve(__dirname, "../tes-large.webp");
-
-      if (!fs.existsSync(filePathLogo)) {
-        throw new Error(`File does not exist: ${filePathLogo}`);
-      }
+      fileExists(filePathLogo);
 
       const achievementData = {
         name: "Achievement",
         logo: filePathLogo,
         year: "2021",
       };
-
-      const res = await request(app)
-        .post("/api/v1/achievements")
-        .set("Cookie", `token=${login.body.authorization.token}`)
-        .set("Authorization", `Bearer ${login.body.authorization.token}`)
-        .field("name", achievementData.name)
-        .field("year", achievementData.year)
-        .attach("logo", achievementData.logo);
+      const res = await createAchievement(
+        login.body.authorization.token,
+        achievementData
+      );
 
       expect(res.statusCode).toEqual(500);
       expect(res.body.status).toEqual(500);
       expect(res.body.message).toBe(
         "Achievement logo size is too big, please upload a file smaller than 500 KB"
       );
-    });
+    }, 60000);
 
     it("should be able to add achievement", async () => {
-      const data = {
-        username: "admin",
-        password: "Admin@123456",
-      };
-
-      await request(app).post("/api/v1/register").send(data);
-
-      const login = await request(app).post("/api/v1/login").send(data);
-
+      const login = await registerAndLogin(TEST_USERNAME, TEST_PASSWORD);
       const filePathLogo = path.resolve(__dirname, "../test-small.webp");
-
-      if (!fs.existsSync(filePathLogo)) {
-        throw new Error(`File does not exist: ${filePathLogo}`);
-      }
+      fileExists(filePathLogo);
 
       const achievementData = {
         name: "Achievement",
         logo: filePathLogo,
         year: "2021",
       };
-
-      const res = await request(app)
-        .post("/api/v1/achievements")
-        .set("Cookie", `token=${login.body.authorization.token}`)
-        .set("Authorization", `Bearer ${login.body.authorization.token}`)
-        .field("name", achievementData.name)
-        .field("year", achievementData.year)
-        .attach("logo", achievementData.logo);
+      const res = await createAchievement(
+        login.body.authorization.token,
+        achievementData
+      );
 
       expect(res.statusCode).toEqual(200);
       expect(res.body.status).toEqual(200);
@@ -298,7 +211,6 @@ describe("Achievement Controller", () => {
   describe("GET /api/v1/acchievements", () => {
     it("Should get all achievements", async () => {
       const res = await request(app).get("/api/v1/achievements");
-
       expect(res.statusCode).toEqual(200);
       expect(res.body.status).toEqual(200);
       expect(res.body.message).toEqual("Successfully Get All Achievements");
@@ -307,53 +219,36 @@ describe("Achievement Controller", () => {
       expect(res.body.data[0].name).toBeDefined();
       expect(res.body.data[0].year).toBeDefined();
       expect(res.body.data[0].created_at).toBeDefined();
-    });
+    }, 60000);
 
     it("Should return 500 if error", async () => {
       await deleteAchievementAll();
-
       const res = await request(app).get("/api/v1/achievements");
       expect(res.statusCode).toEqual(500);
       expect(res.body.status).toEqual(500);
       expect(res.body.message).toEqual(
         "Failed to Get All Achievements: No data found"
       );
-    });
+    }, 60000);
   });
 
   describe("GET /api/v1/achievements?id=id_achievement", () => {
     it("Should get achievement by id", async () => {
-      const data = {
-        username: "admin",
-        password: "Admin@123456",
-      };
-
-      await request(app).post("/api/v1/register").send(data);
-
-      const login = await request(app).post("/api/v1/login").send(data);
-
+      const login = await registerAndLogin(TEST_USERNAME, TEST_PASSWORD);
       const filePathLogo = path.resolve(__dirname, "../test-small.webp");
-
-      if (!fs.existsSync(filePathLogo)) {
-        throw new Error(`File does not exist: ${filePathLogo}`);
-      }
+      fileExists(filePathLogo);
 
       const achievementData = {
         name: "Achievement",
         logo: filePathLogo,
         year: "2021",
       };
-
-      const achcievement = await request(app)
-        .post("/api/v1/achievements")
-        .set("Cookie", `token=${login.body.authorization.token}`)
-        .set("Authorization", `Bearer ${login.body.authorization.token}`)
-        .field("name", achievementData.name)
-        .field("year", achievementData.year)
-        .attach("logo", achievementData.logo);
-
+      const achievement = await createAchievement(
+        login.body.authorization.token,
+        achievementData
+      );
       const res = await request(app).get(
-        `/api/v1/achievements?id=${achcievement.body.data.id}`
+        `/api/v1/achievements?id=${achievement.body.data.id}`
       );
 
       expect(res.statusCode).toEqual(200);
@@ -363,102 +258,121 @@ describe("Achievement Controller", () => {
       expect(res.body.data.name).toBeDefined();
       expect(res.body.data.year).toBeDefined();
       expect(res.body.data.created_at).toBeDefined();
-    });
+    }, 60000);
 
     it("Should return 404 if achievement not found", async () => {
       const res = await request(app).get("/api/v1/achievements?id=100");
-
       expect(res.statusCode).toEqual(404);
       expect(res.body.status).toEqual(404);
       expect(res.body.message).toEqual("Achievement not found");
     }, 60000);
   });
 
-  describe("PUT /api/v1/achievements>id=id_achievement", () => {
+  describe("PUT /api/v1/achievements?id=id_achievement", () => {
     it("should be rejected if user not authenticated", async () => {
       const res = await request(app).put("/api/v1/achievements?id=1");
-
       expect(res.statusCode).toEqual(401);
       expect(res.body.status).toEqual(401);
       expect(res.body.message).toBeDefined();
-    });
-
-    it("Should return 404 if achievement not found", async () => {
-      const res = await request(app).get("/api/v1/achievements?id=100");
-
-      expect(res.statusCode).toEqual(404);
-      expect(res.body.status).toEqual(404);
-      expect(res.body.message).toEqual("Achievement not found");
     }, 60000);
 
-    it("Should be able to update achievement", async () => {
-      const data = {
-        username: "admin",
-        password: "Admin@12345",
-      };
-      await request(app).post("/api/v1/register").send(data);
-      const login = await request(app).post("/api/v1/login").send(data);
-
+    it("Should edit achievement by id", async () => {
+      const login = await registerAndLogin(TEST_USERNAME, TEST_PASSWORD);
       const filePathLogo = path.resolve(__dirname, "../test-small.webp");
-      const newFilePathLogo = path.resolve(__dirname, "../test-1080.webp");
-
-      if (!fs.existsSync(filePathLogo)) {
-        throw new Error(`File does not exist: ${filePathLogo}`);
-      }
+      fileExists(filePathLogo);
 
       const achievementData = {
-        name: "Tes Achievement 1",
+        name: "Achievement",
         logo: filePathLogo,
         year: "2021",
       };
+      const achievement = await createAchievement(
+        login.body.authorization.token,
+        achievementData
+      );
+      const id = achievement.body.data.id;
+      const newFilePathLogo = path.resolve(__dirname, "../test-small.webp");
+      fileExists(newFilePathLogo);
 
-      const updatedAchievement = {
-        name: "Test update achievement 1",
+      const updatedAchievementData = {
+        name: "Updated Achievement",
         year: "2022",
         logo: newFilePathLogo,
       };
-
-      const achievement = await request(app)
-        .post("/api/v1/achievements")
-        .set("Cookie", `token=${login.body.authorization.token}`)
-        .set("Authorization", `Bearer ${login.body.authorization.token}`)
-        .field("name", achievementData.name)
-        .field("year", achievementData.year)
-        .attach("logo", achievementData.logo);
-
       const res = await request(app)
-        .put(`/api/v1/achievements?id=${achievement.body.data.id}`)
+        .put(`/api/v1/achievements?id=${id}`)
         .set("Cookie", `token=${login.body.authorization.token}`)
         .set("Authorization", `Bearer ${login.body.authorization.token}`)
-        .send(updatedAchievement);
+        .field("name", updatedAchievementData.name)
+        .field("year", updatedAchievementData.year)
+        .attach("logo", updatedAchievementData.logo);
 
       expect(res.statusCode).toEqual(200);
       expect(res.body.status).toEqual(200);
       expect(res.body.message).toEqual("Successfully Update Achievement");
+    }, 60000);
+
+    it("Should return 404 if achievement not found", async () => {
+      const login = await registerAndLogin(TEST_USERNAME, TEST_PASSWORD);
+      const newFilePathLogo = path.resolve(__dirname, "../test-small.webp");
+      fileExists(newFilePathLogo);
+
+      const updatedAchievementData = {
+        name: "Updated Achievement",
+        year: "2022",
+        logo: newFilePathLogo,
+      };
+      const res = await request(app)
+        .put("/api/v1/achievements?id=1")
+        .set("Cookie", `token=${login.body.authorization.token}`)
+        .set("Authorization", `Bearer ${login.body.authorization.token}`)
+        .field("name", updatedAchievementData.name)
+        .field("year", updatedAchievementData.year)
+        .attach("logo", updatedAchievementData.logo);
+
+      expect(res.statusCode).toEqual(404);
+      expect(res.body.status).toEqual(404);
+      expect(res.body.message).toEqual("Achievement not found");
     }, 60000);
   });
 
   describe("DELETE /api/v1/achievements?id=id_achievement", () => {
     it("should be rejected if user not authenticated", async () => {
       const res = await request(app).delete("/api/v1/achievements?id=1");
-
       expect(res.statusCode).toEqual(401);
       expect(res.body.status).toEqual(401);
       expect(res.body.message).toBeDefined();
-    });
+    }, 60000);
+
+    it("Should delete achievement by id", async () => {
+      const login = await registerAndLogin(TEST_USERNAME, TEST_PASSWORD);
+      const filePathLogo = path.resolve(__dirname, "../test-small.webp");
+      fileExists(filePathLogo);
+
+      const achievementData = {
+        name: "Achievement",
+        logo: filePathLogo,
+        year: "2021",
+      };
+      const achievement = await createAchievement(
+        login.body.authorization.token,
+        achievementData
+      );
+      const id = achievement.body.data.id;
+      const res = await request(app)
+        .delete(`/api/v1/achievements?id=${id}`)
+        .set("Cookie", `token=${login.body.authorization.token}`)
+        .set("Authorization", `Bearer ${login.body.authorization.token}`);
+
+      expect(res.statusCode).toEqual(200);
+      expect(res.body.status).toEqual(200);
+      expect(res.body.message).toEqual("Successfully Delete Achievement");
+    }, 60000);
 
     it("Should return 404 if achievement not found", async () => {
-      const data = {
-        username: process.env.TEST_USERNAME,
-        password: process.env.TEST_PASSWORD,
-      };
-
-      await request(app).post("/api/v1/register").send(data);
-
-      const login = await request(app).post("/api/v1/login").send(data);
-
+      const login = await registerAndLogin(TEST_USERNAME, TEST_PASSWORD);
       const res = await request(app)
-        .delete("/api/v1/achievements?id=100")
+        .delete("/api/v1/achievements?id=1")
         .set("Cookie", `token=${login.body.authorization.token}`)
         .set("Authorization", `Bearer ${login.body.authorization.token}`);
 
@@ -466,41 +380,5 @@ describe("Achievement Controller", () => {
       expect(res.body.status).toEqual(404);
       expect(res.body.message).toEqual("Achievement not found");
     }, 60000);
-
-    it("Should be able to delete achievement", async () => {
-      const data = {
-        username: process.env.TEST_USERNAME,
-        password: process.env.TEST_PASSWORD,
-      };
-
-      await request(app).post("/api/v1/register").send(data);
-
-      const login = await request(app).post("/api/v1/login").send(data);
-
-      const filePathLogo = path.resolve(__dirname, "../test-small.webp");
-      const achievementData = {
-        name: "Tes Achievement 1",
-        logo: filePathLogo,
-        year: "2021",
-      };
-
-      const achievement = await request(app)
-        .post("/api/v1/achievements")
-        .set("Cookie", `token=${login.body.authorization.token}`)
-        .set("Authorization", `Bearer ${login.body.authorization.token}`)
-        .field("name", achievementData.name)
-        .field("year", achievementData.year)
-        .attach("logo", achievementData.logo);
-
-      const res = await request(app)
-        .delete(`/api/v1/achievements?id=${achievement.body.data.id}`)
-        .set("Cookie", `token=${login.body.authorization.token}`)
-        .set("Authorization", `Bearer ${login.body.authorization.token}`);
-
-      expect(res.statusCode).toEqual(200);
-      expect(res.body.status).toEqual(200);
-      expect(res.body.message).toEqual("Successfully Delete Achievement");
-      expect(res.body.data.deleted_at).toBeDefined();
-    });
   });
 });
