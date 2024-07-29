@@ -1,4 +1,4 @@
-const { updatePartnerById } = require("src/controllers/partnerController");
+const { updatePartnerById } = require("../controllers/partnerController");
 const {
   addPartner,
   getAllPartners,
