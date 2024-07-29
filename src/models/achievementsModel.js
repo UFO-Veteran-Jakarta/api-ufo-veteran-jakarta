@@ -1,38 +1,62 @@
 const pool = require("../config/database");
 
-exports.addAchievement = async function insertAchievement(data) {
+const constructInsertQuery = (data, tableName) => {
   const fields = [];
   const values = [];
   const placeholders = [];
-
   Object.keys(data).forEach((key, index) => {
     fields.push(key);
     values.push(data[key]);
     placeholders.push(`$${index + 1}`);
   });
-
   const query = `
-    INSERT INTO myschema.achievements (${fields.join(", ")})
+    INSERT INTO ${tableName} (${fields.join(", ")})
     VALUES (${placeholders.join(", ")})
     RETURNING *;
- `;
+  `;
+  return { query, values };
+};
 
+const constructUpdateQuery = (data, tableName, id) => {
+  const fields = [];
+  const values = [];
+  let index = 1;
+  Object.keys(data).forEach((key) => {
+    fields.push(`${key} = $${index}`);
+    values.push(data[key]);
+    index++;
+  });
+  const query = `
+    UPDATE ${tableName}
+    SET ${fields.join(", ")}, updated_at = NOW()
+    WHERE id = $${index}
+    RETURNING *;
+  `;
+  return { query, values: [...values, id] };
+};
+
+const logError = (message, error) => {
+  console.error(message, error);
+};
+
+exports.addAchievement = async (data) => {
+  const { query, values } = constructInsertQuery(data, "myschema.achievements");
   try {
     const res = await pool.query(query, values);
     return res.rows[0];
   } catch (error) {
-    console.error("Error inserting achievement:", error);
+    logError("Error inserting achievement:", error);
+    throw error;
   }
 };
 
-exports.getAllAchievements = async function getAllAchievements() {
+exports.getAllAchievements = async () => {
   const query = "SELECT * FROM myschema.achievements WHERE deleted_at IS NULL";
-
   try {
     const res = await pool.query(query);
     return res.rows.length > 0 ? res.rows : null;
   } catch (error) {
-    console.error("Error fetching partners:", error);
+    logError("Error fetching achievements:", error);
     throw error;
   }
 };
@@ -43,48 +67,37 @@ exports.getAchievementById = async (id) => {
       `SELECT * FROM myschema.achievements WHERE id = $1 AND deleted_at IS NULL`,
       [id]
     );
-
-    if (res.rows.length === 0) {
-      return null;
-    }
-    return res.rows[0];
+    return res.rows.length === 0 ? null : res.rows[0];
   } catch (error) {
-    return [];
+    logError(`Error fetching achievement with id ${id}:`, error);
+    throw error;
   }
 };
 
 exports.updateAchievement = async (id, data) => {
-  const fields = [];
-  const values = [];
-  let index = 1;
-
-  Object.keys(data).forEach((key) => {
-    fields.push(`${key} = $${index}`);
-    values.push(data[key]);
-    index++;
-  });
-
-  const query = `
-    UPDATE myschema.achievements
-    SET ${fields.join(", ")}, updated_at = NOW()
-    WHERE id = $${index}
-    RETURNING *;
-  `;
-
+  const { query, values } = constructUpdateQuery(
+    data,
+    "myschema.achievements",
+    id
+  );
   try {
-    const res = await pool.query(query, [...values, id]);
+    const res = await pool.query(query, values);
     return res.rows[0];
   } catch (error) {
-    console.error(`Error updating achievement with id ${id}:`, error);
+    logError(`Error updating achievement with id ${id}:`, error);
     throw error;
   }
 };
 
 exports.deleteAchievementAll = async () => {
-  const res = await pool.query(
-    `UPDATE myschema.achievements SET deleted_at = NOW()`
-  );
-  return res.rows;
+  const query = `UPDATE myschema.achievements SET deleted_at = NOW()`;
+  try {
+    const res = await pool.query(query);
+    return res.rows;
+  } catch (error) {
+    logError("Error deleting all achievements:", error);
+    throw error;
+  }
 };
 
 exports.deleteAchievement = async (id) => {
@@ -94,12 +107,11 @@ exports.deleteAchievement = async (id) => {
     WHERE id = $1
     RETURNING *;
   `;
-
   try {
     const res = await pool.query(query, [id]);
     return res.rows[0];
   } catch (error) {
-    console.error(`Error deleting achievement with id ${id}:`, error);
+    logError(`Error deleting achievement with id ${id}:`, error);
     throw error;
   }
 };
