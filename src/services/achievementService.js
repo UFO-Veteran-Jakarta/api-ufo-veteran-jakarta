@@ -6,6 +6,7 @@ const {
   getAllAchievements,
   getAchievementById,
   updateAchievement,
+  deleteAchievement,
 } = require("../models/achievementsModel");
 
 exports.addAchievemnt = async (data) => {
@@ -30,5 +31,5 @@ exports.updateAchievement = async (id, data) => {
 };
 
 exports.deleteAchievement = async (id) => {
-  return await updateAchievementById(id);
+  return await deleteAchievement(id);
 };
