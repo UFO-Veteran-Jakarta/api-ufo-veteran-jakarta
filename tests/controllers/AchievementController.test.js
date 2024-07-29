@@ -352,13 +352,9 @@ describe("Achievement Controller", () => {
         .field("year", achievementData.year)
         .attach("logo", achievementData.logo);
 
-      console.log(achcievement.body);
-
       const res = await request(app).get(
         `/api/v1/achievements?id=${achcievement.body.data.id}`
       );
-
-      console.log(res.body);
 
       expect(res.statusCode).toEqual(200);
       expect(res.body.status).toEqual(200);
@@ -375,6 +371,74 @@ describe("Achievement Controller", () => {
       expect(res.statusCode).toEqual(404);
       expect(res.body.status).toEqual(404);
       expect(res.body.message).toEqual("Achievement not found");
+    }, 60000);
+  });
+
+  describe("PUT /api/v1/achievements>id=id_achievement", () => {
+    it("should be rejected if user not authenticated", async () => {
+      const res = await request(app).put("/api/v1/achievements?id=1");
+
+      expect(res.statusCode).toEqual(401);
+      expect(res.body.status).toEqual(401);
+      expect(res.body.message).toBeDefined();
+    });
+
+    it("Should return 404 if achievement not found", async () => {
+      const res = await request(app).get("/api/v1/achievements?id=100");
+
+      expect(res.statusCode).toEqual(404);
+      expect(res.body.status).toEqual(404);
+      expect(res.body.message).toEqual("Achievement not found");
+    }, 60000);
+
+    it("Should be able to update achievement", async () => {
+      const data = {
+        username: "admin",
+        password: "Admin@12345",
+      };
+      await request(app).post("/api/v1/register").send(data);
+      const login = await request(app).post("/api/v1/login").send(data);
+
+      const filePathLogo = path.resolve(__dirname, "../test-small.webp");
+      const newFilePathLogo = path.resolve(__dirname, "../test-1080.webp");
+
+      if (!fs.existsSync(filePathLogo)) {
+        throw new Error(`File does not exist: ${filePathLogo}`);
+      }
+
+      const achievementData = {
+        name: "Tes Achievement 1",
+        logo: filePathLogo,
+        year: "2021",
+      };
+
+      const updatedAchievement = {
+        name: "Test update achievement 1",
+        year: "2022",
+        logo: newFilePathLogo,
+      };
+
+      const achievement = await request(app)
+        .post("/api/v1/achievements")
+        .set("Cookie", `token=${login.body.authorization.token}`)
+        .set("Authorization", `Bearer ${login.body.authorization.token}`)
+        .field("name", achievementData.name)
+        .field("year", achievementData.year)
+        .attach("logo", achievementData.logo);
+
+      console.log("Achievement originial:", achievement.body);
+
+      const res = await request(app)
+        .put(`/api/v1/achievements?id=${achievement.body.data.id}`)
+        .set("Cookie", `token=${login.body.authorization.token}`)
+        .set("Authorization", `Bearer ${login.body.authorization.token}`)
+        .send(updatedAchievement);
+
+      console.log("Achievement updated", res.body);
+
+      expect(res.statusCode).toEqual(200);
+      expect(res.body.status).toEqual(200);
+      expect(res.body.message).toEqual("Successfully Update Achievement");
     }, 60000);
   });
 });
