@@ -38,4 +38,10 @@ router.put(
   achievementController.updateAchievementById
 );
 
+router.delete(
+  "/",
+  authentication(),
+  achievementController.deleteAchievementById
+);
+
 module.exports = router;
