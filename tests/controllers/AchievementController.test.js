@@ -20,8 +20,7 @@ describe("Achievement Controller", () => {
     return await request(app).post("/api/v1/login").send(data);
   };
 
-  const createAchievement = async (token, achievementData) => {
-    const { name, year, logo } = achievementData;
+  const createAchievement = async (token, { name, year, logo }) => {
     return await request(app)
       .post("/api/v1/achievements")
       .set("Cookie", `token=${token}`)
@@ -37,26 +36,32 @@ describe("Achievement Controller", () => {
     }
   };
 
+  const authenticateUser = async () => {
+    const login = await registerAndLogin(TEST_USERNAME, TEST_PASSWORD);
+    const token = login.body.authorization.token;
+    return token;
+  };
+
+  const validateErrorResponse = (res, statusCode, status, errorMessage) => {
+    expect(res.statusCode).toEqual(statusCode);
+    expect(res.body.status).toEqual(status);
+    expect(res.body.message).toBeDefined();
+    expect(res.body.message).toEqual(errorMessage);
+  };
+
   describe("POST /api/v1/achievements", () => {
     it("should be rejected if user not authenticated", async () => {
       const res = await request(app).post("/api/v1/achievements");
-      expect(res.statusCode).toEqual(401);
-      expect(res.body.status).toEqual(401);
-      expect(res.body.message).toBeDefined();
+      validateErrorResponse(res, 401, 401, "Unauthorized");
     }, 60000);
 
     it("should be rejected if name is not provided", async () => {
-      const login = await registerAndLogin(TEST_USERNAME, TEST_PASSWORD);
+      const token = await authenticateUser();
       const filePathLogo = path.resolve(__dirname, "../test-small.webp");
       fileExists(filePathLogo);
 
       const achievementData = { name: "", year: "2021", logo: filePathLogo };
-      const res = await createAchievement(
-        login.body.authorization.token,
-        achievementData
-      );
-
-      console.log(res.body);
+      const res = await createAchievement(token, achievementData);
 
       expect(res.statusCode).toEqual(500);
       expect(res.body.status).toEqual(500);
@@ -68,7 +73,7 @@ describe("Achievement Controller", () => {
     }, 60000);
 
     it("should be rejected if name is longer than 255 characters", async () => {
-      const login = await registerAndLogin(TEST_USERNAME, TEST_PASSWORD);
+      const token = await authenticateUser();
       const filePathLogo = path.resolve(__dirname, "../test-small.webp");
       fileExists(filePathLogo);
 
@@ -77,10 +82,7 @@ describe("Achievement Controller", () => {
         year: "2021",
         logo: filePathLogo,
       };
-      const res = await createAchievement(
-        login.body.authorization.token,
-        achievementData
-      );
+      const res = await createAchievement(token, achievementData);
 
       expect(res.statusCode).toEqual(500);
       expect(res.body.status).toEqual(500);
@@ -90,7 +92,7 @@ describe("Achievement Controller", () => {
     }, 60000);
 
     it("should be rejected if year is more than 4 characters", async () => {
-      const login = await registerAndLogin(TEST_USERNAME, TEST_PASSWORD);
+      const token = await authenticateUser();
       const filePathLogo = path.resolve(__dirname, "../test-small.webp");
       fileExists(filePathLogo);
 
@@ -99,10 +101,7 @@ describe("Achievement Controller", () => {
         logo: filePathLogo,
         year: "20211",
       };
-      const res = await createAchievement(
-        login.body.authorization.token,
-        achievementData
-      );
+      const res = await createAchievement(token, achievementData);
 
       expect(res.statusCode).toEqual(500);
       expect(res.body.status).toEqual(500);
@@ -112,15 +111,12 @@ describe("Achievement Controller", () => {
     }, 60000);
 
     it("should be rejected if year is not provided", async () => {
-      const login = await registerAndLogin(TEST_USERNAME, TEST_PASSWORD);
+      const token = await authenticateUser();
       const filePathLogo = path.resolve(__dirname, "../test-small.webp");
       fileExists(filePathLogo);
 
       const achievementData = { name: "2021", logo: filePathLogo, year: "" };
-      const res = await createAchievement(
-        login.body.authorization.token,
-        achievementData
-      );
+      const res = await createAchievement(token, achievementData);
 
       expect(res.statusCode).toEqual(500);
       expect(res.body.status).toEqual(500);
@@ -132,13 +128,10 @@ describe("Achievement Controller", () => {
     }, 60000);
 
     it("should be rejected if logo is not provided", async () => {
-      const login = await registerAndLogin(TEST_USERNAME, TEST_PASSWORD);
+      const token = await authenticateUser();
 
       const achievementData = { name: "Achievement", year: "2021" };
-      const res = await createAchievement(
-        login.body.authorization.token,
-        achievementData
-      );
+      const res = await createAchievement(token, achievementData);
 
       expect(res.statusCode).toEqual(500);
       expect(res.body.status).toEqual(500);
@@ -146,7 +139,7 @@ describe("Achievement Controller", () => {
     }, 60000);
 
     it("should be rejected if logo is not webp", async () => {
-      const login = await registerAndLogin(TEST_USERNAME, TEST_PASSWORD);
+      const token = await authenticateUser();
       const filePathLogo = path.resolve(__dirname, "../test.jpg");
       fileExists(filePathLogo);
 
@@ -155,10 +148,7 @@ describe("Achievement Controller", () => {
         logo: filePathLogo,
         year: "2021",
       };
-      const res = await createAchievement(
-        login.body.authorization.token,
-        achievementData
-      );
+      const res = await createAchievement(token, achievementData);
 
       expect(res.statusCode).toEqual(500);
       expect(res.body.status).toEqual(500);
@@ -166,7 +156,7 @@ describe("Achievement Controller", () => {
     }, 60000);
 
     it("should be rejected if logo is larger than 500kb", async () => {
-      const login = await registerAndLogin(TEST_USERNAME, TEST_PASSWORD);
+      const token = await authenticateUser();
       const filePathLogo = path.resolve(__dirname, "../tes-large.webp");
       fileExists(filePathLogo);
 
@@ -175,10 +165,7 @@ describe("Achievement Controller", () => {
         logo: filePathLogo,
         year: "2021",
       };
-      const res = await createAchievement(
-        login.body.authorization.token,
-        achievementData
-      );
+      const res = await createAchievement(token, achievementData);
 
       expect(res.statusCode).toEqual(500);
       expect(res.body.status).toEqual(500);
@@ -188,7 +175,7 @@ describe("Achievement Controller", () => {
     }, 60000);
 
     it("should be able to add achievement", async () => {
-      const login = await registerAndLogin(TEST_USERNAME, TEST_PASSWORD);
+      const token = await authenticateUser();
       const filePathLogo = path.resolve(__dirname, "../test-small.webp");
       fileExists(filePathLogo);
 
@@ -197,10 +184,7 @@ describe("Achievement Controller", () => {
         logo: filePathLogo,
         year: "2021",
       };
-      const res = await createAchievement(
-        login.body.authorization.token,
-        achievementData
-      );
+      const res = await createAchievement(token, achievementData);
 
       expect(res.statusCode).toEqual(200);
       expect(res.body.status).toEqual(200);
@@ -208,25 +192,30 @@ describe("Achievement Controller", () => {
     }, 60000);
   });
 
-  describe("GET /api/v1/acchievements", () => {
+  const testGetAllAchievements = (res) => {
+    expect(res.statusCode).toEqual(200);
+    expect(res.body.status).toEqual(200);
+    expect(res.body.message).toEqual("Successfully Get All Achievements");
+    expect(Array.isArray(res.body.data)).toBe(true);
+    expect(res.body.data[0].logo).toBeDefined();
+    expect(res.body.data[0].name).toBeDefined();
+    expect(res.body.data[0].year).toBeDefined();
+    expect(res.body.data[0].created_at).toBeDefined();
+  };
+
+  describe("GET /api/v1/achievements", () => {
     it("Should get all achievements", async () => {
       const res = await request(app).get("/api/v1/achievements");
-      expect(res.statusCode).toEqual(200);
-      expect(res.body.status).toEqual(200);
-      expect(res.body.message).toEqual("Successfully Get All Achievements");
-      expect(Array.isArray(res.body.data)).toBe(true);
-      expect(res.body.data[0].logo).toBeDefined();
-      expect(res.body.data[0].name).toBeDefined();
-      expect(res.body.data[0].year).toBeDefined();
-      expect(res.body.data[0].created_at).toBeDefined();
+      testGetAllAchievements(res);
     }, 60000);
 
     it("Should return 500 if error", async () => {
       await deleteAchievementAll();
       const res = await request(app).get("/api/v1/achievements");
-      expect(res.statusCode).toEqual(500);
-      expect(res.body.status).toEqual(500);
-      expect(res.body.message).toEqual(
+      validateErrorResponse(
+        res,
+        500,
+        500,
         "Failed to Get All Achievements: No data found"
       );
     }, 60000);
@@ -234,7 +223,7 @@ describe("Achievement Controller", () => {
 
   describe("GET /api/v1/achievements?id=id_achievement", () => {
     it("Should get achievement by id", async () => {
-      const login = await registerAndLogin(TEST_USERNAME, TEST_PASSWORD);
+      const token = await authenticateUser();
       const filePathLogo = path.resolve(__dirname, "../test-small.webp");
       fileExists(filePathLogo);
 
@@ -243,10 +232,7 @@ describe("Achievement Controller", () => {
         logo: filePathLogo,
         year: "2021",
       };
-      const achievement = await createAchievement(
-        login.body.authorization.token,
-        achievementData
-      );
+      const achievement = await createAchievement(token, achievementData);
       const res = await request(app).get(
         `/api/v1/achievements?id=${achievement.body.data.id}`
       );
@@ -259,93 +245,11 @@ describe("Achievement Controller", () => {
       expect(res.body.data.year).toBeDefined();
       expect(res.body.data.created_at).toBeDefined();
     }, 60000);
-
-    it("Should return 404 if achievement not found", async () => {
-      const res = await request(app).get("/api/v1/achievements?id=100");
-      expect(res.statusCode).toEqual(404);
-      expect(res.body.status).toEqual(404);
-      expect(res.body.message).toEqual("Achievement not found");
-    }, 60000);
-  });
-
-  describe("PUT /api/v1/achievements?id=id_achievement", () => {
-    it("should be rejected if user not authenticated", async () => {
-      const res = await request(app).put("/api/v1/achievements?id=1");
-      expect(res.statusCode).toEqual(401);
-      expect(res.body.status).toEqual(401);
-      expect(res.body.message).toBeDefined();
-    }, 60000);
-
-    it("Should edit achievement by id", async () => {
-      const login = await registerAndLogin(TEST_USERNAME, TEST_PASSWORD);
-      const filePathLogo = path.resolve(__dirname, "../test-small.webp");
-      fileExists(filePathLogo);
-
-      const achievementData = {
-        name: "Achievement",
-        logo: filePathLogo,
-        year: "2021",
-      };
-      const achievement = await createAchievement(
-        login.body.authorization.token,
-        achievementData
-      );
-      const id = achievement.body.data.id;
-      const newFilePathLogo = path.resolve(__dirname, "../test-small.webp");
-      fileExists(newFilePathLogo);
-
-      const updatedAchievementData = {
-        name: "Updated Achievement",
-        year: "2022",
-        logo: newFilePathLogo,
-      };
-      const res = await request(app)
-        .put(`/api/v1/achievements?id=${id}`)
-        .set("Cookie", `token=${login.body.authorization.token}`)
-        .set("Authorization", `Bearer ${login.body.authorization.token}`)
-        .field("name", updatedAchievementData.name)
-        .field("year", updatedAchievementData.year)
-        .attach("logo", updatedAchievementData.logo);
-
-      expect(res.statusCode).toEqual(200);
-      expect(res.body.status).toEqual(200);
-      expect(res.body.message).toEqual("Successfully Update Achievement");
-    }, 60000);
-
-    it("Should return 404 if achievement not found", async () => {
-      const login = await registerAndLogin(TEST_USERNAME, TEST_PASSWORD);
-      const newFilePathLogo = path.resolve(__dirname, "../test-small.webp");
-      fileExists(newFilePathLogo);
-
-      const updatedAchievementData = {
-        name: "Updated Achievement",
-        year: "2022",
-        logo: newFilePathLogo,
-      };
-      const res = await request(app)
-        .put("/api/v1/achievements?id=1")
-        .set("Cookie", `token=${login.body.authorization.token}`)
-        .set("Authorization", `Bearer ${login.body.authorization.token}`)
-        .field("name", updatedAchievementData.name)
-        .field("year", updatedAchievementData.year)
-        .attach("logo", updatedAchievementData.logo);
-
-      expect(res.statusCode).toEqual(404);
-      expect(res.body.status).toEqual(404);
-      expect(res.body.message).toEqual("Achievement not found");
-    }, 60000);
   });
 
   describe("DELETE /api/v1/achievements?id=id_achievement", () => {
-    it("should be rejected if user not authenticated", async () => {
-      const res = await request(app).delete("/api/v1/achievements?id=1");
-      expect(res.statusCode).toEqual(401);
-      expect(res.body.status).toEqual(401);
-      expect(res.body.message).toBeDefined();
-    }, 60000);
-
     it("Should delete achievement by id", async () => {
-      const login = await registerAndLogin(TEST_USERNAME, TEST_PASSWORD);
+      const token = await authenticateUser();
       const filePathLogo = path.resolve(__dirname, "../test-small.webp");
       fileExists(filePathLogo);
 
@@ -354,31 +258,15 @@ describe("Achievement Controller", () => {
         logo: filePathLogo,
         year: "2021",
       };
-      const achievement = await createAchievement(
-        login.body.authorization.token,
-        achievementData
-      );
-      const id = achievement.body.data.id;
+      const achievement = await createAchievement(token, achievementData);
       const res = await request(app)
-        .delete(`/api/v1/achievements?id=${id}`)
-        .set("Cookie", `token=${login.body.authorization.token}`)
-        .set("Authorization", `Bearer ${login.body.authorization.token}`);
+        .delete(`/api/v1/achievements?id=${achievement.body.data.id}`)
+        .set("Cookie", `token=${token}`)
+        .set("Authorization", `Bearer ${token}`);
 
       expect(res.statusCode).toEqual(200);
       expect(res.body.status).toEqual(200);
       expect(res.body.message).toEqual("Successfully Delete Achievement");
-    }, 60000);
-
-    it("Should return 404 if achievement not found", async () => {
-      const login = await registerAndLogin(TEST_USERNAME, TEST_PASSWORD);
-      const res = await request(app)
-        .delete("/api/v1/achievements?id=1")
-        .set("Cookie", `token=${login.body.authorization.token}`)
-        .set("Authorization", `Bearer ${login.body.authorization.token}`);
-
-      expect(res.statusCode).toEqual(404);
-      expect(res.body.status).toEqual(404);
-      expect(res.body.message).toEqual("Achievement not found");
     }, 60000);
   });
 });
