@@ -1,7 +1,4 @@
 const {
-  updateAchievementById,
-} = require("../controllers/achievementController");
-const {
   addAchievement,
   getAllAchievements,
   getAchievementById,
