@@ -426,19 +426,81 @@ describe("Achievement Controller", () => {
         .field("year", achievementData.year)
         .attach("logo", achievementData.logo);
 
-      console.log("Achievement originial:", achievement.body);
-
       const res = await request(app)
         .put(`/api/v1/achievements?id=${achievement.body.data.id}`)
         .set("Cookie", `token=${login.body.authorization.token}`)
         .set("Authorization", `Bearer ${login.body.authorization.token}`)
         .send(updatedAchievement);
 
-      console.log("Achievement updated", res.body);
-
       expect(res.statusCode).toEqual(200);
       expect(res.body.status).toEqual(200);
       expect(res.body.message).toEqual("Successfully Update Achievement");
     }, 60000);
+  });
+
+  describe("DELETE /api/v1/achievements?id=id_achievement", () => {
+    it("should be rejected if user not authenticated", async () => {
+      const res = await request(app).delete("/api/v1/achievements?id=1");
+
+      expect(res.statusCode).toEqual(401);
+      expect(res.body.status).toEqual(401);
+      expect(res.body.message).toBeDefined();
+    });
+
+    it("Should return 404 if achievement not found", async () => {
+      const data = {
+        username: process.env.TEST_USERNAME,
+        password: process.env.TEST_PASSWORD,
+      };
+
+      await request(app).post("/api/v1/register").send(data);
+
+      const login = await request(app).post("/api/v1/login").send(data);
+
+      const res = await request(app)
+        .delete("/api/v1/achievements?id=100")
+        .set("Cookie", `token=${login.body.authorization.token}`)
+        .set("Authorization", `Bearer ${login.body.authorization.token}`);
+
+      expect(res.statusCode).toEqual(404);
+      expect(res.body.status).toEqual(404);
+      expect(res.body.message).toEqual("Achievement not found");
+    }, 60000);
+
+    it("Should be able to delete achievement", async () => {
+      const data = {
+        username: process.env.TEST_USERNAME,
+        password: process.env.TEST_PASSWORD,
+      };
+
+      await request(app).post("/api/v1/register").send(data);
+
+      const login = await request(app).post("/api/v1/login").send(data);
+
+      const filePathLogo = path.resolve(__dirname, "../test-small.webp");
+      const achievementData = {
+        name: "Tes Achievement 1",
+        logo: filePathLogo,
+        year: "2021",
+      };
+
+      const achievement = await request(app)
+        .post("/api/v1/achievements")
+        .set("Cookie", `token=${login.body.authorization.token}`)
+        .set("Authorization", `Bearer ${login.body.authorization.token}`)
+        .field("name", achievementData.name)
+        .field("year", achievementData.year)
+        .attach("logo", achievementData.logo);
+
+      const res = await request(app)
+        .delete(`/api/v1/achievements?id=${achievement.body.data.id}`)
+        .set("Cookie", `token=${login.body.authorization.token}`)
+        .set("Authorization", `Bearer ${login.body.authorization.token}`);
+
+      expect(res.statusCode).toEqual(200);
+      expect(res.body.status).toEqual(200);
+      expect(res.body.message).toEqual("Successfully Delete Achievement");
+      expect(res.body.data.deleted_at).toBeDefined();
+    });
   });
 });
