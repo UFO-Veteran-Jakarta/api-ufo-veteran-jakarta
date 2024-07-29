@@ -29,4 +29,13 @@ router.get(
   achievementController.getAchievementById
 );
 
+router.put(
+  "/",
+  authentication(),
+  checkUpdateFile("logo"),
+  postAchievementValidationRules(),
+  validate,
+  achievementController.updateAchievementById
+);
+
 module.exports = router;
