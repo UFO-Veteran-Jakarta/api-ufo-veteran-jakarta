@@ -1,12 +1,7 @@
 const request = require("supertest");
 
-const {
-  getUserByUsername,
-  deleteUserByUsername,
-  createUser,
-} = require("../../src/models/userModel");
+const { deleteUserByUsername } = require("../../src/models/userModel");
 const app = require("../../src/app");
-const cookie = require("cookie");
 const { deleteContentAll } = require("../../src/models/contentModel");
 
 describe("Content Controller", () => {
