@@ -1,6 +1,6 @@
 const {
   updateAchievementById,
-} = require("src/controllers/achievementController");
+} = require("../controllers/achievementController");
 const {
   addAchievement,
   getAllAchievements,
