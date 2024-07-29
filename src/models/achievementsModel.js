@@ -30,7 +30,7 @@ exports.getAllAchievements = async function getAllAchievements() {
 
   try {
     const res = await pool.query(query);
-    return res.rows;
+    return res.rows.length > 0 ? res.rows : null;
   } catch (error) {
     console.error("Error fetching partners:", error);
     throw error;
@@ -78,6 +78,13 @@ exports.updateAchievement = async (id, data) => {
     console.error(`Error updating achievement with id ${id}:`, error);
     throw error;
   }
+};
+
+exports.deleteAchievementAll = async () => {
+  const res = await pool.query(
+    `UPDATE myschema.achievements SET deleted_at = NOW()`
+  );
+  return res.rows;
 };
 
 exports.deleteAchievement = async (id) => {
