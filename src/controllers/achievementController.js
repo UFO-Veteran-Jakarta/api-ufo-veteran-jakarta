@@ -6,6 +6,7 @@ const {
   getAllAchievements,
   getAchievementById,
   updateAchievement,
+  deleteAchievement,
 } = require("../services/achievementService");
 
 exports.addAchievement = async (req, res) => {
@@ -114,12 +115,14 @@ exports.deleteAchievementById = async (req, res) => {
       return sendResponse(res, 404, "Achievement not found");
     }
 
+    const deletedAchievement = await deleteAchievement(id);
+
     logger.info(`Successfully Delete Achievement with id ${id}`);
     return sendResponse(
       res,
       200,
       "Successfully Delete Achievement",
-      updatedAchievement
+      deletedAchievement
     );
   } catch (error) {
     logger.error("Failed to Delete Achievement");
