@@ -31,6 +31,16 @@ exports.getAllAchievements = async (req, res, next) => {
     }
 
     const achievements = await getAllAchievements();
+
+    if (achievements === null) {
+      logger.error("Failed to Get All Achievements");
+      return sendResponse(
+        res,
+        500,
+        "Failed to Get All Achievements: No data found"
+      );
+    }
+
     logger.info("Successfully Get All Achievements");
 
     return sendResponse(
