@@ -3,28 +3,44 @@ const request = require("supertest");
 const { deleteUserByUsername } = require("../../src/models/userModel");
 const app = require("../../src/app");
 const { deleteContentAll } = require("../../src/models/contentModel");
+require("dotenv").config();
+
+const TEST_USERNAME = process.env.TEST_USERNAME;
+const TEST_PASSWORD = process.env.TEST_PASSWORD;
 
 describe("Content Controller", () => {
   beforeEach(async () => {
-    await deleteUserByUsername("admin");
+    await deleteUserByUsername(TEST_USERNAME);
     await deleteContentAll();
   });
 
+  const registerAndLogin = async (username, password) => {
+    const data = { username, password };
+    await request(app).post("/api/v1/register").send(data);
+    return await request(app).post("/api/v1/login").send(data);
+  };
+
+  const authenticateUser = async () => {
+    const login = await registerAndLogin(TEST_USERNAME, TEST_PASSWORD);
+    const token = login.body.authorization.token;
+    return token;
+  };
+
+  const createContent = async (token, { link }) => {
+    return await request(app)
+      .post("/api/v1/contents")
+      .set("Cookie", `token=${token}`)
+      .set("Authorization", `Bearer ${token}`)
+      .field("link", link);
+  };
+
   describe("POST /api/v1/contents", () => {
     it("should be rejected if link field not https", async () => {
-      const data = {
-        username: "admin",
-        password: "Admin@12345",
-      };
-      await request(app).post("/api/v1/register").send(data);
+      const token = await authenticateUser();
 
-      const login = await request(app).post("/api/v1/login").send(data);
+      const contentData = { link: "http://blablabla.com" };
 
-      const res = await request(app)
-        .post("/api/v1/contents")
-        .set("Cookie", `token=${login.body.authorization.token}`)
-        .set("Authorization", `Bearer ${login.body.authorization.token}`)
-        .send({ link: "http://blablabla.com" });
+      const res = await createContent(token, contentData);
 
       expect(res.statusCode).toEqual(500);
       expect(res.body.status).toEqual(500);
@@ -33,19 +49,11 @@ describe("Content Controller", () => {
       );
     }, 60000);
     it("should be rejected if link field not valid url", async () => {
-      const data = {
-        username: "admin",
-        password: "Admin@12345",
-      };
-      await request(app).post("/api/v1/register").send(data);
+      const token = await authenticateUser();
 
-      const login = await request(app).post("/api/v1/login").send(data);
+      const contentData = { link: "https://bla" };
 
-      const res = await request(app)
-        .post("/api/v1/contents")
-        .set("Cookie", `token=${login.body.authorization.token}`)
-        .set("Authorization", `Bearer ${login.body.authorization.token}`)
-        .send({ link: "https://blablabl" });
+      const res = await createContent(token, contentData);
 
       expect(res.statusCode).toEqual(500);
       expect(res.body.status).toEqual(500);
@@ -61,38 +69,25 @@ describe("Content Controller", () => {
     }, 60000);
 
     it("should be able to add content", async () => {
-      const data = {
-        username: "admin",
-        password: "Admin@12345",
-      };
-      await request(app).post("/api/v1/register").send(data);
+      const token = await authenticateUser();
 
-      const login = await request(app).post("/api/v1/login").send(data);
+      const contentData = { link: "https://blablabla.com" };
 
-      const res = await request(app)
-        .post("/api/v1/contents")
-        .set("Cookie", `token=${login.body.authorization.token}`)
-        .set("Authorization", `Bearer ${login.body.authorization.token}`)
-        .send({ link: "https://blablabla.com" });
+      const res = await createContent(token, contentData);
 
       expect(res.statusCode).toEqual(200);
       expect(res.body.status).toEqual(200);
       expect(res.body.message).toBe("Successfully Add New Content");
     }, 60000);
   });
+
   describe("GET /api/v1/contents", () => {
     it("should be able get contents", async () => {
-      const data = {
-        username: "admin",
-        password: "Admin@12345",
-      };
-      await request(app).post("/api/v1/register").send(data);
-      const login = await request(app).post("/api/v1/login").send(data);
-      await request(app)
-        .post("/api/v1/contents")
-        .set("Cookie", `token=${login.body.authorization.token}`)
-        .set("Authorization", `Bearer ${login.body.authorization.token}`)
-        .send({ link: "https://blablabla.com" });
+      const token = await authenticateUser();
+
+      const contentData = { link: "https://blablabla.com" };
+
+      await createContent(token, contentData);
 
       const res = await request(app).get("/api/v1/contents");
 
@@ -108,17 +103,11 @@ describe("Content Controller", () => {
   });
   describe("GET /api/v1/contents?id=id_content", () => {
     it("should be able get contents by id", async () => {
-      const data = {
-        username: "admin",
-        password: "Admin@12345",
-      };
-      await request(app).post("/api/v1/register").send(data);
-      const login = await request(app).post("/api/v1/login").send(data);
-      await request(app)
-        .post("/api/v1/contents")
-        .set("Cookie", `token=${login.body.authorization.token}`)
-        .set("Authorization", `Bearer ${login.body.authorization.token}`)
-        .send({ link: "https://blablabla.com" });
+      const token = await authenticateUser();
+
+      const contentData = { link: "https://blablabla.com" };
+
+      await createContent(token, contentData);
 
       const content = await request(app).get("/api/v1/contents");
       const res = await request(app).get(
@@ -146,23 +135,16 @@ describe("Content Controller", () => {
     }, 60000);
 
     it("should be rejected if id params null", async () => {
-      const data = {
-        username: "admin",
-        password: "Admin@12345",
-      };
-      await request(app).post("/api/v1/register").send(data);
-      const login = await request(app).post("/api/v1/login").send(data);
+      const token = await authenticateUser();
 
-      await request(app)
-        .post("/api/v1/contents")
-        .set("Cookie", `token=${login.body.authorization.token}`)
-        .set("Authorization", `Bearer ${login.body.authorization.token}`)
-        .send({ link: "https://blablabla.com" });
+      const contentData = { link: "https://blablabla.com" };
+
+      await createContent(token, contentData);
 
       const res = await request(app)
         .put(`/api/v1/contents?id=`)
-        .set("Cookie", `token=${login.body.authorization.token}`)
-        .set("Authorization", `Bearer ${login.body.authorization.token}`)
+        .set("Cookie", `token=${token}`)
+        .set("Authorization", `Bearer ${token}`)
         .send({ link: "https://blablabla.com" });
 
       expect(res.statusCode).toEqual(404);
@@ -171,23 +153,16 @@ describe("Content Controller", () => {
     }, 60000);
 
     it("should be rejected if link is not http", async () => {
-      const data = {
-        username: "admin",
-        password: "Admin@12345",
-      };
-      await request(app).post("/api/v1/register").send(data);
-      const login = await request(app).post("/api/v1/login").send(data);
+      const token = await authenticateUser();
 
-      const content = await request(app)
-        .post("/api/v1/contents")
-        .set("Cookie", `token=${login.body.authorization.token}`)
-        .set("Authorization", `Bearer ${login.body.authorization.token}`)
-        .send({ link: "https://safljsalf.com" });
+      const contentData = { link: "https://blablabla.com" };
+
+      const content = await createContent(token, contentData);
 
       const res = await request(app)
         .put(`/api/v1/contents?id=${content.body.data[0].id}`)
-        .set("Cookie", `token=${login.body.authorization.token}`)
-        .set("Authorization", `Bearer ${login.body.authorization.token}`)
+        .set("Cookie", `token=${token}`)
+        .set("Authorization", `Bearer ${token}`)
         .send({ link: "http://safljsal" });
 
       expect(res.statusCode).toEqual(500);
@@ -197,23 +172,16 @@ describe("Content Controller", () => {
       );
     }, 60000);
     it("should be rejected if link is not valid url", async () => {
-      const data = {
-        username: "admin",
-        password: "Admin@12345",
-      };
-      await request(app).post("/api/v1/register").send(data);
-      const login = await request(app).post("/api/v1/login").send(data);
+      const token = await authenticateUser();
 
-      const content = await request(app)
-        .post("/api/v1/contents")
-        .set("Cookie", `token=${login.body.authorization.token}`)
-        .set("Authorization", `Bearer ${login.body.authorization.token}`)
-        .send({ link: "https://safljsalf.com" });
+      const contentData = { link: "https://blablabla.com" };
+
+      const content = await createContent(token, contentData);
 
       const res = await request(app)
         .put(`/api/v1/contents?id=${content.body.data[0].id}`)
-        .set("Cookie", `token=${login.body.authorization.token}`)
-        .set("Authorization", `Bearer ${login.body.authorization.token}`)
+        .set("Cookie", `token=${token}`)
+        .set("Authorization", `Bearer ${token}`)
         .send({ link: "https://safljsal" });
 
       expect(res.statusCode).toEqual(500);
@@ -222,23 +190,16 @@ describe("Content Controller", () => {
     }, 60000);
 
     it("should be reject cause content not found", async () => {
-      const data = {
-        username: "admin",
-        password: "Admin@12345",
-      };
-      await request(app).post("/api/v1/register").send(data);
-      const login = await request(app).post("/api/v1/login").send(data);
+      const token = await authenticateUser();
 
-      await request(app)
-        .post("/api/v1/contents")
-        .set("Cookie", `token=${login.body.authorization.token}`)
-        .set("Authorization", `Bearer ${login.body.authorization.token}`)
-        .send({ link: "https://safljsalf.com" });
+      const contentData = { link: "https://blablabla.com" };
+
+      await createContent(token, contentData);
 
       const res = await request(app)
         .put(`/api/v1/contents?id=asdf`)
-        .set("Cookie", `token=${login.body.authorization.token}`)
-        .set("Authorization", `Bearer ${login.body.authorization.token}`)
+        .set("Cookie", `token=${token}`)
+        .set("Authorization", `Bearer ${token}`)
         .send({ link: "https://dewii.com" });
 
       expect(res.statusCode).toEqual(404);
@@ -247,23 +208,16 @@ describe("Content Controller", () => {
     }, 60000);
 
     it("should be able to edit content", async () => {
-      const data = {
-        username: "admin",
-        password: "Admin@12345",
-      };
-      await request(app).post("/api/v1/register").send(data);
-      const login = await request(app).post("/api/v1/login").send(data);
+      const token = await authenticateUser();
 
-      const content = await request(app)
-        .post("/api/v1/contents")
-        .set("Cookie", `token=${login.body.authorization.token}`)
-        .set("Authorization", `Bearer ${login.body.authorization.token}`)
-        .send({ link: "https://safljsalf.com" });
+      const contentData = { link: "https://blablabla.com" };
+
+      const content = await createContent(token, contentData);
 
       const res = await request(app)
         .put(`/api/v1/contents?id=${content.body.data[0].id}`)
-        .set("Cookie", `token=${login.body.authorization.token}`)
-        .set("Authorization", `Bearer ${login.body.authorization.token}`)
+        .set("Cookie", `token=${token}`)
+        .set("Authorization", `Bearer ${token}`)
         .send({ link: "https://dewii.com" });
 
       expect(res.statusCode).toEqual(200);
@@ -284,46 +238,32 @@ describe("Content Controller", () => {
     }, 60000);
 
     it("should be rejected if id params null", async () => {
-      const data = {
-        username: "admin",
-        password: "Admin@12345",
-      };
-      await request(app).post("/api/v1/register").send(data);
-      const login = await request(app).post("/api/v1/login").send(data);
+      const token = await authenticateUser();
 
-      await request(app)
-        .post("/api/v1/contents")
-        .set("Cookie", `token=${login.body.authorization.token}`)
-        .set("Authorization", `Bearer ${login.body.authorization.token}`)
-        .send({ link: "https://blablabla.com" });
+      const contentData = { link: "https://blablabla.com" };
+
+      await createContent(token, contentData);
 
       const res = await request(app)
         .delete(`/api/v1/contents?id=`)
-        .set("Cookie", `token=${login.body.authorization.token}`)
-        .set("Authorization", `Bearer ${login.body.authorization.token}`);
+        .set("Cookie", `token=${token}`)
+        .set("Authorization", `Bearer ${token}`);
 
       expect(res.statusCode).toEqual(404);
       expect(res.body.status).toEqual(404);
       expect(res.body.message).toBe("Content Not Found");
     }, 60000);
     it("should be able to delete content", async () => {
-      const data = {
-        username: "admin",
-        password: "Admin@12345",
-      };
-      await request(app).post("/api/v1/register").send(data);
-      const login = await request(app).post("/api/v1/login").send(data);
+      const token = await authenticateUser();
 
-      const content = await request(app)
-        .post("/api/v1/contents")
-        .set("Cookie", `token=${login.body.authorization.token}`)
-        .set("Authorization", `Bearer ${login.body.authorization.token}`)
-        .send({ link: "https://blablabla.com" });
+      const contentData = { link: "https://blablabla.com" };
+
+      const content = await createContent(token, contentData);
 
       const res = await request(app)
         .delete(`/api/v1/contents?id=${content.body.data[0].id}`)
-        .set("Cookie", `token=${login.body.authorization.token}`)
-        .set("Authorization", `Bearer ${login.body.authorization.token}`)
+        .set("Cookie", `token=${token}`)
+        .set("Authorization", `Bearer ${token}`)
         .send({ link: "https://blablabla.com" });
 
       expect(res.statusCode).toEqual(200);
