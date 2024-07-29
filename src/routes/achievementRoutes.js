@@ -23,4 +23,6 @@ router.post(
   achievementController.addAchievement
 );
 
+router.get("/", achievementController.getAllAchievements);
+
 module.exports = router;
