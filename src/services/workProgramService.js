@@ -1,6 +1,7 @@
 const {
   addWorkProgram,
   getAllWorkProgramas,
+  getWorkProgramById,
 } = require("src/models/workPorgramModel");
 
 exports.addWorkProgram = async (data) => {
@@ -14,4 +15,8 @@ exports.getAllWorkPrograms = async () => {
     console.error("Error fetching work programs: ", error);
     throw error;
   }
+};
+
+exports.getWorkProgramById = async (id) => {
+  return await getWorkProgramById(id);
 };
