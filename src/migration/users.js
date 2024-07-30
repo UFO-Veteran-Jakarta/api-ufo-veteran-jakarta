@@ -69,7 +69,7 @@ exports.createTable = async () => {
   CREATE TABLE IF NOT EXISTS myschema.work_programs (
     id SERIAL PRIMARY KEY,
     image text NOT NULL,
-    titel varchar(255) NOT NULL,
+    title varchar(255) NOT NULL,
     description text NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP ,
