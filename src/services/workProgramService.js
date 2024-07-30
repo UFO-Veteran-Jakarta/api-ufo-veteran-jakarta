@@ -2,6 +2,7 @@ const {
   addWorkProgram,
   getAllWorkProgramas,
   getWorkProgramById,
+  updateWorkProgram,
 } = require("src/models/workPorgramModel");
 
 exports.addWorkProgram = async (data) => {
@@ -19,4 +20,8 @@ exports.getAllWorkPrograms = async () => {
 
 exports.getWorkProgramById = async (id) => {
   return await getWorkProgramById(id);
+};
+
+exports.updateWorkProgram = async (id, data) => {
+  return await updateWorkProgram(id, data);
 };
