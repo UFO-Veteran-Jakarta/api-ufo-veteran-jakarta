@@ -3,6 +3,7 @@ const {
   getAllWorkPrograms,
   getWorkProgramById,
   updateWorkProgram,
+  deleteWorkProgram,
 } = require("../services/workProgramService");
 const logger = require("../utils/logger");
 const { sendResponse } = require("../helpers/response");
@@ -86,6 +87,32 @@ exports.updateWorkProgramById = async (req, res) => {
     );
   } catch (error) {
     logger.error("Failed to Update Work Program");
+    return sendResponse(res, 500, error.message);
+  }
+};
+
+exports.deleteWorkProgramById = async (req, res) => {
+  try {
+    const id = req.query.id;
+
+    const workProgram = await getWorkProgramById(id);
+
+    if (!workProgram) {
+      logger.error(`Work Program with id ${id} not found`);
+      return sendResponse(res, 404, "Work Program not found");
+    }
+
+    const deletedWorkProgram = await deleteWorkProgram(id);
+
+    logger.info(`Successfully Delete Work Program with id ${id}`);
+    return sendResponse(
+      res,
+      200,
+      "Successfully Delete Work Program",
+      deletedWorkProgram
+    );
+  } catch (error) {
+    logger.error("Failed to Delete Work Program");
     return sendResponse(res, 500, error.message);
   }
 };

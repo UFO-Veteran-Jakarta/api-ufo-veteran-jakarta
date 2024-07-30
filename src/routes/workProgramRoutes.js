@@ -37,4 +37,10 @@ router.put(
   workProgramController.updateWorkProgramById
 );
 
+router.delete(
+  "/",
+  authentication(),
+  workProgramController.deleteWorkProgramById
+);
+
 module.exports = router;
