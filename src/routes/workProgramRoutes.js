@@ -2,7 +2,7 @@ const express = require("express");
 const workProgramController = require("../controllers/workProgramController");
 
 const {
-  postWorkProramValidationRules,
+  postWorkProgramValidationRules,
   validate,
 } = require("../validators/workProgramValidator");
 const { authentication } = require("../middlewares/authMiddleware");
@@ -17,7 +17,7 @@ router.post(
   "/",
   authentication(),
   checkFile("image"),
-  postWorkProramValidationRules(),
+  postWorkProgramValidationRules(),
   validate,
   workProgramController.addWorkProgram
 );
@@ -32,7 +32,7 @@ router.put(
   "/",
   authentication(),
   checkFileForUpdate("image"),
-  postWorkProramValidationRules(),
+  postWorkProgramValidationRules(),
   validate,
   workProgramController.updateWorkProgramById
 );

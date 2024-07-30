@@ -1,6 +1,6 @@
 const {
   addWorkProgram,
-  getAllWorkProgramas,
+  getAllWorkPrograms,
   getWorkProgramById,
   updateWorkProgram,
   deleteWorkProgram,
@@ -12,7 +12,7 @@ exports.addWorkProgram = async (data) => {
 
 exports.getAllWorkPrograms = async () => {
   try {
-    return await getAllWorkProgramas();
+    return await getAllWorkPrograms();
   } catch (error) {
     console.error("Error fetching work programs: ", error);
     throw error;
