@@ -4,7 +4,7 @@ const {
   getWorkProgramById,
   updateWorkProgram,
   deleteWorkProgram,
-} = require("../models/workPorgramModel");
+} = require("../models/workProgramModel");
 
 exports.addWorkProgram = async (data) => {
   return await addWorkProgram(data);
