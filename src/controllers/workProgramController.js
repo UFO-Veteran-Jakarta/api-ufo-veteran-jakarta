@@ -2,6 +2,7 @@ const {
   addWorkProgram,
   getAllWorkPrograms,
   getWorkProgramById,
+  updateWorkProgram,
 } = require("../services/workProgramService");
 const logger = require("../utils/logger");
 const { sendResponse } = require("../helpers/response");
@@ -55,6 +56,36 @@ exports.getWorkProgramById = async (req, res) => {
     return sendResponse(res, 200, "Successfully Get Work Program", workProgram);
   } catch (error) {
     logger.error("Failed to Get Work Program");
+    return sendResponse(res, 500, error.message);
+  }
+};
+
+exports.updateWorkProgramById = async (req, res) => {
+  try {
+    const { id } = req.query;
+    const workProgram = await getWorkProgramById(id);
+
+    if (!workProgram) {
+      logger.error(`Work Program with id ${id} not found`);
+      return sendResponse(res, 404, "Work Program not found");
+    }
+
+    if (req.file?.image) {
+      const imageUpload = await uploadSingle(req.files.image, "image");
+      req.body.image = imageUpload.secure_url;
+    }
+
+    const updatedWorkProgram = await updateWorkProgram(id, req.body);
+
+    logger.info(`Successfully Update Work Program with id ${id}`);
+    return sendResponse(
+      res,
+      200,
+      "Successfully Update Work Program",
+      updatedWorkProgram
+    );
+  } catch (error) {
+    logger.error("Failed to Update Work Program");
     return sendResponse(res, 500, error.message);
   }
 };

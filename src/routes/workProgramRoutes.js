@@ -28,4 +28,13 @@ router.get(
   workProgramController.getWorkProgramById
 );
 
+router.put(
+  "/",
+  authentication(),
+  checkFileForUpdate("image"),
+  postWorkProramValidationRules(),
+  validate,
+  workProgramController.updateWorkProgramById
+);
+
 module.exports = router;
