@@ -47,7 +47,7 @@ async function getAllWorkPrograms() {
 
   try {
     const res = await pool.query(query);
-    return res.rows;
+    return res.rows.length > 0 ? res.rows : null;
   } catch (error) {
     console.error("Error fetching work programs:", error);
   }
