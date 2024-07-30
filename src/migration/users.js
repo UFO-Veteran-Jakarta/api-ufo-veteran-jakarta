@@ -66,6 +66,18 @@ exports.createTable = async () => {
     `);
 
   await pool.query(`
+    CREATE TABLE IF NOT EXISTS myschema.achievements (
+      id SERIAL PRIMARY KEY,
+      logo text NOT NULL,
+      name varchar(255) NOT NULL,
+      year varchar(255) NOT NULL,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP,
+      deleted_at TIMESTAMP
+    )
+    `);
+
+  await pool.query(`
   CREATE TABLE IF NOT EXISTS myschema.work_programs (
     id SERIAL PRIMARY KEY,
     image text NOT NULL,
@@ -82,5 +94,6 @@ exports.dropTable = async () => {
   await pool.query(`DROP TABLE IF EXISTS myschema.contents;`);
   await pool.query(`DROP TABLE IF EXISTS myschema.events;`);
   await pool.query(`DROP TABLE IF EXISTS myschema.partners;`);
+  await pool.query(`DROP TABLE IF EXISTS myschema.achievements;`);
   await pool.query(`DROP TABLE IF EXISTS myschema.work_programs;`);
 };
