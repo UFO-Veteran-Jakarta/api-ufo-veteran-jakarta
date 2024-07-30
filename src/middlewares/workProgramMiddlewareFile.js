@@ -58,6 +58,7 @@ exports.checkFileForUpdate = (form) => {
           "Work program image size is too big, please upload a file smaller than 500 KB"
         );
       }
+    }
 
     next();
   };
