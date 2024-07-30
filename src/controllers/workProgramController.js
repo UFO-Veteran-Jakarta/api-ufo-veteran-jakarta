@@ -1,6 +1,7 @@
 const {
   addWorkProgram,
   getAllWorkPrograms,
+  getWorkProgramById,
 } = require("../services/workProgramService");
 const logger = require("../utils/logger");
 const { sendResponse } = require("../helpers/response");
@@ -20,8 +21,12 @@ exports.addWorkProgram = async (req, res) => {
   }
 };
 
-exports.getAllWorkPrograms = async (req, res) => {
+exports.getAllWorkPrograms = async (req, res, next) => {
   try {
+    if (req.query.id) {
+      return next();
+    }
+
     const workPrograms = await getAllWorkPrograms();
     logger.info("Successfully Get All Work Programs");
     return sendResponse(
@@ -33,5 +38,23 @@ exports.getAllWorkPrograms = async (req, res) => {
   } catch (error) {
     logger.error("Failed to Get All Work Programs");
     return sendResponse(res, 500, "Failed to Get All Work Programs");
+  }
+};
+
+exports.getWorkProgramById = async (req, res) => {
+  try {
+    const { id } = req.query;
+    const workProgram = await getWorkProgramById(id);
+
+    if (!workProgram) {
+      logger.error(`Work Program with id ${id} not found`);
+      return sendResponse(res, 404, "Work Program not found");
+    }
+
+    logger.info(`Successfully Get Work Program with id ${id}`);
+    return sendResponse(res, 200, "Successfully Get Work Program", workProgram);
+  } catch (error) {
+    logger.error("Failed to Get Work Program");
+    return sendResponse(res, 500, error.message);
   }
 };
