@@ -1,20 +1,28 @@
 const { check, validationResult, matchedData } = require("express-validator");
 
-const postWorkProramValidationRules = () => {
+function createStringFieldValidator(fieldName, errorMessage, maxLength = null) {
+  let validator = check(fieldName)
+    .isString()
+    .trim()
+    .not()
+    .isEmpty()
+    .withMessage(`${fieldName} is required`);
+
+  if (maxLength) {
+    validator = validator
+      .isLength({ max: maxLength })
+      .withMessage(
+        `${errorMessage} must be no more than ${maxLength} characters`
+      );
+  }
+
+  return validator;
+}
+
+const postWorkProgramValidationRules = () => {
   return [
-    check("title")
-      .isString()
-      .trim()
-      .not()
-      .isEmpty()
-      .withMessage("Title is required")
-      .isLength({ max: 255 })
-      .withMessage("Event title must be no more than 255 characters"),
-    check("description")
-      .isString()
-      .not()
-      .isEmpty()
-      .withMessage("description of work program is required"),
+    createStringFieldValidator("title", "Work program title", 255),
+    createStringFieldValidator("description", "Description of work program"),
   ];
 };
 
@@ -23,12 +31,11 @@ const validate = (req, res, next) => {
   if (!errors.isEmpty()) {
     return res.status(500).json({ status: 500, errors: errors.array() });
   }
-
   req.body = matchedData(req, { onlyValidData: true });
   next();
 };
 
 module.exports = {
-  postWorkProramValidationRules,
+  postWorkProgramValidationRules,
   validate,
 };
