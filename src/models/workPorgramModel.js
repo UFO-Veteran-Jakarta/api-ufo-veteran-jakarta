@@ -79,6 +79,17 @@ exports.updateWorkProgram = async (id, data) => {
   }
 };
 
+exports.deleteWorkProgramAll = async () => {
+  const query = `UPDATE myschema.work_programs SET deleted_at = NOW()`;
+  try {
+    const res = await pool.query(query);
+    return res.rows;
+  } catch (error) {
+    console.error("Error deleting all work programs:", error);
+    throw error;
+  }
+};
+
 exports.deleteWorkProgram = async (id) => {
   const query = `
     UPDATE myschema.work_programs
