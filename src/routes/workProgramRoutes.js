@@ -22,6 +22,10 @@ router.post(
   workProgramController.addWorkProgram
 );
 
-router.get("/", workProgramController.getAllWorkPrograms);
+router.get(
+  "/",
+  workProgramController.getAllWorkPrograms,
+  workProgramController.getWorkProgramById
+);
 
 module.exports = router;
