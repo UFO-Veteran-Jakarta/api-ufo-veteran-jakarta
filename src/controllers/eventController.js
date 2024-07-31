@@ -62,7 +62,7 @@ exports.getEventBySlug = async (req, res) => {
 };
 
 exports.updateEvent = async (req, res) => {
-  const { slug } = req.params.slug;
+  const { slug } = req.params;
 
   if (!slug) {
     return sendResponse(res, 404, 'Event Not Found');

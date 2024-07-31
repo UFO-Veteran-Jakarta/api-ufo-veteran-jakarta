@@ -58,7 +58,7 @@ exports.getPartnerById = async (req, res) => {
 
 exports.updatePartnerById = async (req, res) => {
   try {
-    const { id } = req.query.id;
+    const { id } = req.query;
 
     const partner = await getPartnerById(id);
 

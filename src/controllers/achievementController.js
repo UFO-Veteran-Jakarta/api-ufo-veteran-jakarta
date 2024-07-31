@@ -106,7 +106,7 @@ exports.updateAchievementById = async (req, res) => {
 
 exports.deleteAchievementById = async (req, res) => {
   try {
-    const { id } = req.query.id;
+    const { id } = req.query;
 
     const achievement = await getAchievementById(id);
 

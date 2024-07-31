@@ -67,6 +67,7 @@ exports.getAchievementById = async (id) => {
       'SELECT * FROM myschema.achievements WHERE id = $1 AND deleted_at IS NULL',
       [id],
     );
+
     return res.rows.length === 0 ? null : res.rows[0];
   } catch (error) {
     logError(`Error fetching achievement with id ${id}:`, error);
