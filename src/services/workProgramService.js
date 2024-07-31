@@ -20,13 +20,13 @@ exports.getAllWorkPrograms = async () => {
 };
 
 exports.getWorkProgramById = async (id) => {
-  getWorkProgramById(id);
+  return getWorkProgramById(id);
 };
 
 exports.updateWorkProgram = async (id, data) => {
-  updateWorkProgram(id, data);
+  return updateWorkProgram(id, data);
 };
 
 exports.deleteWorkProgram = async (id) => {
-  deleteWorkProgram(id);
+  return deleteWorkProgram(id);
 };
