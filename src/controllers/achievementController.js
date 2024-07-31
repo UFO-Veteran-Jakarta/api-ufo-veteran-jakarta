@@ -1,26 +1,26 @@
-const logger = require("../utils/logger");
-const { sendResponse } = require("../helpers/response");
-const { uploadSingle } = require("../utils/uploadFile");
+const logger = require('../utils/logger');
+const { sendResponse } = require('../helpers/response');
+const { uploadSingle } = require('../utils/uploadFile');
 const {
   addAchievemnt,
   getAllAchievements,
   getAchievementById,
   updateAchievement,
   deleteAchievement,
-} = require("../services/achievementService");
+} = require('../services/achievementService');
 
 exports.addAchievement = async (req, res) => {
   try {
-    const logoUpload = await uploadSingle(req.files.logo, "logo");
+    const logoUpload = await uploadSingle(req.files.logo, 'logo');
 
     req.body.logo = logoUpload.secure_url;
 
     const result = await addAchievemnt(req.body);
 
-    logger.info("Add Success: Success Add Achievement");
-    return sendResponse(res, 200, "Successfully Add New Achievement", result);
+    logger.info('Add Success: Success Add Achievement');
+    return sendResponse(res, 200, 'Successfully Add New Achievement', result);
   } catch (error) {
-    logger.error("Add Error: Failed Add Achievement");
+    logger.error('Add Error: Failed Add Achievement');
     return sendResponse(res, 500, error.message);
   }
 };
@@ -34,25 +34,25 @@ exports.getAllAchievements = async (req, res, next) => {
     const achievements = await getAllAchievements();
 
     if (achievements === null) {
-      logger.error("Failed to Get All Achievements");
+      logger.error('Failed to Get All Achievements');
       return sendResponse(
         res,
         500,
-        "Failed to Get All Achievements: No data found"
+        'Failed to Get All Achievements: No data found',
       );
     }
 
-    logger.info("Successfully Get All Achievements");
+    logger.info('Successfully Get All Achievements');
 
     return sendResponse(
       res,
       200,
-      "Successfully Get All Achievements",
-      achievements
+      'Successfully Get All Achievements',
+      achievements,
     );
   } catch (error) {
-    logger.error("Failed to Get All Achievements", error);
-    return sendResponse(res, 500, "Failed to Get All Achievements");
+    logger.error('Failed to Get All Achievements', error);
+    return sendResponse(res, 500, 'Failed to Get All Achievements');
   }
 };
 
@@ -63,13 +63,13 @@ exports.getAchievementById = async (req, res) => {
 
     if (!achievement) {
       logger.error(`Achievement with id ${id} not found`);
-      return sendResponse(res, 404, "Achievement not found");
+      return sendResponse(res, 404, 'Achievement not found');
     }
 
     logger.info(`Successfully Get Achievement with id ${id}`);
-    return sendResponse(res, 200, "Successfully Get Achievement", achievement);
+    return sendResponse(res, 200, 'Successfully Get Achievement', achievement);
   } catch (error) {
-    logger.error("Failed to Get Achievement");
+    logger.error('Failed to Get Achievement');
     return sendResponse(res, 500, error.message);
   }
 };
@@ -81,11 +81,11 @@ exports.updateAchievementById = async (req, res) => {
 
     if (!achievement) {
       logger.error(`Achievement with id ${id} not found`);
-      return sendResponse(res, 404, "Achievement not found");
+      return sendResponse(res, 404, 'Achievement not found');
     }
 
     if (req.files?.logo) {
-      const logoUpload = await uploadSingle(req.files.logo, "logo");
+      const logoUpload = await uploadSingle(req.files.logo, 'logo');
       req.body.logo = logoUpload.secure_url;
     }
 
@@ -95,24 +95,24 @@ exports.updateAchievementById = async (req, res) => {
     return sendResponse(
       res,
       200,
-      "Successfully Update Achievement",
-      updatedAchievement
+      'Successfully Update Achievement',
+      updatedAchievement,
     );
   } catch (error) {
-    logger.error("Failed to Update Achievement");
+    logger.error('Failed to Update Achievement');
     return sendResponse(res, 500, error.message);
   }
 };
 
 exports.deleteAchievementById = async (req, res) => {
   try {
-    const id = req.query.id;
+    const { id } = req.query.id;
 
     const achievement = await getAchievementById(id);
 
     if (!achievement) {
       logger.error(`Achievement with id ${id} not found`);
-      return sendResponse(res, 404, "Achievement not found");
+      return sendResponse(res, 404, 'Achievement not found');
     }
 
     const deletedAchievement = await deleteAchievement(id);
@@ -121,11 +121,11 @@ exports.deleteAchievementById = async (req, res) => {
     return sendResponse(
       res,
       200,
-      "Successfully Delete Achievement",
-      deletedAchievement
+      'Successfully Delete Achievement',
+      deletedAchievement,
     );
   } catch (error) {
-    logger.error("Failed to Delete Achievement");
+    logger.error('Failed to Delete Achievement');
     return sendResponse(res, 500, error.message);
   }
 };
