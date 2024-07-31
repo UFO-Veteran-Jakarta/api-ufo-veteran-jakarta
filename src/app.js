@@ -1,11 +1,11 @@
-const express = require("express");
-const bodyParser = require("body-parser");
-const cors = require("cors");
-const routes = require("./routes");
-const cookieParser = require("cookie-parser");
-const limiter = require("./utils/limiter");
-const fileUpload = require("express-fileupload");
-const dotenv = require("dotenv");
+const dotenv = require('dotenv');
+const express = require('express');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const cookieParser = require('cookie-parser');
+const fileUpload = require('express-fileupload');
+const limiter = require('./utils/limiter');
+const routes = require('./routes');
 
 dotenv.config();
 
@@ -17,6 +17,6 @@ app.use(bodyParser.json());
 app.use(limiter);
 app.use(fileUpload());
 
-app.use("/api/v1", routes);
+app.use('/api/v1', routes);
 
 module.exports = app;
