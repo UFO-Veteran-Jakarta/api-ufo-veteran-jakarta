@@ -93,7 +93,7 @@ exports.updateWorkProgramById = async (req, res) => {
 
 exports.deleteWorkProgramById = async (req, res) => {
   try {
-    const { id } = req.query.id;
+    const { id } = req.query;
 
     const workProgram = await getWorkProgramById(id);
 
