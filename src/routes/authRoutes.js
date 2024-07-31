@@ -1,45 +1,45 @@
-const express = require("express");
-const authController = require("../controllers/authController");
+const express = require('express');
+const authController = require('../controllers/authController');
 
 const {
   registerValidationRules,
   validate,
   loginValidationRules,
-} = require("../validators/authValidator");
+} = require('../validators/authValidator');
 const {
   checkMethod,
   authentication,
-} = require("../middlewares/authMiddleware");
+} = require('../middlewares/authMiddleware');
 
 const router = express.Router();
 
 router.use(
-  "/register",
-  checkMethod(["POST"]),
+  '/register',
+  checkMethod(['POST']),
   registerValidationRules(),
   validate,
-  authController.register
+  authController.register,
 );
 
 router.use(
-  "/login",
-  checkMethod(["POST"]),
+  '/login',
+  checkMethod(['POST']),
   loginValidationRules(),
   validate,
-  authController.login
+  authController.login,
 );
 
 router.use(
-  "/logout",
-  checkMethod(["DELETE"]),
+  '/logout',
+  checkMethod(['DELETE']),
   authentication(),
 
-  authController.logout
+  authController.logout,
 );
 
-router.use(function (err, req, res, next) {
-  if (err.name === "UnauthorizedError") {
-    res.status(401).send("Unauthorized");
+router.use((err, req, res, next) => {
+  if (err.name === 'UnauthorizedError') {
+    res.status(401).send('Unauthorized');
   } else {
     next(err);
   }

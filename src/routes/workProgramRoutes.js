@@ -1,46 +1,46 @@
-const express = require("express");
-const workProgramController = require("../controllers/workProgramController");
+const express = require('express');
+const workProgramController = require('../controllers/workProgramController');
 
 const {
   postWorkProgramValidationRules,
   validate,
-} = require("../validators/workProgramValidator");
-const { authentication } = require("../middlewares/authMiddleware");
+} = require('../validators/workProgramValidator');
+const { authentication } = require('../middlewares/authMiddleware');
 const {
   checkFile,
   checkFileForUpdate,
-} = require("../middlewares/workProgramMiddlewareFile");
+} = require('../middlewares/workProgramMiddlewareFile');
 
 const router = express.Router();
 
 router.post(
-  "/",
+  '/',
   authentication(),
-  checkFile("image"),
+  checkFile('image'),
   postWorkProgramValidationRules(),
   validate,
-  workProgramController.addWorkProgram
+  workProgramController.addWorkProgram,
 );
 
 router.get(
-  "/",
+  '/',
   workProgramController.getAllWorkPrograms,
-  workProgramController.getWorkProgramById
+  workProgramController.getWorkProgramById,
 );
 
 router.put(
-  "/",
+  '/',
   authentication(),
-  checkFileForUpdate("image"),
+  checkFileForUpdate('image'),
   postWorkProgramValidationRules(),
   validate,
-  workProgramController.updateWorkProgramById
+  workProgramController.updateWorkProgramById,
 );
 
 router.delete(
-  "/",
+  '/',
   authentication(),
-  workProgramController.deleteWorkProgramById
+  workProgramController.deleteWorkProgramById,
 );
 
 module.exports = router;

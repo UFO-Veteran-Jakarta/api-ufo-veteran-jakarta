@@ -1,4 +1,4 @@
-const { check, validationResult, matchedData } = require("express-validator");
+const { check, validationResult, matchedData } = require('express-validator');
 
 function createStringFieldValidator(fieldName, errorMessage, maxLength = null) {
   let validator = check(fieldName)
@@ -12,7 +12,7 @@ function createStringFieldValidator(fieldName, errorMessage, maxLength = null) {
     validator = validator
       .isLength({ max: maxLength })
       .withMessage(
-        `${errorMessage} must be no more than ${maxLength} characters`
+        `${errorMessage} must be no more than ${maxLength} characters`,
       );
   }
 
@@ -21,8 +21,8 @@ function createStringFieldValidator(fieldName, errorMessage, maxLength = null) {
 
 const postWorkProgramValidationRules = () => {
   return [
-    createStringFieldValidator("title", "Work program title", 255),
-    createStringFieldValidator("description", "Description of work program"),
+    createStringFieldValidator('title', 'Work program title', 255),
+    createStringFieldValidator('description', 'Description of work program'),
   ];
 };
 

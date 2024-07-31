@@ -1,47 +1,47 @@
-const express = require("express");
-const achievementController = require("../controllers/achievementController");
+const express = require('express');
+const achievementController = require('../controllers/achievementController');
 
 const {
   postAchievementValidationRules,
   validate,
-} = require("../validators/achievementValidator");
+} = require('../validators/achievementValidator');
 
-const { authentication } = require("../middlewares/authMiddleware");
+const { authentication } = require('../middlewares/authMiddleware');
 const {
   checkFile,
   checkUpdateFile,
-} = require("../middlewares/achievementMiddlewareFile");
+} = require('../middlewares/achievementMiddlewareFile');
 
 const router = express.Router();
 
 router.post(
-  "/",
+  '/',
   authentication(),
-  checkFile("logo"),
+  checkFile('logo'),
   postAchievementValidationRules(),
   validate,
-  achievementController.addAchievement
+  achievementController.addAchievement,
 );
 
 router.get(
-  "/",
+  '/',
   achievementController.getAllAchievements,
-  achievementController.getAchievementById
+  achievementController.getAchievementById,
 );
 
 router.put(
-  "/",
+  '/',
   authentication(),
-  checkUpdateFile("logo"),
+  checkUpdateFile('logo'),
   postAchievementValidationRules(),
   validate,
-  achievementController.updateAchievementById
+  achievementController.updateAchievementById,
 );
 
 router.delete(
-  "/",
+  '/',
   authentication(),
-  achievementController.deleteAchievementById
+  achievementController.deleteAchievementById,
 );
 
 module.exports = router;

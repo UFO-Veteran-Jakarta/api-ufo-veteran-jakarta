@@ -4,20 +4,21 @@ const {
   getContentById,
   updateContent,
   deleteContent,
-} = require("../models/contentModel");
+} = require('../models/contentModel');
+
 exports.getAll = async () => {
-  return await getAllContent();
+  return getAllContent();
 };
 exports.getContentById = async (id) => {
-  return await getContentById(id);
+  return getContentById(id);
 };
 exports.addContent = async (data) => {
-  return await addContent(data);
+  return addContent(data);
 };
 exports.updateContent = async (id, link) => {
-  return await updateContent(id, link);
+  return updateContent(id, link);
 };
 
 exports.deleteContent = async (id) => {
-  return await deleteContent(id);
+  return deleteContent(id);
 };

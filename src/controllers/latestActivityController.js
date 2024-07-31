@@ -107,7 +107,7 @@ exports.updateLatestActivityById = async (req, res) => {
 
 exports.deleteLatestActivityById = async (req, res) => {
   try {
-    const id = req.query.id;
+    const { id } = req.query.id;
 
     const latestActivity = await getLatestActivityById(id);
 

@@ -7,7 +7,7 @@ const {
 } = require('../models/latestActivityModel');
 
 exports.addLatestActivity = async (data) => {
-  return await addLatestActivity(data);
+  return addLatestActivity(data);
 };
 
 exports.getAllLatestActivities = async () => {
@@ -20,13 +20,13 @@ exports.getAllLatestActivities = async () => {
 };
 
 exports.getLatestActivityById = async (id) => {
-  return await getLatestActivityById(id);
+  return getLatestActivityById(id);
 };
 
 exports.updateLatestActivity = async (id, data) => {
-  return await updateLatestActivity(id, data);
+  return updateLatestActivity(id, data);
 };
 
 exports.deleteLatestActivity = async (id) => {
-  return await deleteLatestActivity(id);
+  return deleteLatestActivity(id);
 };

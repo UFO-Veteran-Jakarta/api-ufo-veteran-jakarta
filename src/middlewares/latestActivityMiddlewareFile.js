@@ -1,6 +1,5 @@
-const sharp = require('sharp');
-const { sendResponse } = require('../helpers/response');
 const path = require('path');
+const { sendResponse } = require('../helpers/response');
 
 function validateFile(file, res) {
   const extension = path.extname(file.name).toLowerCase();
@@ -24,30 +23,26 @@ function validateFile(file, res) {
   return true;
 }
 
-exports.checkFile = (form) => {
-  return async (req, res, next) => {
-    const file = req?.files?.[form];
+exports.checkFile = (form) => async (req, res, next) => {
+  const file = req?.files?.[form];
 
-    if (!file) {
-      return sendResponse(res, 500, 'Latest activity image is required');
-    }
+  if (!file) {
+    return sendResponse(res, 500, 'Latest activity image is required');
+  }
 
-    if (!validateFile(file, res)) {
-      return;
-    }
+  if (!validateFile(file, res)) {
+    return;
+  }
 
-    next();
-  };
+  next();
 };
 
-exports.checkFileForUpdate = (form) => {
-  return async (req, res, next) => {
-    const file = req?.files?.[form];
+exports.checkFileForUpdate = (form) => async (req, res, next) => {
+  const file = req?.files?.[form];
 
-    if (file && !validateFile(file, res)) {
-      return;
-    }
+  if (file && !validateFile(file, res)) {
+    return;
+  }
 
-    next();
-  };
+  next();
 };

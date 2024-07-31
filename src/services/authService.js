@@ -1,16 +1,16 @@
-const userModel = require("../models/userModel");
-const bcrypt = require("bcrypt");
+const bcrypt = require('bcrypt');
+const userModel = require('../models/userModel');
 
 exports.getAllUser = async () => {
-  return await userModel.getAllUser();
+  return userModel.getAllUser();
 };
 
 exports.getUserByUsername = async (username) => {
-  return await userModel.getUserByUsername(username);
+  return userModel.getUserByUsername(username);
 };
 
 exports.createUser = async (data) => {
-  return await userModel.createUser(data);
+  return userModel.createUser(data);
 };
 
 exports.login = async (data) => {
