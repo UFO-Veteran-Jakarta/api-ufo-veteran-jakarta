@@ -19,11 +19,8 @@ function createStringFieldValidator(fieldName, errorMessage, maxLength = null) {
   return validator;
 }
 
-const postWorkProgramValidationRules = () => {
-  return [
-    createStringFieldValidator('title', 'Work program title', 255),
-    createStringFieldValidator('description', 'Description of work program'),
-  ];
+const postLatestActivityValidationRules = () => {
+  return [createStringFieldValidator('title', 'Latest activity title', 255)];
 };
 
 const validate = (req, res, next) => {
@@ -31,11 +28,12 @@ const validate = (req, res, next) => {
   if (!errors.isEmpty()) {
     return res.status(500).json({ status: 500, errors: errors.array() });
   }
+
   req.body = matchedData(req, { onlyValidData: true });
   next();
 };
 
 module.exports = {
-  postWorkProgramValidationRules,
+  postLatestActivityValidationRules,
   validate,
 };

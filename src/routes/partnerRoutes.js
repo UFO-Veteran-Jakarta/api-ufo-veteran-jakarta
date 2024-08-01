@@ -1,42 +1,42 @@
-const express = require("express");
-const partnerController = require("../controllers/partnerController");
+const express = require('express');
+const partnerController = require('../controllers/partnerController');
 
 const {
   postPartnerValidationRules,
   validate,
-} = require("../validators/partnerValidator");
-const { authentication } = require("../middlewares/authMiddleware");
+} = require('../validators/partnerValidator');
+const { authentication } = require('../middlewares/authMiddleware');
 const {
   checkFile,
   checkUpdateFile,
-} = require("../middlewares/partnerMiddlewareFile");
+} = require('../middlewares/partnerMiddlewareFile');
 
 const router = express.Router();
 
 router.post(
-  "/",
+  '/',
   authentication(),
-  checkFile("logo"),
+  checkFile('logo'),
   postPartnerValidationRules(),
   validate,
-  partnerController.uploadPartner
+  partnerController.uploadPartner,
 );
 
 router.get(
-  "/",
+  '/',
   partnerController.getAllPartners,
-  partnerController.getPartnerById
+  partnerController.getPartnerById,
 );
 
 router.put(
-  "/",
+  '/',
   authentication(),
-  checkUpdateFile("logo"),
+  checkUpdateFile('logo'),
   postPartnerValidationRules(),
   validate,
-  partnerController.updatePartnerById
+  partnerController.updatePartnerById,
 );
 
-router.delete("/", authentication(), partnerController.deletePartnerById);
+router.delete('/', authentication(), partnerController.deletePartnerById);
 
 module.exports = router;

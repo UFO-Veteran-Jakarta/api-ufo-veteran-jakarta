@@ -1,21 +1,21 @@
-const { check, validationResult } = require("express-validator");
+const { check, validationResult } = require('express-validator');
 
 const postValidationRules = () => {
   return [
-    check("link")
+    check('link')
       .isString()
       .trim()
       .not()
       .isEmpty()
-      .withMessage("link is required")
+      .withMessage('link is required')
       .matches(/^https:\/\/.*/)
       .withMessage(
-        "The link must be a string and a link evidenced by https:// at the beginning"
+        'The link must be a string and a link evidenced by https:// at the beginning',
       )
       .matches(
-        /^https:\/\/(www\.)?[a-zA-Z0-9@:%._~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_~#?&/=]*)$/
+        /^https:\/\/(www\.)?[a-zA-Z0-9@:%._~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_~#?&/=]*)$/,
       )
-      .withMessage("The link must valid a url"),
+      .withMessage('The link must valid a url'),
   ];
 };
 

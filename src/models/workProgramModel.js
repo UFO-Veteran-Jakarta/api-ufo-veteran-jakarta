@@ -1,4 +1,4 @@
-const pool = require("../config/database");
+const pool = require('../config/database');
 
 function createInsertQuery(data, tableName) {
   const fields = Object.keys(data);
@@ -6,8 +6,8 @@ function createInsertQuery(data, tableName) {
   const placeholders = fields.map((_, index) => `$${index + 1}`);
 
   const query = `
-    INSERT INTO ${tableName} (${fields.join(", ")})
-    VALUES (${placeholders.join(", ")})
+    INSERT INTO ${tableName} (${fields.join(', ')})
+    VALUES (${placeholders.join(', ')})
     RETURNING *;
   `;
 
@@ -19,7 +19,7 @@ function createUpdateQuery(data, tableName, id) {
   const values = Object.values(data);
   const setClause = fields
     .map((field, index) => `${field} = $${index + 1}`)
-    .join(", ");
+    .join(', ');
 
   const query = `
     UPDATE ${tableName}
@@ -32,24 +32,24 @@ function createUpdateQuery(data, tableName, id) {
 }
 
 async function addWorkProgram(data) {
-  const { query, values } = createInsertQuery(data, "myschema.work_programs");
+  const { query, values } = createInsertQuery(data, 'myschema.work_programs');
 
   try {
     const res = await pool.query(query, values);
     return res.rows[0];
   } catch (err) {
-    console.error("Error inserting work program:", err);
+    console.error('Error inserting work program:', err);
   }
 }
 
 async function getAllWorkPrograms() {
-  const query = "SELECT * FROM myschema.work_programs WHERE deleted_at IS NULL";
+  const query = 'SELECT * FROM myschema.work_programs WHERE deleted_at IS NULL';
 
   try {
     const res = await pool.query(query);
     return res.rows.length > 0 ? res.rows : null;
   } catch (error) {
-    console.error("Error fetching work programs:", error);
+    console.error('Error fetching work programs:', error);
   }
 }
 
@@ -75,8 +75,8 @@ async function getWorkProgramById(id) {
 async function updateWorkProgram(id, data) {
   const { query, values } = createUpdateQuery(
     data,
-    "myschema.work_programs",
-    id
+    'myschema.work_programs',
+    id,
   );
 
   try {
@@ -89,13 +89,13 @@ async function updateWorkProgram(id, data) {
 }
 
 async function deleteAllWorkPrograms() {
-  const query = "UPDATE myschema.work_programs SET deleted_at = NOW()";
+  const query = 'UPDATE myschema.work_programs SET deleted_at = NOW()';
 
   try {
     const res = await pool.query(query);
     return res.rows;
   } catch (error) {
-    console.error("Error deleting all work programs:", error);
+    console.error('Error deleting all work programs:', error);
     throw error;
   }
 }

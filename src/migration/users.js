@@ -1,11 +1,11 @@
-const pool = require("../config/database");
+const pool = require('../config/database');
 
 exports.createUser = async () => {
   await pool.query(`INSERT INTO myschema.users (username, password, created_at, updated_at, deleted_at)
       VALUES ('john_doe', 'securepassword123', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL);`);
 };
 exports.deleteUser = async () => {
-  await pool.query(`DELETE FROM myschema.users`);
+  await pool.query('DELETE FROM myschema.users');
 };
 
 exports.createTable = async () => {
@@ -88,12 +88,26 @@ exports.createTable = async () => {
     deleted_at TIMESTAMP
   )
   `);
+
+  await pool.query(
+    `
+    CREATE TABLE IF NOT EXISTS myschema.latest_activities(
+      id SERIAL PRIMARY KEY,
+      image text NOT NULL,
+      title varchar(255) NOT NULL,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP ,
+      deleted_at TIMESTAMP
+    )
+    `,
+  );
 };
 exports.dropTable = async () => {
-  await pool.query(`DROP TABLE IF EXISTS myschema.users;`);
-  await pool.query(`DROP TABLE IF EXISTS myschema.contents;`);
-  await pool.query(`DROP TABLE IF EXISTS myschema.events;`);
-  await pool.query(`DROP TABLE IF EXISTS myschema.partners;`);
-  await pool.query(`DROP TABLE IF EXISTS myschema.achievements;`);
-  await pool.query(`DROP TABLE IF EXISTS myschema.work_programs;`);
+  await pool.query('DROP TABLE IF EXISTS myschema.users;');
+  await pool.query('DROP TABLE IF EXISTS myschema.contents;');
+  await pool.query('DROP TABLE IF EXISTS myschema.events;');
+  await pool.query('DROP TABLE IF EXISTS myschema.partners;');
+  await pool.query('DROP TABLE IF EXISTS myschema.achievements;');
+  await pool.query('DROP TABLE IF EXISTS myschema.work_programs;');
+  await pool.query('DROP TABLE IF EXISTS myschema.latest_activities;');
 };

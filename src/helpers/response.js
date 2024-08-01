@@ -3,7 +3,7 @@ exports.sendResponse = (
   status,
   message,
   data = null,
-  authorization = null
+  authorization = null,
 ) => {
   const layout = {
     status,

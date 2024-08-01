@@ -1,24 +1,24 @@
-const { check, validationResult } = require("express-validator");
+const { check, validationResult } = require('express-validator');
 
 const postAchievementValidationRules = () => {
   return [
-    check("name")
+    check('name')
       .isString()
       .trim()
       .not()
       .isEmpty()
-      .withMessage("Achievement name is required")
+      .withMessage('Achievement name is required')
       .isLength({ max: 255 })
-      .withMessage("Achievement name must be no more than 255 characters"),
+      .withMessage('Achievement name must be no more than 255 characters'),
 
-    check("year")
+    check('year')
       .isString()
       .trim()
       .not()
       .isEmpty()
-      .withMessage("Achievement year is required")
+      .withMessage('Achievement year is required')
       .isLength({ max: 4 })
-      .withMessage("Achievement year must be no more than 4 characters"),
+      .withMessage('Achievement year must be no more than 4 characters'),
   ];
 };
 
