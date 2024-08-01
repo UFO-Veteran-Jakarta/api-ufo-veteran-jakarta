@@ -1,8 +1,8 @@
-const pool = require("../config/database");
+const pool = require('../config/database');
 
 exports.getAllContent = async () => {
   const res = await pool.query(
-    "SELECT * FROM myschema.contents WHERE deleted_at IS NULL"
+    'SELECT * FROM myschema.contents WHERE deleted_at IS NULL',
   );
   return res.rows;
 };
@@ -10,8 +10,8 @@ exports.getAllContent = async () => {
 exports.getContentById = async (id) => {
   try {
     const res = await pool.query(
-      `SELECT * FROM myschema.contents WHERE id = $1 AND deleted_at IS NULL`,
-      [id]
+      'SELECT * FROM myschema.contents WHERE id = $1 AND deleted_at IS NULL',
+      [id],
     );
     return res.rows;
   } catch (err) {
@@ -29,7 +29,7 @@ exports.addContent = async (data) => {
 
 exports.getUserByUsername = async (username) => {
   const res = await pool.query(
-    `SELECT * FROM myschema.users WHERE username = '${username}' AND deleted_at IS NULL`
+    `SELECT * FROM myschema.users WHERE username = '${username}' AND deleted_at IS NULL`,
   );
 
   return res.rows;
@@ -37,8 +37,8 @@ exports.getUserByUsername = async (username) => {
 
 exports.updateContent = async (id, link) => {
   const res = await pool.query(
-    `UPDATE  myschema.contents SET link = $1 WHERE id = $2 RETURNING *`,
-    [link, id]
+    'UPDATE  myschema.contents SET link = $1 WHERE id = $2 RETURNING *',
+    [link, id],
   );
 
   return res.rows;
@@ -46,15 +46,15 @@ exports.updateContent = async (id, link) => {
 
 exports.deleteContentAll = async () => {
   const res = await pool.query(
-    `UPDATE myschema.contents SET deleted_at = NOW()`
+    'UPDATE myschema.contents SET deleted_at = NOW()',
   );
   return res.rows;
 };
 
 exports.deleteContent = async (id) => {
   const res = await pool.query(
-    `UPDATE myschema.contents SET deleted_at = NOW() WHERE id = $1`,
-    [id]
+    'UPDATE myschema.contents SET deleted_at = NOW() WHERE id = $1',
+    [id],
   );
 
   return res.rows;

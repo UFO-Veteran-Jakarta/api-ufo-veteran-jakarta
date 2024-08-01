@@ -1,4 +1,4 @@
-const pool = require("../config/database");
+const pool = require('../config/database');
 
 exports.addPartner = async function insertParnter(data) {
   const fields = [];
@@ -12,8 +12,8 @@ exports.addPartner = async function insertParnter(data) {
   });
 
   const query = `
-    INSERT INTO myschema.partners (${fields.join(", ")})
-    VALUES (${placeholders.join(", ")})
+    INSERT INTO myschema.partners (${fields.join(', ')})
+    VALUES (${placeholders.join(', ')})
     RETURNING *;
  `;
 
@@ -21,18 +21,18 @@ exports.addPartner = async function insertParnter(data) {
     const res = await pool.query(query, values);
     return res.rows[0];
   } catch (error) {
-    console.error("Error inserting partner:", error);
+    console.error('Error inserting partner:', error);
   }
 };
 
 exports.getAllPartners = async function getAllPartners() {
-  const query = "SELECT * FROM myschema.partners WHERE deleted_at IS NULL";
+  const query = 'SELECT * FROM myschema.partners WHERE deleted_at IS NULL';
 
   try {
     const res = await pool.query(query);
     return res.rows;
   } catch (error) {
-    console.error("Error fetching partners:", error);
+    console.error('Error fetching partners:', error);
     throw error;
   }
 };
@@ -40,8 +40,8 @@ exports.getAllPartners = async function getAllPartners() {
 exports.getPartnerById = async (id) => {
   try {
     const res = await pool.query(
-      `SELECT * FROM myschema.partners WHERE id = $1 AND deleted_at IS NULL`,
-      [id]
+      'SELECT * FROM myschema.partners WHERE id = $1 AND deleted_at IS NULL',
+      [id],
     );
 
     if (res.rows.length === 0) {
@@ -61,12 +61,12 @@ exports.updatePartner = async (id, data) => {
   Object.keys(data).forEach((key) => {
     fields.push(`${key} = $${index}`);
     values.push(data[key]);
-    index++;
+    index += 1;
   });
 
   const query = `
     UPDATE myschema.events
-    SET ${fields.join(", ")}, updated_at = NOW()
+    SET ${fields.join(', ')}, updated_at = NOW()
     WHERE id = $${index}
     RETURNING *;
   `;

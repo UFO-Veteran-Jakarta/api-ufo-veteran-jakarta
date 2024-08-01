@@ -1,4 +1,4 @@
-const pool = require("../config/database");
+const pool = require('../config/database');
 
 exports.addEvent = async function insertEvent(data) {
   const fields = [];
@@ -12,8 +12,8 @@ exports.addEvent = async function insertEvent(data) {
   });
 
   const query = `
-    INSERT INTO myschema.events (${fields.join(", ")})
-    VALUES (${placeholders.join(", ")})
+    INSERT INTO myschema.events (${fields.join(', ')})
+    VALUES (${placeholders.join(', ')})
     RETURNING *;
   `;
 
@@ -21,30 +21,30 @@ exports.addEvent = async function insertEvent(data) {
     const res = await pool.query(query, values);
     return res.rows[0];
   } catch (err) {
-    console.error("Error inserting event:", err);
+    console.error('Error inserting event:', err);
   }
 };
 
 exports.getAllEvents = async function getAllEvents() {
-  const query = "SELECT * FROM myschema.events";
+  const query = 'SELECT * FROM myschema.events';
 
   try {
     const res = await pool.query(query);
     return res.rows;
   } catch (err) {
-    console.error("Error fetching events:", err);
+    console.error('Error fetching events:', err);
     throw err;
   }
 };
 
 exports.getEventBySlug = async function getEventBySlug(slug) {
-  const query = "SELECT * FROM myschema.events WHERE slug = $1";
+  const query = 'SELECT * FROM myschema.events WHERE slug = $1';
 
   try {
     const res = await pool.query(query, [slug]);
     return res.rows[0];
   } catch (error) {
-    console.error("Error fetching event by slug:", error);
+    console.error('Error fetching event by slug:', error);
     throw error;
   }
 };
@@ -57,12 +57,12 @@ exports.updateEventInDb = async (slug, data) => {
   Object.keys(data).forEach((key) => {
     fields.push(`${key} = $${index}`);
     values.push(data[key]);
-    index++;
+    index += 1;
   });
 
   const query = `
     UPDATE myschema.events
-    SET ${fields.join(", ")}, updated_at = NOW()
+    SET ${fields.join(', ')}, updated_at = NOW()
     WHERE slug = $${index}
     RETURNING *;
   `;
@@ -88,7 +88,7 @@ exports.softDeleteEventBySlug = async function softDeleteEventBySlug(slug) {
     const res = await pool.query(query, [slug]);
     return res.rows[0];
   } catch (error) {
-    console.error("Error soft deleting event by slug:", error);
+    console.error('Error soft deleting event by slug:', error);
     throw error;
   }
 };

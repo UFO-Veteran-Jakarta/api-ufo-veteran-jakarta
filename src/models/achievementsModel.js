@@ -1,4 +1,4 @@
-const pool = require("../config/database");
+const pool = require('../config/database');
 
 const constructInsertQuery = (data, tableName) => {
   const fields = [];
@@ -10,8 +10,8 @@ const constructInsertQuery = (data, tableName) => {
     placeholders.push(`$${index + 1}`);
   });
   const query = `
-    INSERT INTO ${tableName} (${fields.join(", ")})
-    VALUES (${placeholders.join(", ")})
+    INSERT INTO ${tableName} (${fields.join(', ')})
+    VALUES (${placeholders.join(', ')})
     RETURNING *;
   `;
   return { query, values };
@@ -24,11 +24,11 @@ const constructUpdateQuery = (data, tableName, id) => {
   Object.keys(data).forEach((key) => {
     fields.push(`${key} = $${index}`);
     values.push(data[key]);
-    index++;
+    index += 1;
   });
   const query = `
     UPDATE ${tableName}
-    SET ${fields.join(", ")}, updated_at = NOW()
+    SET ${fields.join(', ')}, updated_at = NOW()
     WHERE id = $${index}
     RETURNING *;
   `;
@@ -40,23 +40,23 @@ const logError = (message, error) => {
 };
 
 exports.addAchievement = async (data) => {
-  const { query, values } = constructInsertQuery(data, "myschema.achievements");
+  const { query, values } = constructInsertQuery(data, 'myschema.achievements');
   try {
     const res = await pool.query(query, values);
     return res.rows[0];
   } catch (error) {
-    logError("Error inserting achievement:", error);
+    logError('Error inserting achievement:', error);
     throw error;
   }
 };
 
 exports.getAllAchievements = async () => {
-  const query = "SELECT * FROM myschema.achievements WHERE deleted_at IS NULL";
+  const query = 'SELECT * FROM myschema.achievements WHERE deleted_at IS NULL';
   try {
     const res = await pool.query(query);
     return res.rows.length > 0 ? res.rows : null;
   } catch (error) {
-    logError("Error fetching achievements:", error);
+    logError('Error fetching achievements:', error);
     throw error;
   }
 };
@@ -64,9 +64,10 @@ exports.getAllAchievements = async () => {
 exports.getAchievementById = async (id) => {
   try {
     const res = await pool.query(
-      `SELECT * FROM myschema.achievements WHERE id = $1 AND deleted_at IS NULL`,
-      [id]
+      'SELECT * FROM myschema.achievements WHERE id = $1 AND deleted_at IS NULL',
+      [id],
     );
+
     return res.rows.length === 0 ? null : res.rows[0];
   } catch (error) {
     logError(`Error fetching achievement with id ${id}:`, error);
@@ -77,8 +78,8 @@ exports.getAchievementById = async (id) => {
 exports.updateAchievement = async (id, data) => {
   const { query, values } = constructUpdateQuery(
     data,
-    "myschema.achievements",
-    id
+    'myschema.achievements',
+    id,
   );
   try {
     const res = await pool.query(query, values);
@@ -90,12 +91,12 @@ exports.updateAchievement = async (id, data) => {
 };
 
 exports.deleteAchievementAll = async () => {
-  const query = `UPDATE myschema.achievements SET deleted_at = NOW()`;
+  const query = 'UPDATE myschema.achievements SET deleted_at = NOW()';
   try {
     const res = await pool.query(query);
     return res.rows;
   } catch (error) {
-    logError("Error deleting all achievements:", error);
+    logError('Error deleting all achievements:', error);
     throw error;
   }
 };

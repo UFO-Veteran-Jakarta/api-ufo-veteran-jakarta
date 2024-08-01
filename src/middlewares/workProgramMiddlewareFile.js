@@ -1,13 +1,12 @@
-const sharp = require("sharp");
-const { sendResponse } = require("../helpers/response");
-const path = require("path");
+const path = require('path');
+const { sendResponse } = require('../helpers/response');
 
 function validateFile(file, res) {
   const extension = path.extname(file.name).toLowerCase();
   const mimeType = file.mimetype;
 
-  if (extension !== ".webp" || mimeType !== "image/webp") {
-    sendResponse(res, 500, "Work program image must be in WEBP Format");
+  if (extension !== '.webp' || mimeType !== 'image/webp') {
+    sendResponse(res, 500, 'Work program image must be in WEBP Format');
     return false;
   }
 
@@ -16,7 +15,7 @@ function validateFile(file, res) {
     sendResponse(
       res,
       500,
-      "Work program image size is too big, please upload a file smaller than 500 KB"
+      'Work program image size is too big, please upload a file smaller than 500 KB',
     );
     return false;
   }
@@ -29,7 +28,7 @@ exports.checkFile = (form) => {
     const file = req?.files?.[form];
 
     if (!file) {
-      return sendResponse(res, 500, "Work program image is required");
+      return sendResponse(res, 500, 'Work program image is required');
     }
 
     if (!validateFile(file, res)) {

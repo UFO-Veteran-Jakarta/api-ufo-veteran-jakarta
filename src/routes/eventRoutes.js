@@ -1,41 +1,41 @@
-const express = require("express");
-const eventController = require("../controllers/eventController");
+const express = require('express');
+const eventController = require('../controllers/eventController');
 
 const {
   postValidationRules,
   validate,
-} = require("../validators/eventValidator");
-const { authentication } = require("../middlewares/authMiddleware");
+} = require('../validators/eventValidator');
+const { authentication } = require('../middlewares/authMiddleware');
 const {
   checkFile,
   checkFileForUpdate,
-} = require("../middlewares/eventMiddlewareFile");
+} = require('../middlewares/eventMiddlewareFile');
 
 const router = express.Router();
 
 router.post(
-  "/",
+  '/',
   authentication(),
-  checkFile("cover"),
-  checkFile("cover_landscape"),
+  checkFile('cover'),
+  checkFile('cover_landscape'),
   postValidationRules(),
   validate,
-  eventController.uploadEvent
+  eventController.uploadEvent,
 );
 
-router.get("/", eventController.getAllEvents);
-router.get("/:slug", eventController.getEventBySlug);
+router.get('/', eventController.getAllEvents);
+router.get('/:slug', eventController.getEventBySlug);
 
 router.put(
-  "/:slug",
+  '/:slug',
   authentication(),
-  checkFileForUpdate("cover"),
-  checkFileForUpdate("cover_landscape"),
+  checkFileForUpdate('cover'),
+  checkFileForUpdate('cover_landscape'),
   postValidationRules(),
   validate,
-  eventController.updateEvent
+  eventController.updateEvent,
 );
 
-router.delete("/:slug", authentication(), eventController.deleteEventBySlug);
+router.delete('/:slug', authentication(), eventController.deleteEventBySlug);
 
 module.exports = router;
