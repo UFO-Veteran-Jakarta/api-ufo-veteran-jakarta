@@ -78,7 +78,7 @@ exports.updateDivisionById = async (req, res) => {
   }
 };
 
-exports.deleteLatestActivityById = async (req, res) => {
+exports.deleteDivisionById = async (req, res) => {
   try {
     const { id } = req.query;
 
