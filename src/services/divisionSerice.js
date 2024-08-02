@@ -18,7 +18,7 @@ exports.getAllDivisions = async () => {
   }
 };
 
-exports.getLatestDivisionById = async (id) => {
+exports.getDivisionById = async (id) => {
   return getDivisionById(id);
 };
 
