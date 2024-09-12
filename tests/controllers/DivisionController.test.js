@@ -93,21 +93,6 @@ describe('Division Controller', () => {
 
       validateSuccessResponse(res, 200, 200, 'Successfully Add New Division');
     });
-
-    //  it('should fail to add a division with server error', async () => {
-    //    // Mock the addDivision function to throw an error
-    //    jest
-    //      .spyOn(require('../../src/models/divisionModel'), 'addDivision')
-    //      .mockImplementation(() => {
-    //        throw new Error('Database error');
-    //      });
-
-    //    const token = await authenticateUser();
-    //    const res = await createDivision(token, { name: 'New Division' });
-
-    //   //  Check if the response status code is 500 and contains the correct error message
-    //    validateErrorResponse(res, 500, 'error', 'Database error');
-    //  });
   });
 
   describe('GET /api/v1/divisions', () => {
