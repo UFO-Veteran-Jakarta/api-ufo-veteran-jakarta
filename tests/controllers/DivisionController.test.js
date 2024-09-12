@@ -200,8 +200,9 @@ const deleteDivisionById = async (headers, divisionId) => {
     .set(headers);
 };
 
+
 describe('Soft Delete Division', () => {
-  it('should soft delete a division, if success return 200', async () => {
+  it('should soft delete a division by setting the deleted_at timestamp and return 200', async () => {
     const { headers } = await setupAuthHeaders();
     const divisionData = { name: 'Division to be Deleted' };
 
@@ -217,7 +218,8 @@ describe('Soft Delete Division', () => {
       'Successfully Delete Division',
     );
 
-    const isSoftDeleted = await divisionId.deleted_at !== null;
-    expect(isSoftDeleted).toBe(true);
+    expect(deleteRes.body.data).toBeDefined();
+    expect(deleteRes.body.data.deleted_at).toBeDefined();
+    expect(deleteRes.body.data.deleted_at).not.toBeNull();
   });
 });
