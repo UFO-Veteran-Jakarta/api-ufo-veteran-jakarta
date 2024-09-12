@@ -193,3 +193,31 @@ describe('Division Controller', () => {
     });
   });
 });
+
+const deleteDivisionById = async (headers, divisionId) => {
+  return await request(app)
+    .delete(`/api/v1/divisions?id=${divisionId}`)
+    .set(headers);
+};
+
+describe('Soft Delete Division', () => {
+  it('should soft delete a division, if success return 200', async () => {
+    const { headers } = await setupAuthHeaders();
+    const divisionData = { name: 'Division to be Deleted' };
+
+    const createRes = await createDivision(headers, divisionData);
+    const divisionId = createRes.body.data.id;
+
+    const deleteRes = await deleteDivisionById(headers, divisionId);
+
+    validateSuccessResponse(
+      deleteRes,
+      200,
+      200,
+      'Successfully Delete Division',
+    );
+
+    const isSoftDeleted = await divisionId.deleted_at !== null;
+    expect(isSoftDeleted).toBe(true);
+  });
+});
