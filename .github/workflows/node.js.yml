@@ -67,6 +67,8 @@ jobs:
           cache: 'npm'
       - name: Install dependencies
         run: npm ci
+      - name: Create .env.test file
+        run: echo "ENV_TESTING=${{ secrets.ENV_TESTING }}" >> .env.test
       - name: Run tests and coverage
         run: npm test
       - name: SonarCloud Scan
