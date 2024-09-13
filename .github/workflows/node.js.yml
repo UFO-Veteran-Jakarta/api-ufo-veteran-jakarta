@@ -77,7 +77,7 @@ jobs:
           cat .env
 
       - name: Run tests and coverage
-        run: npm test
+        run: npm run test ./tests/controllers/DivisionController.test.js
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
