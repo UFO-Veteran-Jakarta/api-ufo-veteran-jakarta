@@ -68,7 +68,11 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Create .env.test file
-        run: echo "ENV_TESTING=${{ secrets.ENV_TESTING }}" >> .env.test
+        run: |
+          touch .env.test
+          echo "ENV_TESTING=${{ secrets.ENV_TESTING }}" >> .env.test
+          cat .env.test
+
       - name: Run tests and coverage
         run: npm test
       - name: SonarCloud Scan
