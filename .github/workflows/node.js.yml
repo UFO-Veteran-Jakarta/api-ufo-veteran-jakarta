@@ -71,7 +71,10 @@ jobs:
         run: |
           touch .env.test
           echo "${{ secrets.ENV_TESTING }}" >> .env.test
+          touch .env
+          echo "${{ secrets.ENV }}" >> .env
           cat .env.test
+          cat .env
 
       - name: Run tests and coverage
         run: npm test
