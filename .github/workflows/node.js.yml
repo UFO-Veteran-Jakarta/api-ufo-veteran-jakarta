@@ -70,7 +70,7 @@ jobs:
       - name: Create .env.test file
         run: |
           touch .env.test
-          echo "ENV_TESTING=${{ secrets.ENV_TESTING }}" >> .env.test
+          echo "${{ secrets.ENV_TESTING }}" >> .env.test
           cat .env.test
 
       - name: Run tests and coverage
