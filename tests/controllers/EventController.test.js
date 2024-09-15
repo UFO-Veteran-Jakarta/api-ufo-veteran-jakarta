@@ -121,45 +121,55 @@ describe('Event Controller', () => {
   });
 
   describe('GET /api/v1/events/:slug', () => {
-    it('should return an event by slug', async () => {
-      const headers = await setupAuthHeaders('admin', 'Admin@12345');
-      const filePathCover = path.resolve(__dirname, '../test-1080.webp');
+    it("should return an event by slug", async () => {
+      const data = {
+        username: "admin",
+        password: "Admin@12345",
+      };
+      await request(app).post("/api/v1/register").send(data);
+      const login = await request(app).post("/api/v1/login").send(data);
+
+      const filePathCover = path.resolve(__dirname, "../test-1080.webp");
       const filePathLandscape = path.resolve(
         __dirname,
-        '../test-cc-2000-1047.webp',
+        "../test-cc-2000-1047.webp"
       );
 
       const eventData = {
-        name: 'Event Test',
-        start_event_date: '2024-07-26',
-        end_event_date: '2024-07-26',
-        start_event_time: '1000',
-        end_event_time: '1800',
-        registration_start_date: '2024-07-26',
-        registration_end_date: '2024-07-26',
-        registration_start_time: '1000',
-        registration_end_time: '1800',
-        body: 'Event Test Body',
-        link_registration: 'https://link-registration.com',
-        location: 'Test Location',
-        snippets: 'Test Snippets',
+        name: "Event Test",
+        start_event_date: "2024-07-26",
+        end_event_date: "2024-07-26",
+        start_event_time: "1000",
+        end_event_time: "1800",
+        registration_start_date: "2024-07-26",
+        registration_end_date: "2024-07-26",
+        registration_start_time: "1000",
+        registration_end_time: "1800",
+        body: "Event Test Body",
+        link_registration: "https://link-registration.com",
+        location: "Test Location",
+        snippets: "Test Snippets",
       };
 
       const event = await request(app)
-        .post('/api/v1/events')
-        .set(headers)
-        .attach('cover', filePathCover)
-        .attach('cover_landscape', filePathLandscape)
+        .post("/api/v1/events")
+        .set("Cookie", `token=${login.body.authorization.token}`)
+        .set("Authorization", `Bearer ${login.body.authorization.token}`)
+        .attach("cover", filePathCover)
+        .attach("cover_landscape", filePathLandscape)
         .field(eventData);
 
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      const res = await request(app).get(
-        `/api/v1/events/${event.body.slug}`,
-      );
+      const slug = event.body.data.slug;
+      expect(slug).toBeDefined();
 
-      validateSuccessResponse(res, 200, 'Successfully Get Event');
-      expect(res.body.slug).toBe(event.body.slug);
-    });
+      const res = await request(app).get(`/api/v1/events/${slug}`);
+      
+      expect(res.statusCode).toEqual(200);
+      expect(res.body.status).toEqual(200);
+      expect(res.body.message).toEqual("Successfully Get Event");
+      expect(res.body.data).toBeDefined();
+      expect(res.body.data.slug).toBe(slug);
+    }, 30000);
 
     it('should return 404 if event is not found', async () => {
       const res = await request(app).get('/api/v1/events/non-existent-slug');
