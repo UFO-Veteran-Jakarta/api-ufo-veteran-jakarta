@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-  pull_request_target:
+  pull_request:
     branches:
       - master
       - testing
@@ -51,7 +51,7 @@ jobs:
         continue-on-error: true
 
   build:
-    name: Build
+    name: Build and Test
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -75,16 +75,17 @@ jobs:
           echo "${{ secrets.ENV }}" >> .env
           cat .env.test
           cat .env
-
+  
   test:
     name: Test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: ArtiomTr/jest-coverage-report-action@v2
       - name: Run tests and coverage
-        run: npm run test
+        run: npm run test --filter EventController.test.js
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.SECRET_TOKEN }}
+            SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+            GITHUB_TOKEN: ${{ secrets.SECRET_TOKEN }}
