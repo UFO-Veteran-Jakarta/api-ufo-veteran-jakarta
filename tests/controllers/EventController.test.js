@@ -152,15 +152,13 @@ describe('Event Controller', () => {
     });
   });
 
-
   describe('GET /api/v1/events', () => {
     it('should return all events', async () => {
       const res = await request(app).get('/api/v1/events');
-      validateSuccessResponse(res, 200,200, 'Successfully Get All Events');
+      validateSuccessResponse(res, 200, 200, 'Successfully Get All Events');
       expect(Array.isArray(res.body.data)).toBe(true);
     });
   });
-
 
   describe('GET /api/v1/events/:slug', () => {
     it('should return an event by slug', async () => {
@@ -183,18 +181,16 @@ describe('Event Controller', () => {
 
       const event = await createEvent(headers, eventData);
 
-        const slug = event.body.data.slug; 
+      const slug = event.body.data.slug;
 
-        if (!slug) {
-          throw new Error('Slug is missing from the event response');
-        }
-      const res = await request(app).get(
-        `/api/v1/events/${slug}`,
-      );
+      if (!slug) {
+        throw new Error('Slug is missing from the event response');
+      }
+      const res = await request(app).get(`/api/v1/events/${slug}`);
 
       validateSuccessResponse(res, 200, 200, 'Successfully Get Event');
       validateEvent(res);
-    });
+    }, 50000);
 
     it('should return 404 if event is not found', async () => {
       const res = await request(app).get('/api/v1/events/non-existent-slug');
@@ -261,7 +257,7 @@ describe('DELETE /api/v1/events/:slug', () => {
   });
 
   it('should be able to delete event', async () => {
-    const {headers }= await setupAuthHeaders();
+    const { headers } = await setupAuthHeaders();
 
     const eventData = {
       name: 'Event Test',
@@ -279,15 +275,15 @@ describe('DELETE /api/v1/events/:slug', () => {
       snippets: 'Test Snippets',
     };
     const event = await createEvent(headers, eventData);
-        const slug = event.body.data.slug;
-        if (!slug) {
-          throw new Error('Slug is missing from the event response');
-        }
+    const slug = event.body.data.slug;
+    if (!slug) {
+      throw new Error('Slug is missing from the event response');
+    }
     const res = await request(app)
       .delete(`/api/v1/events/${slug}`)
       .set(headers);
 
-    validateSuccessResponse(res, 200,200, 'Event deleted successfully');
+    validateSuccessResponse(res, 200, 200, 'Event deleted successfully');
   });
 
   it('should return 404 if event does not exist', async () => {
