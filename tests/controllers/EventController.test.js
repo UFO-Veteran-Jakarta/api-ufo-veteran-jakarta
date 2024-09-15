@@ -154,11 +154,11 @@ describe('Event Controller', () => {
 
       await new Promise((resolve) => setTimeout(resolve, 1000));
       const res = await request(app).get(
-        `/api/v1/events/${event.body.data.slug}`,
+        `/api/v1/events/${event.body.slug}`,
       );
 
       validateSuccessResponse(res, 200, 'Successfully Get Event');
-      expect(res.body.data.slug).toBe(event.body.data.slug);
+      expect(res.body.slug).toBe(event.body.slug);
     });
 
     it('should return 404 if event is not found', async () => {
