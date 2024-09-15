@@ -77,11 +77,15 @@ jobs:
           cat .env
   
   test:
-    
-      name: Run tests and coverage
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ArtiomTr/jest-coverage-report-action@v2
+      - name: Run tests and coverage
         run: npm run test --filter EventController.test.js
-      name: SonarCloud Scan
+      - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.SECRET_TOKEN }}
+            SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+            GITHUB_TOKEN: ${{ secrets.SECRET_TOKEN }}
