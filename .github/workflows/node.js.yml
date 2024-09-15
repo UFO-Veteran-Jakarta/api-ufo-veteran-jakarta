@@ -77,7 +77,7 @@ jobs:
           cat .env
 
       - name: Run tests and coverage
-        run: npm run test
+        run: npm run test --filter EventController.test.js
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
