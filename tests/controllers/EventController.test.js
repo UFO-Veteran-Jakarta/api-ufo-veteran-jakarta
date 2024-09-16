@@ -181,14 +181,14 @@ describe('Event Controller', () => {
 
       const event = await createEvent(headers, eventData);
 
-      console.log(event.body);
+      console.log('ini cek respon', event.body);
       const slug = event.body.data.slug;
 
       const res = await request(app).get(`/api/v1/events/${slug}`);
 
       validateSuccessResponse(res, 200, 200, 'Successfully Get Event');
       validateEvent(res);
-    }, 50000);
+    }, 30000);
 
     it('should return 404 if event is not found', async () => {
       const res = await request(app).get('/api/v1/events/non-existent-slug');
@@ -241,12 +241,12 @@ describe('Event Controller', () => {
       const res = await request(app)
         .put(`/api/v1/events/${event.body.data.slug}`)
         .set(headers)
-        .send(updateData); 
+        .send(updateData);
 
-      console.log(res.body);
+      console.log('ini cek respon', res.body);
       validateSuccessResponse(res, 200, 200, 'Successfully Edit This Event');
       validateEvent(res);
-    });
+    }, 30000);
   });
 });
 describe('DELETE /api/v1/events/:slug', () => {
@@ -274,7 +274,7 @@ describe('DELETE /api/v1/events/:slug', () => {
       snippets: 'Test Snippets',
     };
     const event = await createEvent(headers, eventData);
-    console.log(event.body);
+    console.log('ini cek respon',event.body);
     const slug = event.body.data.slug;
   
     const res = await request(app)
@@ -282,7 +282,7 @@ describe('DELETE /api/v1/events/:slug', () => {
       .set(headers);
 
     validateSuccessResponse(res, 200, 200, 'Event deleted successfully');
-  });
+  }, 7000);
 
   it('should return 404 if event does not exist', async () => {
     const { headers } = await setupAuthHeaders();

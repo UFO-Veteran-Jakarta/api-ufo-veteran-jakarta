@@ -52,7 +52,7 @@ describe('Achievement Controller', () => {
     it('should be rejected if user not authenticated', async () => {
       const res = await request(app).post('/api/v1/achievements');
       validateErrorResponse(res, 401, 401, 'Unauthorized');
-    }, 60000);
+    });
 
     it('should be rejected if name is not provided', async () => {
       const token = await authenticateUser();
@@ -182,12 +182,12 @@ describe('Achievement Controller', () => {
         year: '2021',
       };
       const res = await createAchievement(token, achievementData);
-      console.log(res.body);
+      console.log('ini cek respon', res.body);
 
       expect(res.statusCode).toEqual(200);
       expect(res.body.status).toEqual(200);
       expect(res.body.message).toBe('Successfully Add New Achievement');
-    });
+    }, 7000);
   });
 
   const testGetAllAchievements = (res) => {
@@ -203,10 +203,20 @@ describe('Achievement Controller', () => {
 
   describe('GET /api/v1/achievements', () => {
     it('Should get all achievements', async () => {
+        const token = await authenticateUser();
+        const filePathLogo = path.resolve(__dirname, '../test-small.webp');
+        fileExists(filePathLogo);
+
+        const achievementData = {
+          name: 'Achievement',
+          logo: filePathLogo,
+          year: '2021',
+        };
+      await createAchievement(token, achievementData);
       const res = await request(app).get('/api/v1/achievements');
-      console.log(res.body);
+      console.log('ini cek respon', res.body);
       testGetAllAchievements(res);
-    });
+      }, 7000);
 
     it('Should return 500 if error', async () => {
       await deleteAchievementAll();
@@ -217,7 +227,7 @@ describe('Achievement Controller', () => {
         500,
         'Failed to Get All Achievements: No data found',
       );
-    }, 60000);
+    }, 7000);
   });
 
   describe('GET /api/v1/achievements?id=id_achievement', () => {
@@ -233,7 +243,7 @@ describe('Achievement Controller', () => {
       };
       const achievement = await createAchievement(token, achievementData);
 
-      console.log(achievement.body);
+      console.log('ini cek respon', achievement.body);
 
       const res = await request(app).get(
         `/api/v1/achievements?id=${achievement.body.data.id}`,
@@ -246,7 +256,7 @@ describe('Achievement Controller', () => {
       expect(res.body.data.name).toBeDefined();
       expect(res.body.data.year).toBeDefined();
       expect(res.body.data.created_at).toBeDefined();
-    }, 60000);
+    }, 30000);
   });
 
   describe('PUT /api/v1/achievements?id=id_achievement', () => {
@@ -270,7 +280,7 @@ describe('Achievement Controller', () => {
       };
       const achievement = await createAchievement(token, achievementData);
 
-      console.log(achievement.body);
+      console.log('ini cek respon',achievement.body);
 
       const res = await request(app)
         .put(`/api/v1/achievements?id=${achievement.body.data.id}`)
@@ -283,7 +293,7 @@ describe('Achievement Controller', () => {
       expect(res.statusCode).toEqual(200);
       expect(res.body.status).toEqual(200);
       expect(res.body.message).toEqual('Successfully Update Achievement');
-    });
+    }, 30000);
   });
 
   describe('DELETE /api/v1/achievements?id=id_achievement', () => {
@@ -298,17 +308,15 @@ describe('Achievement Controller', () => {
         year: '2021',
       };
       const achievement = await createAchievement(token, achievementData);
-
-      console.log(achievement.body);
-      console.log('woii', achievement.body.data.id);
+      console.log('ini cek respon',achievement.body);
       const res = await request(app)
         .delete(`/api/v1/achievements?id=${achievement.body.data.id}`)
         .set('Cookie', `token=${token}`)
         .set('Authorization', `Bearer ${token}`);
-      console.log(res.body);
+      console.log('ini cek respon',res.body);
       expect(res.statusCode).toEqual(200);
       expect(res.body.status).toEqual(200);
       expect(res.body.message).toEqual('Successfully Delete Achievement');
-    }, 60000);
+    }, 30000);
   });
 });

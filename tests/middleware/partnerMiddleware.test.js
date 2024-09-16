@@ -79,7 +79,7 @@ describe('Partner Middleware', () => {
 
         assertions(res, expectedStatus, expectedMessage);
       },
-      60000000,
+      30000,
     );
   };
 
@@ -125,7 +125,7 @@ describe('Partner Middleware', () => {
         expect(res.body.message).toBe(expectedMessage);
       },
     );
-  }, 60000000);
+  }, 30000);
 
   describe('checkUpdateFile Middleware', () => {
     testFileMiddleware(
@@ -143,5 +143,5 @@ describe('Partner Middleware', () => {
         expect(res.body.message).toBe(expectedMessage);
       },
     );
-  }, 60000000);
+  }, 30000);
 });

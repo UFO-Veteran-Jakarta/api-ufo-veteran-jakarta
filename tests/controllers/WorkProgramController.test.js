@@ -201,7 +201,7 @@ describe('Work Program Controller', () => {
       };
       const res = await createWorkProgram(token, workProgramData);
 
-      console.log(res.body);
+      console.log('ini cek respon' ,res.body);
 
       validateSuccessResponse(
         res,
@@ -214,6 +214,16 @@ describe('Work Program Controller', () => {
 
   describe('GET /api/v1/work-programs', () => {
     it('Should get all work programs', async () => {
+       const token = await authenticateUser();
+       const filePathImage = path.resolve(__dirname, '../test-small.webp');
+       fileExists(filePathImage);
+
+       const workProgramData = {
+         title: 'TES DULU',
+         description: 'Ini merupakan sebuah tes',
+         image: filePathImage,
+       };
+      await createWorkProgram(token, workProgramData);
       const res = await request(app).get('/api/v1/work-programs');
 
       validateSuccessResponse(
@@ -234,6 +244,16 @@ describe('Work Program Controller', () => {
     }, 60000);
 
     it('Should get work program by id', async () => {
+       const token = await authenticateUser();
+       const filePathImage = path.resolve(__dirname, '../test-small.webp');
+       fileExists(filePathImage);
+
+       const workProgramData = {
+         title: 'TES DULU',
+         description: 'Ini merupakan sebuah tes',
+         image: filePathImage,
+       };
+      await createWorkProgram(token, workProgramData);
       const workPrograms = await request(app).get('/api/v1/work-programs');
 
       const res = await request(app).get(
@@ -247,6 +267,7 @@ describe('Work Program Controller', () => {
   });
 
   describe('PUT /api/v1/work-programs?id=id_work_program?id=id_work_prorgram', () => {
+    
     it('Should be rejected if work program not found', async () => {
       const res = await request(app).get('/api/v1/work-programs?id=100000');
 
@@ -257,6 +278,13 @@ describe('Work Program Controller', () => {
       const workPrograms = await request(app).get('/api/v1/work-programs');
 
       const token = await authenticateUser();
+      const workProgramData = {
+        title: 'TES DULU',
+        description: 'Ini merupakan sebuah tes',
+        image: filePathImage,
+      };
+      
+      await createWorkProgram(token, workProgramData);
 
       const filePathImage = path.resolve(__dirname, '../test-small.webp');
       fileExists(filePathImage);
@@ -292,9 +320,19 @@ describe('Work Program Controller', () => {
     }, 60000);
 
     it('Should be able to delete work program by id', async () => {
+       const token = await authenticateUser();
+       const filePathImage = path.resolve(__dirname, '../test-small.webp');
+       fileExists(filePathImage);
+
+       const workProgramData = {
+         title: 'TES DULU',
+         description: 'Ini merupakan sebuah tes',
+         image: filePathImage,
+       };
+       
+      await createWorkProgram(token, workProgramData);
       const workPrograms = await request(app).get('/api/v1/work-programs');
 
-      const token = await authenticateUser();
 
       const res = await request(app)
         .delete(`/api/v1/work-programs?id=${workPrograms.body.data[0].id}`)

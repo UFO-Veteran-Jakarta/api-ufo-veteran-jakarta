@@ -125,10 +125,12 @@ describe('Partner Controller', () => {
       const filePathLogo = path.resolve(__dirname, '../test-small.webp');
       const partnerData = { name: 'Test Partner' };
       const res = await postPartner(token, filePathLogo, partnerData);
+
+      console.log('ini cek respon', res.body);
       expect(res.statusCode).toEqual(200);
       expect(res.body.status).toEqual(200);
       expect(res.body.message).toBe('Successfully Add New Partner');
-    }, 60000);
+    });
   });
 
   describe('GET /api/v1/partners', () => {
@@ -150,6 +152,7 @@ describe('Partner Controller', () => {
         filePathLogo,
         partnerData,
       );
+      console.log('ini cek respon', partner.body);
 
       const res = await getPartnerById(token, partner.id);
       expect(res.statusCode).toEqual(200);
@@ -181,6 +184,8 @@ describe('Partner Controller', () => {
         partnerData,
       );
 
+      console.log('ini cek respon', partner.body);
+
       const updateData = { name: 'Tes update partner' };
       const res = await updatePartner(token, partner.id, updateData);
 
@@ -209,6 +214,8 @@ describe('Partner Controller', () => {
         filePathLogo,
         partnerData,
       );
+
+      console.log('ini cek respon', partner.body);
 
       const res = await deletePartner(token, partner.id);
       expect(res.statusCode).toEqual(200);
