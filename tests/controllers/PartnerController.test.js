@@ -152,7 +152,7 @@ describe('Partner Controller', () => {
         filePathLogo,
         partnerData,
       );
-      console.log('ini cek respon', partner.body);
+      console.log('ini cek respon', partner);
 
       const res = await getPartnerById(token, partner.id);
       expect(res.statusCode).toEqual(200);
@@ -184,7 +184,7 @@ describe('Partner Controller', () => {
         partnerData,
       );
 
-      console.log('ini cek respon', partner.body);
+      console.log('ini cek respon', partner);
 
       const updateData = { name: 'Tes update partner' };
       const res = await updatePartner(token, partner.id, updateData);
@@ -215,7 +215,7 @@ describe('Partner Controller', () => {
         partnerData,
       );
 
-      console.log('ini cek respon', partner.body);
+      console.log('ini cek respon', partner);
 
       const res = await deletePartner(token, partner.id);
       expect(res.statusCode).toEqual(200);
