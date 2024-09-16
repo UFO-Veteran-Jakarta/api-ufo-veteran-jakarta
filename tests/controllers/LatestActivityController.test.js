@@ -206,4 +206,41 @@ describe('Latest Activity Controller', () => {
       getAllLatestActivitiesSuccess(res);
     });
   });
+
+  describe('GET /api/v1/latest-activities?id=id_latest_activity', () => {
+    it('Should be rejected if latest activity not found', async () => {
+      const res = await request(app).get('/api/v1/latest-activities?id=999999');
+
+      validateErrorResponse(res, 404, 404, 'Latest Activity not found');
+    });
+
+    it('Should get latest activity by id', async () => {
+      const token = await authenticateUser();
+      const filePathImage = path.resolve(__dirname, '../test-small.webp');
+      fileExists(filePathImage);
+
+      const latestActivityData = {
+        title: 'Tes latest activity',
+        image: filePathImage,
+      };
+
+      await createLatestActivity(token, latestActivityData);
+      const latestActivities = await request(app).get(
+        '/api/v1/latest-activities',
+      );
+
+      const res = await request(app).get(
+        `/api/v1/latest-activities?id=${latestActivities.body.data[0].id}`,
+      );
+
+      validateSuccessResponse(
+        res,
+        200,
+        200,
+        'Successfully Get Latest Activity',
+      );
+
+      validateLatesActivity(res);
+    });
+  });
 });
