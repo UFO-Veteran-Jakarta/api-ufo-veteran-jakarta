@@ -287,4 +287,42 @@ describe('Latest Activity Controller', () => {
       );
     });
   });
+
+  describe('DELETE /api/v1/latest-activities?id=id_latest_activity', () => {
+    it('Should be rejected if latest activity not found', async () => {
+      const res = await request(app).get('/api/v1/latest-activities?id=999999');
+
+      validateErrorResponse(res, 404, 404, 'Latest Activity not found');
+    });
+
+    it('should be able to delte latest activity by id', async () => {
+      const token = await authenticateUser();
+      const filePathImage = path.resolve(__dirname, '../test-small.webp');
+      fileExists(filePathImage);
+
+      const latestActivityData = {
+        title: 'title latest activity',
+        image: filePathImage,
+      };
+
+      await createLatestActivity(token, latestActivityData);
+      const latestActivities = await request(app).get(
+        '/api/v1/latest-activities',
+      );
+
+      const res = await request(app)
+        .delete(
+          `/api/v1/latest-activities?id=${latestActivities.body.data[0].id}`,
+        )
+        .set('Cookie', [`token=${token}`])
+        .set('Authorization', `Bearer ${token}`);
+
+      validateSuccessResponse(
+        res,
+        200,
+        200,
+        'Successfully Delete Latest Activity',
+      );
+    });
+  });
 });
