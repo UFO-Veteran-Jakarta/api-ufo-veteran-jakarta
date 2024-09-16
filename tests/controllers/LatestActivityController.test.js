@@ -243,4 +243,48 @@ describe('Latest Activity Controller', () => {
       validateLatesActivity(res);
     });
   });
+
+  describe('PUT /api/v1/latest-activities?id=id_latest_activity?id=id_latest_activity', () => {
+    it('Should be rejected if latest activity not found', async () => {
+      const res = await request(app).get('/api/v1/latest-activities?id=999999');
+
+      validateErrorResponse(res, 404, 404, 'Latest Activity not found');
+    });
+
+    it('should be able to update latest activity by id', async () => {
+      const latestActivities = await request(app).get(
+        '/api/v1/latest-activities',
+      );
+
+      const filePathImage = path.resolve(__dirname, '../test-small.webp');
+      fileExists(filePathImage);
+
+      const token = await authenticateUser();
+      const latestActivityData = {
+        title: 'title latest activity lama',
+        image: filePathImage,
+      };
+
+      await createLatestActivity(token, latestActivityData);
+
+      const latestActivityUpdated = {
+        title: 'title latest activity baru ceunah',
+        image: filePathImage,
+      };
+
+      const res = await request(app)
+        .put(`/api/v1/latest-activities?id=${latestActivities.body.data[0].id}`)
+        .set('Cookie', [`token=${token}`])
+        .set('Authorization', `Bearer ${token}`)
+        .field('title', latestActivityUpdated.title)
+        .attach('image', latestActivityUpdated.image);
+
+      validateSuccessResponse(
+        res,
+        200,
+        200,
+        'Successfully Update Latest Activity',
+      );
+    });
+  });
 });
