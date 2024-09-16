@@ -181,4 +181,29 @@ describe('Latest Activity Controller', () => {
       );
     });
   });
+
+  describe('GET /api/v1/latest-activities', () => {
+    it('should get all latest activities', async () => {
+      const token = await authenticateUser();
+      const filePathImage = path.resolve(__dirname, '../test-small.webp');
+      fileExists(filePathImage);
+
+      const latestActivityData = {
+        title: 'Tes latest activity',
+        image: filePathImage,
+      };
+
+      await createLatestActivity(token, latestActivityData);
+      const res = await request(app).get('/api/v1/latest-activities');
+
+      validateSuccessResponse(
+        res,
+        200,
+        200,
+        'Successfully Get All Latest Activities',
+      );
+
+      getAllLatestActivitiesSuccess(res);
+    });
+  });
 });
