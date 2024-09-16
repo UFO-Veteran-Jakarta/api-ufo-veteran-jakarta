@@ -82,3 +82,9 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.SECRET_TOKEN }}
+
+  coverage:
+      runs-on: ubuntu-latest
+      steps:
+      - uses: actions/checkout@v3
+      - uses: ArtiomTr/jest-coverage-report-action@v2
