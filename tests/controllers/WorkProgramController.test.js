@@ -201,8 +201,6 @@ describe('Work Program Controller', () => {
       };
       const res = await createWorkProgram(token, workProgramData);
 
-      console.log('ini cek respon' ,res.body);
-
       validateSuccessResponse(
         res,
         200,

@@ -181,7 +181,6 @@ describe('Event Controller', () => {
 
       const event = await createEvent(headers, eventData);
 
-      console.log('ini cek respon', event.body);
       const slug = event.body.data.slug;
 
       const res = await request(app).get(`/api/v1/events/${slug}`);
@@ -243,7 +242,6 @@ describe('Event Controller', () => {
         .set(headers)
         .send(updateData);
 
-      console.log('ini cek respon', res.body);
       validateSuccessResponse(res, 200, 200, 'Successfully Edit This Event');
       validateEvent(res);
     }, 30000);
@@ -274,7 +272,7 @@ describe('DELETE /api/v1/events/:slug', () => {
       snippets: 'Test Snippets',
     };
     const event = await createEvent(headers, eventData);
-    console.log('ini cek respon',event.body);
+
     const slug = event.body.data.slug;
   
     const res = await request(app)

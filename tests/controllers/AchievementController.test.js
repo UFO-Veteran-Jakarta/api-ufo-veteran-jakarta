@@ -182,7 +182,6 @@ describe('Achievement Controller', () => {
         year: '2021',
       };
       const res = await createAchievement(token, achievementData);
-      console.log('ini cek respon', res.body);
 
       expect(res.statusCode).toEqual(200);
       expect(res.body.status).toEqual(200);
@@ -214,7 +213,7 @@ describe('Achievement Controller', () => {
         };
       await createAchievement(token, achievementData);
       const res = await request(app).get('/api/v1/achievements');
-      console.log('ini cek respon', res.body);
+
       testGetAllAchievements(res);
       }, 7000);
 
@@ -242,8 +241,6 @@ describe('Achievement Controller', () => {
         year: '2021',
       };
       const achievement = await createAchievement(token, achievementData);
-
-      console.log('ini cek respon', achievement.body);
 
       const res = await request(app).get(
         `/api/v1/achievements?id=${achievement.body.data.id}`,
@@ -280,8 +277,6 @@ describe('Achievement Controller', () => {
       };
       const achievement = await createAchievement(token, achievementData);
 
-      console.log('ini cek respon',achievement.body);
-
       const res = await request(app)
         .put(`/api/v1/achievements?id=${achievement.body.data.id}`)
         .set('Cookie', `token=${token}`)
@@ -308,12 +303,12 @@ describe('Achievement Controller', () => {
         year: '2021',
       };
       const achievement = await createAchievement(token, achievementData);
-      console.log('ini cek respon',achievement.body);
+
       const res = await request(app)
         .delete(`/api/v1/achievements?id=${achievement.body.data.id}`)
         .set('Cookie', `token=${token}`)
         .set('Authorization', `Bearer ${token}`);
-      console.log('ini cek respon',res.body);
+
       expect(res.statusCode).toEqual(200);
       expect(res.body.status).toEqual(200);
       expect(res.body.message).toEqual('Successfully Delete Achievement');
