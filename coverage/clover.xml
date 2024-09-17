@@ -1,11 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1726519567184" clover="3.2.0">
+  <project timestamp="1726519567184" name="All files">
+    <metrics statements="1359" coveredstatements="1134" conditionals="258" coveredconditionals="195" methods="211" coveredmethods="198" elements="1828" coveredelements="1527" complexity="0" loc="1359" ncloc="1359" packages="11" files="58" classes="58"/>
 <coverage generated="1726506147062" clover="3.2.0">
   <project timestamp="1726506147062" name="All files">
     <metrics statements="1359" coveredstatements="588" conditionals="258" coveredconditionals="56" methods="211" coveredmethods="70" elements="1828" coveredelements="714" complexity="0" loc="1359" ncloc="1359" packages="11" files="58" classes="58"/>
     <package name="src">
       <metrics statements="17" coveredstatements="17" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-      <file name="app.js" path="D:\opal\Projek code\api-ufo-veteran-jakarta\src\app.js">
+      <file name="app.js" path="C:\Users\Nugraha Adhitama\Documents\api-ufo-veteran-jakarta\src\app.js">
         <metrics statements="17" coveredstatements="17" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="9" type="stmt"/>
+        <line num="2" count="9" type="stmt"/>
+        <line num="3" count="9" type="stmt"/>
+        <line num="4" count="9" type="stmt"/>
+        <line num="5" count="9" type="stmt"/>
+        <line num="6" count="9" type="stmt"/>
+        <line num="7" count="9" type="stmt"/>
+        <line num="8" count="9" type="stmt"/>
+        <line num="10" count="9" type="stmt"/>
+        <line num="12" count="9" type="stmt"/>
+        <line num="14" count="9" type="stmt"/>
+        <line num="15" count="9" type="stmt"/>
+        <line num="16" count="9" type="stmt"/>
+        <line num="17" count="9" type="stmt"/>
+        <line num="18" count="9" type="stmt"/>
+        <line num="20" count="9" type="stmt"/>
+        <line num="22" count="9" type="stmt"/>
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="stmt"/>
         <line num="3" count="1" type="stmt"/>
@@ -35,8 +55,23 @@
         <line num="6" count="1" type="stmt"/>
         <line num="12" count="1" type="stmt"/>
       </file>
-      <file name="database.js" path="D:\opal\Projek code\api-ufo-veteran-jakarta\src\config\database.js">
+    </package>
+    <package name="src.config">
+      <metrics statements="9" coveredstatements="9" conditionals="2" coveredconditionals="1" methods="0" coveredmethods="0"/>
+      <file name="cloudinary.js" path="C:\Users\Nugraha Adhitama\Documents\api-ufo-veteran-jakarta\src\config\cloudinary.js">
+        <metrics statements="5" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="10" type="stmt"/>
+        <line num="2" count="10" type="stmt"/>
+        <line num="4" count="10" type="stmt"/>
+        <line num="6" count="10" type="stmt"/>
+        <line num="12" count="10" type="stmt"/>
+      </file>
+      <file name="database.js" path="C:\Users\Nugraha Adhitama\Documents\api-ufo-veteran-jakarta\src\config\database.js">
         <metrics statements="4" coveredstatements="4" conditionals="2" coveredconditionals="1" methods="0" coveredmethods="0"/>
+        <line num="1" count="10" type="stmt"/>
+        <line num="2" count="10" type="stmt"/>
+        <line num="6" count="10" type="stmt"/>
+        <line num="14" count="10" type="stmt"/>
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="stmt"/>
         <line num="6" count="1" type="stmt"/>
@@ -44,6 +79,14 @@
       </file>
     </package>
     <package name="src.controllers">
+      <metrics statements="436" coveredstatements="334" conditionals="80" coveredconditionals="62" methods="37" coveredmethods="37"/>
+      <file name="achievementController.js" path="C:\Users\Nugraha Adhitama\Documents\api-ufo-veteran-jakarta\src\controllers\achievementController.js">
+        <metrics statements="63" coveredstatements="47" conditionals="12" coveredconditionals="8" methods="5" coveredmethods="5"/>
+        <line num="1" count="9" type="stmt"/>
+        <line num="2" count="9" type="stmt"/>
+        <line num="3" count="9" type="stmt"/>
+        <line num="10" count="9" type="stmt"/>
+        <line num="12" count="9" type="stmt"/>
       <metrics statements="436" coveredstatements="122" conditionals="80" coveredconditionals="12" methods="37" coveredmethods="7"/>
       <file name="achievementController.js" path="D:\opal\Projek code\api-ufo-veteran-jakarta\src\controllers\achievementController.js">
         <metrics statements="63" coveredstatements="51" conditionals="12" coveredconditionals="10" methods="5" coveredmethods="5"/>
@@ -60,6 +103,10 @@
         <line num="21" count="5" type="stmt"/>
         <line num="23" count="0" type="stmt"/>
         <line num="24" count="0" type="stmt"/>
+        <line num="28" count="9" type="stmt"/>
+        <line num="29" count="3" type="stmt"/>
+        <line num="30" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="31" count="1" type="stmt"/>
         <line num="28" count="1" type="stmt"/>
         <line num="29" count="4" type="stmt"/>
         <line num="30" count="4" type="cond" truecount="2" falsecount="0"/>
@@ -72,6 +119,13 @@
         <line num="47" count="1" type="stmt"/>
         <line num="54" count="0" type="stmt"/>
         <line num="55" count="0" type="stmt"/>
+        <line num="59" count="9" type="stmt"/>
+        <line num="60" count="1" type="stmt"/>
+        <line num="61" count="1" type="stmt"/>
+        <line num="62" count="1" type="stmt"/>
+        <line num="64" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="65" count="0" type="stmt"/>
+        <line num="66" count="0" type="stmt"/>
         <line num="59" count="1" type="stmt"/>
         <line num="60" count="2" type="stmt"/>
         <line num="61" count="2" type="stmt"/>
@@ -83,6 +137,7 @@
         <line num="70" count="1" type="stmt"/>
         <line num="72" count="0" type="stmt"/>
         <line num="73" count="0" type="stmt"/>
+        <line num="77" count="9" type="stmt"/>
         <line num="77" count="1" type="stmt"/>
         <line num="78" count="1" type="stmt"/>
         <line num="79" count="1" type="stmt"/>
@@ -98,6 +153,13 @@
         <line num="95" count="1" type="stmt"/>
         <line num="102" count="0" type="stmt"/>
         <line num="103" count="0" type="stmt"/>
+        <line num="107" count="9" type="stmt"/>
+        <line num="108" count="1" type="stmt"/>
+        <line num="109" count="1" type="stmt"/>
+        <line num="111" count="1" type="stmt"/>
+        <line num="113" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="114" count="0" type="stmt"/>
+        <line num="115" count="0" type="stmt"/>
         <line num="107" count="1" type="stmt"/>
         <line num="108" count="3" type="stmt"/>
         <line num="109" count="3" type="stmt"/>
@@ -111,6 +173,21 @@
         <line num="128" count="0" type="stmt"/>
         <line num="129" count="0" type="stmt"/>
       </file>
+      <file name="authController.js" path="C:\Users\Nugraha Adhitama\Documents\api-ufo-veteran-jakarta\src\controllers\authController.js">
+        <metrics statements="32" coveredstatements="26" conditionals="6" coveredconditionals="5" methods="3" coveredmethods="3"/>
+        <line num="1" count="9" type="stmt"/>
+        <line num="2" count="9" type="stmt"/>
+        <line num="3" count="9" type="stmt"/>
+        <line num="4" count="9" type="stmt"/>
+        <line num="6" count="9" type="stmt"/>
+        <line num="7" count="89" type="stmt"/>
+        <line num="8" count="89" type="stmt"/>
+        <line num="10" count="89" type="cond" truecount="2" falsecount="0"/>
+        <line num="11" count="14" type="stmt"/>
+        <line num="12" count="14" type="stmt"/>
+        <line num="14" count="75" type="stmt"/>
+        <line num="15" count="75" type="stmt"/>
+        <line num="17" count="75" type="stmt"/>
       <file name="authController.js" path="D:\opal\Projek code\api-ufo-veteran-jakarta\src\controllers\authController.js">
         <metrics statements="32" coveredstatements="19" conditionals="6" coveredconditionals="2" methods="3" coveredmethods="2"/>
         <line num="1" count="1" type="stmt"/>
@@ -128,6 +205,15 @@
         <line num="17" count="14" type="stmt"/>
         <line num="19" count="0" type="stmt"/>
         <line num="20" count="0" type="stmt"/>
+        <line num="24" count="9" type="stmt"/>
+        <line num="25" count="87" type="stmt"/>
+        <line num="26" count="87" type="stmt"/>
+        <line num="28" count="87" type="cond" truecount="2" falsecount="0"/>
+        <line num="29" count="1" type="stmt"/>
+        <line num="30" count="1" type="stmt"/>
+        <line num="32" count="86" type="stmt"/>
+        <line num="33" count="86" type="stmt"/>
+        <line num="37" count="86" type="stmt"/>
         <line num="24" count="1" type="stmt"/>
         <line num="25" count="14" type="stmt"/>
         <line num="26" count="14" type="stmt"/>
@@ -139,6 +225,8 @@
         <line num="37" count="14" type="stmt"/>
         <line num="48" count="0" type="stmt"/>
         <line num="49" count="0" type="stmt"/>
+        <line num="53" count="9" type="stmt"/>
+        <line num="54" count="1" type="cond" truecount="1" falsecount="1"/>
         <line num="53" count="1" type="stmt"/>
         <line num="54" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="55" count="0" type="stmt"/>
@@ -146,6 +234,18 @@
         <line num="58" count="0" type="stmt"/>
         <line num="59" count="0" type="stmt"/>
       </file>
+      <file name="contentController.js" path="C:\Users\Nugraha Adhitama\Documents\api-ufo-veteran-jakarta\src\controllers\contentController.js">
+        <metrics statements="43" coveredstatements="35" conditionals="10" coveredconditionals="10" methods="4" coveredmethods="4"/>
+        <line num="1" count="9" type="stmt"/>
+        <line num="2" count="9" type="stmt"/>
+        <line num="4" count="9" type="stmt"/>
+        <line num="6" count="9" type="stmt"/>
+        <line num="7" count="3" type="stmt"/>
+        <line num="10" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="11" count="1" type="stmt"/>
+        <line num="13" count="2" type="stmt"/>
+        <line num="16" count="3" type="stmt"/>
+        <line num="17" count="3" type="stmt"/>
       <file name="contentController.js" path="D:\opal\Projek code\api-ufo-veteran-jakarta\src\controllers\contentController.js">
         <metrics statements="43" coveredstatements="7" conditionals="10" coveredconditionals="0" methods="4" coveredmethods="0"/>
         <line num="1" count="1" type="stmt"/>
@@ -160,6 +260,11 @@
         <line num="17" count="0" type="stmt"/>
         <line num="19" count="0" type="stmt"/>
         <line num="20" count="0" type="stmt"/>
+        <line num="24" count="9" type="stmt"/>
+        <line num="25" count="11" type="stmt"/>
+        <line num="26" count="11" type="stmt"/>
+        <line num="28" count="11" type="stmt"/>
+        <line num="29" count="11" type="stmt"/>
         <line num="24" count="1" type="stmt"/>
         <line num="25" count="0" type="stmt"/>
         <line num="26" count="0" type="stmt"/>
@@ -167,6 +272,16 @@
         <line num="29" count="0" type="stmt"/>
         <line num="31" count="0" type="stmt"/>
         <line num="32" count="0" type="stmt"/>
+        <line num="36" count="9" type="stmt"/>
+        <line num="37" count="3" type="stmt"/>
+        <line num="38" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="39" count="1" type="stmt"/>
+        <line num="42" count="2" type="stmt"/>
+        <line num="43" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="44" count="1" type="stmt"/>
+        <line num="46" count="1" type="stmt"/>
+        <line num="51" count="1" type="stmt"/>
+        <line num="52" count="1" type="stmt"/>
         <line num="36" count="1" type="stmt"/>
         <line num="37" count="0" type="stmt"/>
         <line num="38" count="0" type="cond" truecount="0" falsecount="2"/>
@@ -179,6 +294,16 @@
         <line num="52" count="0" type="stmt"/>
         <line num="54" count="0" type="stmt"/>
         <line num="55" count="0" type="stmt"/>
+        <line num="59" count="9" type="stmt"/>
+        <line num="60" count="3" type="stmt"/>
+        <line num="61" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="62" count="1" type="stmt"/>
+        <line num="65" count="2" type="stmt"/>
+        <line num="66" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="67" count="1" type="stmt"/>
+        <line num="70" count="1" type="stmt"/>
+        <line num="71" count="1" type="stmt"/>
+        <line num="72" count="1" type="stmt"/>
         <line num="59" count="1" type="stmt"/>
         <line num="60" count="0" type="stmt"/>
         <line num="61" count="0" type="cond" truecount="0" falsecount="2"/>
@@ -192,6 +317,16 @@
         <line num="74" count="0" type="stmt"/>
         <line num="75" count="0" type="stmt"/>
       </file>
+      <file name="divisionController.js" path="C:\Users\Nugraha Adhitama\Documents\api-ufo-veteran-jakarta\src\controllers\divisionController.js">
+        <metrics statements="54" coveredstatements="44" conditionals="8" coveredconditionals="8" methods="5" coveredmethods="5"/>
+        <line num="7" count="9" type="stmt"/>
+        <line num="8" count="9" type="stmt"/>
+        <line num="9" count="9" type="stmt"/>
+        <line num="11" count="9" type="stmt"/>
+        <line num="12" count="4" type="stmt"/>
+        <line num="13" count="4" type="stmt"/>
+        <line num="15" count="4" type="stmt"/>
+        <line num="16" count="4" type="stmt"/>
       <file name="divisionController.js" path="D:\opal\Projek code\api-ufo-veteran-jakarta\src\controllers\divisionController.js">
         <metrics statements="54" coveredstatements="8" conditionals="8" coveredconditionals="0" methods="5" coveredmethods="0"/>
         <line num="7" count="1" type="stmt"/>
@@ -204,6 +339,13 @@
         <line num="16" count="0" type="stmt"/>
         <line num="18" count="0" type="stmt"/>
         <line num="19" count="0" type="stmt"/>
+        <line num="23" count="9" type="stmt"/>
+        <line num="24" count="3" type="stmt"/>
+        <line num="25" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="26" count="2" type="stmt"/>
+        <line num="29" count="1" type="stmt"/>
+        <line num="30" count="1" type="stmt"/>
+        <line num="31" count="1" type="stmt"/>
         <line num="23" count="1" type="stmt"/>
         <line num="24" count="0" type="stmt"/>
         <line num="25" count="0" type="cond" truecount="0" falsecount="2"/>
@@ -213,6 +355,15 @@
         <line num="31" count="0" type="stmt"/>
         <line num="33" count="0" type="stmt"/>
         <line num="34" count="0" type="stmt"/>
+        <line num="38" count="9" type="stmt"/>
+        <line num="39" count="2" type="stmt"/>
+        <line num="40" count="2" type="stmt"/>
+        <line num="41" count="2" type="stmt"/>
+        <line num="43" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="44" count="1" type="stmt"/>
+        <line num="45" count="1" type="stmt"/>
+        <line num="48" count="1" type="stmt"/>
+        <line num="49" count="1" type="stmt"/>
         <line num="38" count="1" type="stmt"/>
         <line num="39" count="0" type="stmt"/>
         <line num="40" count="0" type="stmt"/>
@@ -224,6 +375,16 @@
         <line num="49" count="0" type="stmt"/>
         <line num="51" count="0" type="stmt"/>
         <line num="52" count="0" type="stmt"/>
+        <line num="56" count="9" type="stmt"/>
+        <line num="57" count="2" type="stmt"/>
+        <line num="58" count="2" type="stmt"/>
+        <line num="59" count="2" type="stmt"/>
+        <line num="61" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="62" count="1" type="stmt"/>
+        <line num="63" count="1" type="stmt"/>
+        <line num="66" count="1" type="stmt"/>
+        <line num="68" count="1" type="stmt"/>
+        <line num="69" count="1" type="stmt"/>
         <line num="56" count="1" type="stmt"/>
         <line num="57" count="0" type="stmt"/>
         <line num="58" count="0" type="stmt"/>
@@ -236,6 +397,16 @@
         <line num="69" count="0" type="stmt"/>
         <line num="76" count="0" type="stmt"/>
         <line num="77" count="0" type="stmt"/>
+        <line num="81" count="9" type="stmt"/>
+        <line num="82" count="3" type="stmt"/>
+        <line num="83" count="3" type="stmt"/>
+        <line num="85" count="3" type="stmt"/>
+        <line num="87" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="88" count="1" type="stmt"/>
+        <line num="89" count="1" type="stmt"/>
+        <line num="92" count="2" type="stmt"/>
+        <line num="94" count="2" type="stmt"/>
+        <line num="95" count="2" type="stmt"/>
         <line num="81" count="1" type="stmt"/>
         <line num="82" count="0" type="stmt"/>
         <line num="83" count="0" type="stmt"/>
@@ -249,6 +420,23 @@
         <line num="102" count="0" type="stmt"/>
         <line num="103" count="0" type="stmt"/>
       </file>
+      <file name="eventController.js" path="C:\Users\Nugraha Adhitama\Documents\api-ufo-veteran-jakarta\src\controllers\eventController.js">
+        <metrics statements="65" coveredstatements="49" conditionals="14" coveredconditionals="9" methods="5" coveredmethods="5"/>
+        <line num="1" count="9" type="stmt"/>
+        <line num="2" count="9" type="stmt"/>
+        <line num="9" count="9" type="stmt"/>
+        <line num="10" count="9" type="stmt"/>
+        <line num="11" count="9" type="stmt"/>
+        <line num="13" count="9" type="stmt"/>
+        <line num="14" count="3" type="stmt"/>
+        <line num="15" count="3" type="stmt"/>
+        <line num="17" count="3" type="stmt"/>
+        <line num="18" count="3" type="stmt"/>
+        <line num="23" count="3" type="stmt"/>
+        <line num="24" count="3" type="stmt"/>
+        <line num="26" count="3" type="stmt"/>
+        <line num="27" count="3" type="stmt"/>
+        <line num="28" count="3" type="stmt"/>
       <file name="eventController.js" path="D:\opal\Projek code\api-ufo-veteran-jakarta\src\controllers\eventController.js">
         <metrics statements="65" coveredstatements="10" conditionals="14" coveredconditionals="0" methods="5" coveredmethods="0"/>
         <line num="1" count="1" type="stmt"/>
@@ -268,6 +456,11 @@
         <line num="28" count="0" type="stmt"/>
         <line num="30" count="0" type="stmt"/>
         <line num="31" count="0" type="stmt"/>
+        <line num="35" count="9" type="stmt"/>
+        <line num="36" count="1" type="stmt"/>
+        <line num="37" count="1" type="stmt"/>
+        <line num="38" count="1" type="stmt"/>
+        <line num="39" count="1" type="stmt"/>
         <line num="35" count="1" type="stmt"/>
         <line num="36" count="0" type="stmt"/>
         <line num="37" count="0" type="stmt"/>
@@ -275,6 +468,15 @@
         <line num="39" count="0" type="stmt"/>
         <line num="41" count="0" type="stmt"/>
         <line num="42" count="0" type="stmt"/>
+        <line num="46" count="9" type="stmt"/>
+        <line num="47" count="2" type="stmt"/>
+        <line num="48" count="2" type="stmt"/>
+        <line num="49" count="2" type="stmt"/>
+        <line num="51" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="52" count="1" type="stmt"/>
+        <line num="53" count="1" type="stmt"/>
+        <line num="56" count="1" type="stmt"/>
+        <line num="57" count="1" type="stmt"/>
         <line num="46" count="1" type="stmt"/>
         <line num="47" count="0" type="stmt"/>
         <line num="48" count="0" type="stmt"/>
@@ -286,6 +488,9 @@
         <line num="57" count="0" type="stmt"/>
         <line num="59" count="0" type="stmt"/>
         <line num="60" count="0" type="stmt"/>
+        <line num="64" count="9" type="stmt"/>
+        <line num="65" count="1" type="stmt"/>
+        <line num="67" count="1" type="cond" truecount="1" falsecount="1"/>
         <line num="64" count="1" type="stmt"/>
         <line num="65" count="0" type="stmt"/>
         <line num="67" count="0" type="cond" truecount="0" falsecount="2"/>
@@ -308,6 +513,13 @@
         <line num="99" count="0" type="stmt"/>
         <line num="101" count="0" type="stmt"/>
         <line num="102" count="0" type="stmt"/>
+        <line num="106" count="9" type="stmt"/>
+        <line num="107" count="2" type="stmt"/>
+        <line num="108" count="2" type="stmt"/>
+        <line num="109" count="2" type="stmt"/>
+        <line num="111" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="112" count="1" type="stmt"/>
+        <line num="118" count="1" type="stmt"/>
         <line num="106" count="1" type="stmt"/>
         <line num="107" count="0" type="stmt"/>
         <line num="108" count="0" type="stmt"/>
@@ -317,6 +529,19 @@
         <line num="118" count="0" type="stmt"/>
         <line num="123" count="0" type="stmt"/>
       </file>
+      <file name="latestActivityController.js" path="C:\Users\Nugraha Adhitama\Documents\api-ufo-veteran-jakarta\src\controllers\latestActivityController.js">
+        <metrics statements="60" coveredstatements="44" conditionals="10" coveredconditionals="7" methods="5" coveredmethods="5"/>
+        <line num="1" count="9" type="stmt"/>
+        <line num="2" count="9" type="stmt"/>
+        <line num="3" count="9" type="stmt"/>
+        <line num="10" count="9" type="stmt"/>
+        <line num="12" count="9" type="stmt"/>
+        <line num="13" count="5" type="stmt"/>
+        <line num="14" count="5" type="stmt"/>
+        <line num="19" count="5" type="stmt"/>
+        <line num="21" count="5" type="stmt"/>
+        <line num="22" count="5" type="stmt"/>
+        <line num="23" count="5" type="stmt"/>
       <file name="latestActivityController.js" path="D:\opal\Projek code\api-ufo-veteran-jakarta\src\controllers\latestActivityController.js">
         <metrics statements="60" coveredstatements="9" conditionals="10" coveredconditionals="0" methods="5" coveredmethods="0"/>
         <line num="1" count="1" type="stmt"/>
@@ -332,6 +557,13 @@
         <line num="23" count="0" type="stmt"/>
         <line num="30" count="0" type="stmt"/>
         <line num="31" count="0" type="stmt"/>
+        <line num="35" count="9" type="stmt"/>
+        <line num="36" count="8" type="stmt"/>
+        <line num="37" count="8" type="cond" truecount="2" falsecount="0"/>
+        <line num="38" count="4" type="stmt"/>
+        <line num="41" count="4" type="stmt"/>
+        <line num="42" count="4" type="stmt"/>
+        <line num="43" count="4" type="stmt"/>
         <line num="35" count="1" type="stmt"/>
         <line num="36" count="0" type="stmt"/>
         <line num="37" count="0" type="cond" truecount="0" falsecount="2"/>
@@ -341,6 +573,15 @@
         <line num="43" count="0" type="stmt"/>
         <line num="50" count="0" type="stmt"/>
         <line num="51" count="0" type="stmt"/>
+        <line num="55" count="9" type="stmt"/>
+        <line num="56" count="4" type="stmt"/>
+        <line num="57" count="4" type="stmt"/>
+        <line num="58" count="4" type="stmt"/>
+        <line num="60" count="4" type="cond" truecount="2" falsecount="0"/>
+        <line num="61" count="3" type="stmt"/>
+        <line num="62" count="3" type="stmt"/>
+        <line num="65" count="1" type="stmt"/>
+        <line num="66" count="1" type="stmt"/>
         <line num="55" count="1" type="stmt"/>
         <line num="56" count="0" type="stmt"/>
         <line num="57" count="0" type="stmt"/>
@@ -352,6 +593,11 @@
         <line num="66" count="0" type="stmt"/>
         <line num="73" count="0" type="stmt"/>
         <line num="74" count="0" type="stmt"/>
+        <line num="78" count="9" type="stmt"/>
+        <line num="79" count="1" type="stmt"/>
+        <line num="80" count="1" type="stmt"/>
+        <line num="81" count="1" type="stmt"/>
+        <line num="83" count="1" type="cond" truecount="1" falsecount="1"/>
         <line num="78" count="1" type="stmt"/>
         <line num="79" count="0" type="stmt"/>
         <line num="80" count="0" type="stmt"/>
@@ -359,14 +605,19 @@
         <line num="83" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="84" count="0" type="stmt"/>
         <line num="85" count="0" type="stmt"/>
-        <line num="88" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="88" count="1" type="cond" truecount="1" falsecount="1"/>
         <line num="89" count="0" type="stmt"/>
         <line num="90" count="0" type="stmt"/>
-        <line num="93" count="0" type="stmt"/>
-        <line num="95" count="0" type="stmt"/>
-        <line num="96" count="0" type="stmt"/>
+        <line num="93" count="1" type="stmt"/>
+        <line num="95" count="1" type="stmt"/>
+        <line num="96" count="1" type="stmt"/>
         <line num="103" count="0" type="stmt"/>
         <line num="104" count="0" type="stmt"/>
+        <line num="108" count="9" type="stmt"/>
+        <line num="109" count="1" type="stmt"/>
+        <line num="110" count="1" type="stmt"/>
+        <line num="112" count="1" type="stmt"/>
+        <line num="114" count="1" type="cond" truecount="1" falsecount="1"/>
         <line num="108" count="1" type="stmt"/>
         <line num="109" count="0" type="stmt"/>
         <line num="110" count="0" type="stmt"/>
@@ -374,12 +625,25 @@
         <line num="114" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="115" count="0" type="stmt"/>
         <line num="116" count="0" type="stmt"/>
-        <line num="119" count="0" type="stmt"/>
-        <line num="121" count="0" type="stmt"/>
-        <line num="122" count="0" type="stmt"/>
+        <line num="119" count="1" type="stmt"/>
+        <line num="121" count="1" type="stmt"/>
+        <line num="122" count="1" type="stmt"/>
         <line num="129" count="0" type="stmt"/>
         <line num="130" count="0" type="stmt"/>
       </file>
+      <file name="partnerController.js" path="C:\Users\Nugraha Adhitama\Documents\api-ufo-veteran-jakarta\src\controllers\partnerController.js">
+        <metrics statements="59" coveredstatements="45" conditionals="10" coveredconditionals="8" methods="5" coveredmethods="5"/>
+        <line num="1" count="9" type="stmt"/>
+        <line num="2" count="9" type="stmt"/>
+        <line num="8" count="9" type="stmt"/>
+        <line num="9" count="9" type="stmt"/>
+        <line num="11" count="9" type="stmt"/>
+        <line num="12" count="7" type="stmt"/>
+        <line num="13" count="7" type="stmt"/>
+        <line num="15" count="7" type="stmt"/>
+        <line num="17" count="7" type="stmt"/>
+        <line num="18" count="7" type="stmt"/>
+        <line num="19" count="7" type="stmt"/>
       <file name="partnerController.js" path="D:\opal\Projek code\api-ufo-veteran-jakarta\src\controllers\partnerController.js">
         <metrics statements="59" coveredstatements="9" conditionals="10" coveredconditionals="0" methods="5" coveredmethods="0"/>
         <line num="1" count="1" type="stmt"/>
@@ -395,6 +659,13 @@
         <line num="19" count="0" type="stmt"/>
         <line num="21" count="0" type="stmt"/>
         <line num="22" count="0" type="stmt"/>
+        <line num="26" count="9" type="stmt"/>
+        <line num="27" count="2" type="stmt"/>
+        <line num="28" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="29" count="1" type="stmt"/>
+        <line num="32" count="1" type="stmt"/>
+        <line num="33" count="1" type="stmt"/>
+        <line num="34" count="1" type="stmt"/>
         <line num="26" count="1" type="stmt"/>
         <line num="27" count="0" type="stmt"/>
         <line num="28" count="0" type="cond" truecount="0" falsecount="2"/>
@@ -404,6 +675,11 @@
         <line num="34" count="0" type="stmt"/>
         <line num="36" count="0" type="stmt"/>
         <line num="37" count="0" type="stmt"/>
+        <line num="41" count="9" type="stmt"/>
+        <line num="42" count="1" type="stmt"/>
+        <line num="43" count="1" type="stmt"/>
+        <line num="44" count="1" type="stmt"/>
+        <line num="46" count="1" type="cond" truecount="1" falsecount="1"/>
         <line num="41" count="1" type="stmt"/>
         <line num="42" count="0" type="stmt"/>
         <line num="43" count="0" type="stmt"/>
@@ -415,6 +691,14 @@
         <line num="52" count="0" type="stmt"/>
         <line num="54" count="0" type="stmt"/>
         <line num="55" count="0" type="stmt"/>
+        <line num="59" count="9" type="stmt"/>
+        <line num="60" count="2" type="stmt"/>
+        <line num="61" count="2" type="stmt"/>
+        <line num="63" count="2" type="stmt"/>
+        <line num="65" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="66" count="1" type="stmt"/>
+        <line num="67" count="1" type="stmt"/>
+        <line num="70" count="1" type="cond" truecount="1" falsecount="1"/>
         <line num="59" count="1" type="stmt"/>
         <line num="60" count="0" type="stmt"/>
         <line num="61" count="0" type="stmt"/>
@@ -430,6 +714,15 @@
         <line num="78" count="0" type="stmt"/>
         <line num="85" count="0" type="stmt"/>
         <line num="86" count="0" type="stmt"/>
+        <line num="90" count="9" type="stmt"/>
+        <line num="91" count="2" type="stmt"/>
+        <line num="92" count="2" type="stmt"/>
+        <line num="94" count="2" type="stmt"/>
+        <line num="96" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="97" count="1" type="stmt"/>
+        <line num="98" count="1" type="stmt"/>
+        <line num="101" count="1" type="stmt"/>
+        <line num="102" count="1" type="stmt"/>
         <line num="90" count="1" type="stmt"/>
         <line num="91" count="0" type="stmt"/>
         <line num="92" count="0" type="stmt"/>
@@ -442,6 +735,19 @@
         <line num="104" count="0" type="stmt"/>
         <line num="105" count="0" type="stmt"/>
       </file>
+      <file name="workProgramController.js" path="C:\Users\Nugraha Adhitama\Documents\api-ufo-veteran-jakarta\src\controllers\workProgramController.js">
+        <metrics statements="60" coveredstatements="44" conditionals="10" coveredconditionals="7" methods="5" coveredmethods="5"/>
+        <line num="7" count="9" type="stmt"/>
+        <line num="8" count="9" type="stmt"/>
+        <line num="9" count="9" type="stmt"/>
+        <line num="10" count="9" type="stmt"/>
+        <line num="12" count="9" type="stmt"/>
+        <line num="13" count="4" type="stmt"/>
+        <line num="14" count="4" type="stmt"/>
+        <line num="15" count="4" type="stmt"/>
+        <line num="17" count="4" type="stmt"/>
+        <line num="18" count="4" type="stmt"/>
+        <line num="19" count="4" type="stmt"/>
       <file name="workProgramController.js" path="D:\opal\Projek code\api-ufo-veteran-jakarta\src\controllers\workProgramController.js">
         <metrics statements="60" coveredstatements="9" conditionals="10" coveredconditionals="0" methods="5" coveredmethods="0"/>
         <line num="7" count="1" type="stmt"/>
@@ -457,6 +763,13 @@
         <line num="19" count="0" type="stmt"/>
         <line num="21" count="0" type="stmt"/>
         <line num="22" count="0" type="stmt"/>
+        <line num="26" count="9" type="stmt"/>
+        <line num="27" count="8" type="stmt"/>
+        <line num="28" count="8" type="cond" truecount="2" falsecount="0"/>
+        <line num="29" count="4" type="stmt"/>
+        <line num="32" count="4" type="stmt"/>
+        <line num="33" count="4" type="stmt"/>
+        <line num="34" count="4" type="stmt"/>
         <line num="26" count="1" type="stmt"/>
         <line num="27" count="0" type="stmt"/>
         <line num="28" count="0" type="cond" truecount="0" falsecount="2"/>
@@ -466,6 +779,15 @@
         <line num="34" count="0" type="stmt"/>
         <line num="41" count="0" type="stmt"/>
         <line num="42" count="0" type="stmt"/>
+        <line num="46" count="9" type="stmt"/>
+        <line num="47" count="4" type="stmt"/>
+        <line num="48" count="4" type="stmt"/>
+        <line num="49" count="4" type="stmt"/>
+        <line num="51" count="4" type="cond" truecount="2" falsecount="0"/>
+        <line num="52" count="3" type="stmt"/>
+        <line num="53" count="3" type="stmt"/>
+        <line num="56" count="1" type="stmt"/>
+        <line num="57" count="1" type="stmt"/>
         <line num="46" count="1" type="stmt"/>
         <line num="47" count="0" type="stmt"/>
         <line num="48" count="0" type="stmt"/>
@@ -477,6 +799,11 @@
         <line num="57" count="0" type="stmt"/>
         <line num="59" count="0" type="stmt"/>
         <line num="60" count="0" type="stmt"/>
+        <line num="64" count="9" type="stmt"/>
+        <line num="65" count="1" type="stmt"/>
+        <line num="66" count="1" type="stmt"/>
+        <line num="67" count="1" type="stmt"/>
+        <line num="69" count="1" type="cond" truecount="1" falsecount="1"/>
         <line num="64" count="1" type="stmt"/>
         <line num="65" count="0" type="stmt"/>
         <line num="66" count="0" type="stmt"/>
@@ -492,6 +819,11 @@
         <line num="82" count="0" type="stmt"/>
         <line num="89" count="0" type="stmt"/>
         <line num="90" count="0" type="stmt"/>
+        <line num="94" count="9" type="stmt"/>
+        <line num="95" count="1" type="stmt"/>
+        <line num="96" count="1" type="stmt"/>
+        <line num="98" count="1" type="stmt"/>
+        <line num="100" count="1" type="cond" truecount="1" falsecount="1"/>
         <line num="94" count="1" type="stmt"/>
         <line num="95" count="0" type="stmt"/>
         <line num="96" count="0" type="stmt"/>
@@ -507,14 +839,25 @@
       </file>
     </package>
     <package name="src.helpers">
+      <metrics statements="15" coveredstatements="15" conditionals="6" coveredconditionals="6" methods="3" coveredmethods="3"/>
+      <file name="bcrypt.js" path="C:\Users\Nugraha Adhitama\Documents\api-ufo-veteran-jakarta\src\helpers\bcrypt.js">
       <metrics statements="15" coveredstatements="12" conditionals="6" coveredconditionals="6" methods="3" coveredmethods="2"/>
       <file name="bcrypt.js" path="D:\opal\Projek code\api-ufo-veteran-jakarta\src\helpers\bcrypt.js">
         <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <line num="1" count="9" type="stmt"/>
+        <line num="3" count="76" type="stmt"/>
         <line num="1" count="1" type="stmt"/>
         <line num="3" count="14" type="stmt"/>
       </file>
-      <file name="response.js" path="D:\opal\Projek code\api-ufo-veteran-jakarta\src\helpers\response.js">
+      <file name="response.js" path="C:\Users\Nugraha Adhitama\Documents\api-ufo-veteran-jakarta\src\helpers\response.js">
         <metrics statements="7" coveredstatements="7" conditionals="6" coveredconditionals="6" methods="1" coveredmethods="1"/>
+        <line num="1" count="9" type="stmt"/>
+        <line num="8" count="304" type="stmt"/>
+        <line num="12" count="304" type="cond" truecount="2" falsecount="0"/>
+        <line num="13" count="153" type="stmt"/>
+        <line num="15" count="304" type="cond" truecount="2" falsecount="0"/>
+        <line num="16" count="86" type="stmt"/>
+        <line num="18" count="304" type="stmt"/>
         <line num="1" count="1" type="stmt"/>
         <line num="8" count="45" type="stmt"/>
         <line num="12" count="45" type="cond" truecount="2" falsecount="0"/>
@@ -523,6 +866,14 @@
         <line num="16" count="14" type="stmt"/>
         <line num="18" count="45" type="stmt"/>
       </file>
+      <file name="slug.js" path="C:\Users\Nugraha Adhitama\Documents\api-ufo-veteran-jakarta\src\helpers\slug.js">
+        <metrics statements="6" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <line num="1" count="9" type="stmt"/>
+        <line num="2" count="9" type="stmt"/>
+        <line num="4" count="9" type="stmt"/>
+        <line num="5" count="4" type="stmt"/>
+        <line num="6" count="4" type="stmt"/>
+        <line num="7" count="4" type="stmt"/>
       <file name="slug.js" path="D:\opal\Projek code\api-ufo-veteran-jakarta\src\helpers\slug.js">
         <metrics statements="6" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="1" count="1" type="stmt"/>
@@ -534,9 +885,14 @@
       </file>
     </package>
     <package name="src.middlewares">
+      <metrics statements="152" coveredstatements="134" conditionals="105" coveredconditionals="79" methods="29" coveredmethods="29"/>
+      <file name="achievementMiddlewareFile.js" path="C:\Users\Nugraha Adhitama\Documents\api-ufo-veteran-jakarta\src\middlewares\achievementMiddlewareFile.js">
       <metrics statements="152" coveredstatements="63" conditionals="105" coveredconditionals="22" methods="29" coveredmethods="19"/>
       <file name="achievementMiddlewareFile.js" path="D:\opal\Projek code\api-ufo-veteran-jakarta\src\middlewares\achievementMiddlewareFile.js">
         <metrics statements="29" coveredstatements="28" conditionals="19" coveredconditionals="17" methods="7" coveredmethods="7"/>
+        <line num="1" count="9" type="stmt"/>
+        <line num="2" count="9" type="stmt"/>
+        <line num="4" count="9" type="stmt"/>
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="stmt"/>
         <line num="4" count="1" type="stmt"/>
@@ -544,6 +900,7 @@
         <line num="6" count="1" type="stmt"/>
         <line num="7" count="1" type="stmt"/>
         <line num="9" count="11" type="stmt"/>
+        <line num="12" count="9" type="stmt"/>
         <line num="12" count="1" type="stmt"/>
         <line num="13" count="12" type="stmt"/>
         <line num="14" count="12" type="stmt"/>
@@ -551,15 +908,18 @@
         <line num="17" count="1" type="stmt"/>
         <line num="18" count="1" type="stmt"/>
         <line num="20" count="11" type="stmt"/>
+        <line num="23" count="9" type="stmt"/>
         <line num="23" count="1" type="stmt"/>
         <line num="24" count="11" type="cond" truecount="2" falsecount="0"/>
         <line num="26" count="1" type="stmt"/>
         <line num="31" count="1" type="stmt"/>
         <line num="33" count="10" type="stmt"/>
+        <line num="36" count="9" type="stmt"/>
         <line num="36" count="1" type="stmt"/>
         <line num="37" count="12" type="stmt"/>
         <line num="39" count="12" type="cond" truecount="2" falsecount="0"/>
         <line num="44" count="9" type="stmt"/>
+        <line num="48" count="9" type="stmt"/>
         <line num="48" count="1" type="stmt"/>
         <line num="49" count="1" type="stmt"/>
         <line num="51" count="1" type="cond" truecount="1" falsecount="1"/>
@@ -567,6 +927,22 @@
         <line num="53" count="1" type="stmt"/>
         <line num="56" count="0" type="stmt"/>
       </file>
+      <file name="authMiddleware.js" path="C:\Users\Nugraha Adhitama\Documents\api-ufo-veteran-jakarta\src\middlewares\authMiddleware.js">
+        <metrics statements="16" coveredstatements="15" conditionals="6" coveredconditionals="6" methods="4" coveredmethods="4"/>
+        <line num="1" count="9" type="stmt"/>
+        <line num="2" count="9" type="stmt"/>
+        <line num="4" count="27" type="stmt"/>
+        <line num="5" count="184" type="cond" truecount="2" falsecount="0"/>
+        <line num="6" count="2" type="stmt"/>
+        <line num="8" count="182" type="stmt"/>
+        <line num="13" count="198" type="stmt"/>
+        <line num="14" count="119" type="stmt"/>
+        <line num="15" count="119" type="stmt"/>
+        <line num="16" count="119" type="stmt"/>
+        <line num="18" count="119" type="cond" truecount="4" falsecount="0"/>
+        <line num="19" count="14" type="stmt"/>
+        <line num="22" count="105" type="stmt"/>
+        <line num="23" count="105" type="stmt"/>
       <file name="authMiddleware.js" path="D:\opal\Projek code\api-ufo-veteran-jakarta\src\middlewares\authMiddleware.js">
         <metrics statements="16" coveredstatements="14" conditionals="6" coveredconditionals="5" methods="4" coveredmethods="4"/>
         <line num="1" count="1" type="stmt"/>
@@ -584,8 +960,23 @@
         <line num="22" count="16" type="stmt"/>
         <line num="23" count="16" type="stmt"/>
         <line num="25" count="0" type="stmt"/>
+        <line num="28" count="105" type="stmt"/>
         <line num="28" count="16" type="stmt"/>
       </file>
+      <file name="eventMiddlewareFile.js" path="C:\Users\Nugraha Adhitama\Documents\api-ufo-veteran-jakarta\src\middlewares\eventMiddlewareFile.js">
+        <metrics statements="34" coveredstatements="22" conditionals="36" coveredconditionals="18" methods="4" coveredmethods="4"/>
+        <line num="1" count="9" type="stmt"/>
+        <line num="2" count="9" type="stmt"/>
+        <line num="3" count="9" type="stmt"/>
+        <line num="5" count="18" type="stmt"/>
+        <line num="6" count="13" type="stmt"/>
+        <line num="8" count="13" type="cond" truecount="2" falsecount="0"/>
+        <line num="9" count="1" type="stmt"/>
+        <line num="12" count="12" type="stmt"/>
+        <line num="13" count="12" type="stmt"/>
+        <line num="15" count="12" type="cond" truecount="4" falsecount="0"/>
+        <line num="16" count="1" type="stmt"/>
+        <line num="23" count="11" type="cond" truecount="1" falsecount="1"/>
       <file name="eventMiddlewareFile.js" path="D:\opal\Projek code\api-ufo-veteran-jakarta\src\middlewares\eventMiddlewareFile.js">
         <metrics statements="34" coveredstatements="5" conditionals="36" coveredconditionals="0" methods="4" coveredmethods="2"/>
         <line num="1" count="1" type="stmt"/>
@@ -601,6 +992,15 @@
         <line num="16" count="0" type="stmt"/>
         <line num="23" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="25" count="0" type="stmt"/>
+        <line num="32" count="11" type="stmt"/>
+        <line num="33" count="11" type="cond" truecount="2" falsecount="0"/>
+        <line num="37" count="1" type="stmt"/>
+        <line num="40" count="10" type="cond" truecount="2" falsecount="0"/>
+        <line num="44" count="1" type="stmt"/>
+        <line num="51" count="9" type="stmt"/>
+        <line num="54" count="18" type="stmt"/>
+        <line num="55" count="2" type="stmt"/>
+        <line num="57" count="2" type="cond" truecount="1" falsecount="1"/>
         <line num="32" count="0" type="stmt"/>
         <line num="33" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="37" count="0" type="stmt"/>
@@ -623,6 +1023,29 @@
         <line num="90" count="0" type="stmt"/>
         <line num="98" count="0" type="stmt"/>
       </file>
+      <file name="latestActivityMiddlewareFile.js" path="C:\Users\Nugraha Adhitama\Documents\api-ufo-veteran-jakarta\src\middlewares\latestActivityMiddlewareFile.js">
+        <metrics statements="23" coveredstatements="22" conditionals="14" coveredconditionals="13" methods="5" coveredmethods="5"/>
+        <line num="1" count="9" type="stmt"/>
+        <line num="2" count="9" type="stmt"/>
+        <line num="5" count="10" type="stmt"/>
+        <line num="6" count="10" type="stmt"/>
+        <line num="8" count="10" type="cond" truecount="4" falsecount="0"/>
+        <line num="9" count="1" type="stmt"/>
+        <line num="10" count="1" type="stmt"/>
+        <line num="13" count="9" type="cond" truecount="2" falsecount="0"/>
+        <line num="15" count="1" type="stmt"/>
+        <line num="20" count="1" type="stmt"/>
+        <line num="23" count="8" type="stmt"/>
+        <line num="26" count="9" type="stmt"/>
+        <line num="27" count="10" type="stmt"/>
+        <line num="29" count="10" type="cond" truecount="2" falsecount="0"/>
+        <line num="30" count="1" type="stmt"/>
+        <line num="33" count="9" type="cond" truecount="2" falsecount="0"/>
+        <line num="34" count="2" type="stmt"/>
+        <line num="37" count="7" type="stmt"/>
+        <line num="40" count="9" type="stmt"/>
+        <line num="41" count="1" type="stmt"/>
+        <line num="43" count="1" type="cond" truecount="3" falsecount="1"/>
       <file name="latestActivityMiddlewareFile.js" path="D:\opal\Projek code\api-ufo-veteran-jakarta\src\middlewares\latestActivityMiddlewareFile.js">
         <metrics statements="23" coveredstatements="4" conditionals="14" coveredconditionals="0" methods="5" coveredmethods="2"/>
         <line num="1" count="1" type="stmt"/>
@@ -647,8 +1070,32 @@
         <line num="41" count="0" type="stmt"/>
         <line num="43" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="44" count="0" type="stmt"/>
-        <line num="47" count="0" type="stmt"/>
+        <line num="47" count="1" type="stmt"/>
       </file>
+      <file name="partnerMiddlewareFile.js" path="C:\Users\Nugraha Adhitama\Documents\api-ufo-veteran-jakarta\src\middlewares\partnerMiddlewareFile.js">
+        <metrics statements="25" coveredstatements="23" conditionals="16" coveredconditionals="12" methods="4" coveredmethods="4"/>
+        <line num="1" count="9" type="stmt"/>
+        <line num="2" count="9" type="stmt"/>
+        <line num="4" count="9" type="stmt"/>
+        <line num="5" count="9" type="stmt"/>
+        <line num="6" count="16" type="stmt"/>
+        <line num="8" count="16" type="cond" truecount="2" falsecount="0"/>
+        <line num="9" count="3" type="stmt"/>
+        <line num="12" count="13" type="stmt"/>
+        <line num="13" count="13" type="stmt"/>
+        <line num="15" count="13" type="cond" truecount="4" falsecount="0"/>
+        <line num="16" count="3" type="stmt"/>
+        <line num="19" count="10" type="cond" truecount="2" falsecount="0"/>
+        <line num="21" count="1" type="stmt"/>
+        <line num="28" count="9" type="stmt"/>
+        <line num="32" count="9" type="stmt"/>
+        <line num="33" count="9" type="stmt"/>
+        <line num="34" count="3" type="stmt"/>
+        <line num="36" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="37" count="1" type="stmt"/>
+        <line num="38" count="1" type="stmt"/>
+        <line num="40" count="1" type="cond" truecount="2" falsecount="2"/>
+        <line num="41" count="1" type="stmt"/>
       <file name="partnerMiddlewareFile.js" path="D:\opal\Projek code\api-ufo-veteran-jakarta\src\middlewares\partnerMiddlewareFile.js">
         <metrics statements="25" coveredstatements="6" conditionals="16" coveredconditionals="0" methods="4" coveredmethods="2"/>
         <line num="1" count="1" type="stmt"/>
@@ -677,6 +1124,31 @@
         <line num="46" count="0" type="stmt"/>
         <line num="54" count="0" type="stmt"/>
       </file>
+      <file name="workProgramMiddlewareFile.js" path="C:\Users\Nugraha Adhitama\Documents\api-ufo-veteran-jakarta\src\middlewares\workProgramMiddlewareFile.js">
+        <metrics statements="25" coveredstatements="24" conditionals="14" coveredconditionals="13" methods="5" coveredmethods="5"/>
+        <line num="1" count="9" type="stmt"/>
+        <line num="2" count="9" type="stmt"/>
+        <line num="5" count="10" type="stmt"/>
+        <line num="6" count="10" type="stmt"/>
+        <line num="8" count="10" type="cond" truecount="4" falsecount="0"/>
+        <line num="9" count="1" type="stmt"/>
+        <line num="10" count="1" type="stmt"/>
+        <line num="13" count="9" type="cond" truecount="2" falsecount="0"/>
+        <line num="15" count="1" type="stmt"/>
+        <line num="20" count="1" type="stmt"/>
+        <line num="23" count="8" type="stmt"/>
+        <line num="26" count="9" type="stmt"/>
+        <line num="27" count="9" type="stmt"/>
+        <line num="28" count="11" type="stmt"/>
+        <line num="30" count="11" type="cond" truecount="2" falsecount="0"/>
+        <line num="31" count="2" type="stmt"/>
+        <line num="34" count="9" type="cond" truecount="2" falsecount="0"/>
+        <line num="35" count="2" type="stmt"/>
+        <line num="38" count="7" type="stmt"/>
+        <line num="42" count="9" type="stmt"/>
+        <line num="43" count="9" type="stmt"/>
+        <line num="44" count="1" type="stmt"/>
+        <line num="46" count="1" type="cond" truecount="3" falsecount="1"/>
       <file name="workProgramMiddlewareFile.js" path="D:\opal\Projek code\api-ufo-veteran-jakarta\src\middlewares\workProgramMiddlewareFile.js">
         <metrics statements="25" coveredstatements="6" conditionals="14" coveredconditionals="0" methods="5" coveredmethods="2"/>
         <line num="1" count="1" type="stmt"/>
@@ -708,13 +1180,34 @@
     </package>
     <package name="src.migration">
       <metrics statements="23" coveredstatements="21" conditionals="0" coveredconditionals="0" methods="4" coveredmethods="2"/>
-      <file name="users.js" path="D:\opal\Projek code\api-ufo-veteran-jakarta\src\migration\users.js">
+      <file name="users.js" path="C:\Users\Nugraha Adhitama\Documents\api-ufo-veteran-jakarta\src\migration\users.js">
         <metrics statements="23" coveredstatements="21" conditionals="0" coveredconditionals="0" methods="4" coveredmethods="2"/>
+        <line num="1" count="10" type="stmt"/>
+        <line num="3" count="10" type="stmt"/>
         <line num="1" count="1" type="stmt"/>
         <line num="3" count="1" type="stmt"/>
         <line num="4" count="0" type="stmt"/>
+        <line num="7" count="10" type="stmt"/>
         <line num="7" count="1" type="stmt"/>
         <line num="8" count="0" type="stmt"/>
+        <line num="11" count="10" type="stmt"/>
+        <line num="12" count="10" type="stmt"/>
+        <line num="22" count="10" type="stmt"/>
+        <line num="32" count="10" type="stmt"/>
+        <line num="57" count="10" type="stmt"/>
+        <line num="68" count="10" type="stmt"/>
+        <line num="80" count="10" type="stmt"/>
+        <line num="92" count="10" type="stmt"/>
+        <line num="105" count="10" type="stmt"/>
+        <line num="117" count="10" type="stmt"/>
+        <line num="118" count="10" type="stmt"/>
+        <line num="119" count="10" type="stmt"/>
+        <line num="120" count="10" type="stmt"/>
+        <line num="121" count="10" type="stmt"/>
+        <line num="122" count="10" type="stmt"/>
+        <line num="123" count="10" type="stmt"/>
+        <line num="124" count="10" type="stmt"/>
+        <line num="125" count="10" type="stmt"/>
         <line num="11" count="1" type="stmt"/>
         <line num="12" count="1" type="stmt"/>
         <line num="22" count="1" type="stmt"/>
@@ -736,6 +1229,11 @@
       </file>
     </package>
     <package name="src.models">
+      <metrics statements="344" coveredstatements="268" conditionals="18" coveredconditionals="14" methods="66" coveredmethods="59"/>
+      <file name="achievementsModel.js" path="C:\Users\Nugraha Adhitama\Documents\api-ufo-veteran-jakarta\src\models\achievementsModel.js">
+        <metrics statements="64" coveredstatements="51" conditionals="4" coveredconditionals="3" methods="11" coveredmethods="10"/>
+        <line num="1" count="9" type="stmt"/>
+        <line num="3" count="9" type="stmt"/>
       <metrics statements="344" coveredstatements="90" conditionals="18" coveredconditionals="4" methods="66" coveredmethods="13"/>
       <file name="achievementsModel.js" path="D:\opal\Projek code\api-ufo-veteran-jakarta\src\models\achievementsModel.js">
         <metrics statements="64" coveredstatements="51" conditionals="4" coveredconditionals="4" methods="11" coveredmethods="10"/>
@@ -750,6 +1248,7 @@
         <line num="10" count="15" type="stmt"/>
         <line num="12" count="5" type="stmt"/>
         <line num="17" count="5" type="stmt"/>
+        <line num="20" count="9" type="stmt"/>
         <line num="20" count="1" type="stmt"/>
         <line num="21" count="1" type="stmt"/>
         <line num="22" count="1" type="stmt"/>
@@ -760,8 +1259,10 @@
         <line num="27" count="3" type="stmt"/>
         <line num="29" count="1" type="stmt"/>
         <line num="35" count="1" type="stmt"/>
+        <line num="38" count="9" type="stmt"/>
         <line num="38" count="1" type="stmt"/>
         <line num="39" count="0" type="stmt"/>
+        <line num="42" count="9" type="stmt"/>
         <line num="42" count="1" type="stmt"/>
         <line num="43" count="5" type="stmt"/>
         <line num="44" count="5" type="stmt"/>
@@ -769,6 +1270,7 @@
         <line num="46" count="5" type="stmt"/>
         <line num="48" count="0" type="stmt"/>
         <line num="49" count="0" type="stmt"/>
+        <line num="53" count="9" type="stmt"/>
         <line num="53" count="1" type="stmt"/>
         <line num="54" count="2" type="stmt"/>
         <line num="55" count="2" type="stmt"/>
@@ -776,12 +1278,17 @@
         <line num="57" count="2" type="cond" truecount="2" falsecount="0"/>
         <line num="59" count="0" type="stmt"/>
         <line num="60" count="0" type="stmt"/>
+        <line num="64" count="9" type="stmt"/>
+        <line num="65" count="3" type="stmt"/>
+        <line num="66" count="3" type="stmt"/>
+        <line num="71" count="3" type="cond" truecount="1" falsecount="1"/>
         <line num="64" count="1" type="stmt"/>
         <line num="65" count="6" type="stmt"/>
         <line num="66" count="6" type="stmt"/>
         <line num="71" count="6" type="cond" truecount="2" falsecount="0"/>
         <line num="73" count="0" type="stmt"/>
         <line num="74" count="0" type="stmt"/>
+        <line num="78" count="9" type="stmt"/>
         <line num="78" count="1" type="stmt"/>
         <line num="79" count="1" type="stmt"/>
         <line num="84" count="1" type="stmt"/>
@@ -789,6 +1296,7 @@
         <line num="86" count="1" type="stmt"/>
         <line num="88" count="0" type="stmt"/>
         <line num="89" count="0" type="stmt"/>
+        <line num="93" count="9" type="stmt"/>
         <line num="93" count="1" type="stmt"/>
         <line num="94" count="1" type="stmt"/>
         <line num="95" count="1" type="stmt"/>
@@ -796,6 +1304,7 @@
         <line num="97" count="1" type="stmt"/>
         <line num="99" count="0" type="stmt"/>
         <line num="100" count="0" type="stmt"/>
+        <line num="104" count="9" type="stmt"/>
         <line num="104" count="1" type="stmt"/>
         <line num="105" count="1" type="stmt"/>
         <line num="111" count="1" type="stmt"/>
@@ -804,6 +1313,21 @@
         <line num="115" count="0" type="stmt"/>
         <line num="116" count="0" type="stmt"/>
       </file>
+      <file name="contentModel.js" path="C:\Users\Nugraha Adhitama\Documents\api-ufo-veteran-jakarta\src\models\contentModel.js">
+        <metrics statements="24" coveredstatements="22" conditionals="0" coveredconditionals="0" methods="7" coveredmethods="6"/>
+        <line num="1" count="9" type="stmt"/>
+        <line num="3" count="9" type="stmt"/>
+        <line num="4" count="2" type="stmt"/>
+        <line num="7" count="2" type="stmt"/>
+        <line num="10" count="9" type="stmt"/>
+        <line num="11" count="5" type="stmt"/>
+        <line num="12" count="5" type="stmt"/>
+        <line num="16" count="3" type="stmt"/>
+        <line num="18" count="2" type="stmt"/>
+        <line num="22" count="9" type="stmt"/>
+        <line num="24" count="11" type="stmt"/>
+        <line num="27" count="11" type="stmt"/>
+        <line num="30" count="9" type="stmt"/>
       <file name="contentModel.js" path="D:\opal\Projek code\api-ufo-veteran-jakarta\src\models\contentModel.js">
         <metrics statements="24" coveredstatements="8" conditionals="0" coveredconditionals="0" methods="7" coveredmethods="0"/>
         <line num="1" count="1" type="stmt"/>
@@ -821,6 +1345,15 @@
         <line num="30" count="1" type="stmt"/>
         <line num="31" count="0" type="stmt"/>
         <line num="35" count="0" type="stmt"/>
+        <line num="38" count="9" type="stmt"/>
+        <line num="39" count="1" type="stmt"/>
+        <line num="44" count="1" type="stmt"/>
+        <line num="47" count="9" type="stmt"/>
+        <line num="48" count="16" type="stmt"/>
+        <line num="51" count="16" type="stmt"/>
+        <line num="54" count="9" type="stmt"/>
+        <line num="55" count="1" type="stmt"/>
+        <line num="60" count="1" type="stmt"/>
         <line num="38" count="1" type="stmt"/>
         <line num="39" count="0" type="stmt"/>
         <line num="44" count="0" type="stmt"/>
@@ -831,6 +1364,24 @@
         <line num="55" count="0" type="stmt"/>
         <line num="60" count="0" type="stmt"/>
       </file>
+      <file name="divisionModel.js" path="C:\Users\Nugraha Adhitama\Documents\api-ufo-veteran-jakarta\src\models\divisionModel.js">
+        <metrics statements="45" coveredstatements="35" conditionals="4" coveredconditionals="3" methods="10" coveredmethods="9"/>
+        <line num="1" count="9" type="stmt"/>
+        <line num="4" count="4" type="stmt"/>
+        <line num="5" count="4" type="stmt"/>
+        <line num="6" count="4" type="stmt"/>
+        <line num="8" count="4" type="stmt"/>
+        <line num="14" count="4" type="stmt"/>
+        <line num="18" count="1" type="stmt"/>
+        <line num="19" count="1" type="stmt"/>
+        <line num="20" count="1" type="stmt"/>
+        <line num="21" count="1" type="stmt"/>
+        <line num="24" count="1" type="stmt"/>
+        <line num="31" count="1" type="stmt"/>
+        <line num="35" count="4" type="stmt"/>
+        <line num="37" count="4" type="stmt"/>
+        <line num="38" count="4" type="stmt"/>
+        <line num="39" count="4" type="stmt"/>
       <file name="divisionModel.js" path="D:\opal\Projek code\api-ufo-veteran-jakarta\src\models\divisionModel.js">
         <metrics statements="45" coveredstatements="2" conditionals="4" coveredconditionals="0" methods="10" coveredmethods="0"/>
         <line num="1" count="1" type="stmt"/>
@@ -877,8 +1428,24 @@
         <line num="104" count="0" type="stmt"/>
         <line num="105" count="0" type="stmt"/>
         <line num="107" count="0" type="stmt"/>
+        <line num="111" count="9" type="stmt"/>
         <line num="111" count="1" type="stmt"/>
       </file>
+      <file name="eventModel.js" path="C:\Users\Nugraha Adhitama\Documents\api-ufo-veteran-jakarta\src\models\eventModel.js">
+        <metrics statements="49" coveredstatements="40" conditionals="0" coveredconditionals="0" methods="7" coveredmethods="7"/>
+        <line num="1" count="9" type="stmt"/>
+        <line num="3" count="9" type="stmt"/>
+        <line num="4" count="3" type="stmt"/>
+        <line num="5" count="3" type="stmt"/>
+        <line num="6" count="3" type="stmt"/>
+        <line num="8" count="3" type="stmt"/>
+        <line num="9" count="48" type="stmt"/>
+        <line num="10" count="48" type="stmt"/>
+        <line num="11" count="48" type="stmt"/>
+        <line num="14" count="3" type="stmt"/>
+        <line num="20" count="3" type="stmt"/>
+        <line num="21" count="3" type="stmt"/>
+        <line num="22" count="3" type="stmt"/>
       <file name="eventModel.js" path="D:\opal\Projek code\api-ufo-veteran-jakarta\src\models\eventModel.js">
         <metrics statements="49" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="7" coveredmethods="0"/>
         <line num="1" count="1" type="stmt"/>
@@ -895,6 +1462,11 @@
         <line num="21" count="0" type="stmt"/>
         <line num="22" count="0" type="stmt"/>
         <line num="24" count="0" type="stmt"/>
+        <line num="28" count="9" type="stmt"/>
+        <line num="29" count="1" type="stmt"/>
+        <line num="31" count="1" type="stmt"/>
+        <line num="32" count="1" type="stmt"/>
+        <line num="33" count="1" type="stmt"/>
         <line num="28" count="1" type="stmt"/>
         <line num="29" count="0" type="stmt"/>
         <line num="31" count="0" type="stmt"/>
@@ -902,6 +1474,11 @@
         <line num="33" count="0" type="stmt"/>
         <line num="35" count="0" type="stmt"/>
         <line num="36" count="0" type="stmt"/>
+        <line num="40" count="9" type="stmt"/>
+        <line num="41" count="3" type="stmt"/>
+        <line num="43" count="3" type="stmt"/>
+        <line num="44" count="3" type="stmt"/>
+        <line num="45" count="3" type="stmt"/>
         <line num="40" count="1" type="stmt"/>
         <line num="41" count="0" type="stmt"/>
         <line num="43" count="0" type="stmt"/>
@@ -909,6 +1486,18 @@
         <line num="45" count="0" type="stmt"/>
         <line num="47" count="0" type="stmt"/>
         <line num="48" count="0" type="stmt"/>
+        <line num="52" count="9" type="stmt"/>
+        <line num="53" count="1" type="stmt"/>
+        <line num="54" count="1" type="stmt"/>
+        <line num="55" count="1" type="stmt"/>
+        <line num="57" count="1" type="stmt"/>
+        <line num="58" count="14" type="stmt"/>
+        <line num="59" count="14" type="stmt"/>
+        <line num="60" count="14" type="stmt"/>
+        <line num="63" count="1" type="stmt"/>
+        <line num="70" count="1" type="stmt"/>
+        <line num="71" count="1" type="stmt"/>
+        <line num="72" count="1" type="stmt"/>
         <line num="52" count="1" type="stmt"/>
         <line num="53" count="0" type="stmt"/>
         <line num="54" count="0" type="stmt"/>
@@ -923,6 +1512,11 @@
         <line num="72" count="0" type="stmt"/>
         <line num="74" count="0" type="stmt"/>
         <line num="75" count="0" type="stmt"/>
+        <line num="79" count="9" type="stmt"/>
+        <line num="80" count="2" type="stmt"/>
+        <line num="87" count="2" type="stmt"/>
+        <line num="88" count="2" type="stmt"/>
+        <line num="89" count="2" type="stmt"/>
         <line num="79" count="1" type="stmt"/>
         <line num="80" count="0" type="stmt"/>
         <line num="87" count="0" type="stmt"/>
@@ -931,6 +1525,24 @@
         <line num="91" count="0" type="stmt"/>
         <line num="92" count="0" type="stmt"/>
       </file>
+      <file name="latestActivityModel.js" path="C:\Users\Nugraha Adhitama\Documents\api-ufo-veteran-jakarta\src\models\latestActivityModel.js">
+        <metrics statements="49" coveredstatements="35" conditionals="4" coveredconditionals="3" methods="10" coveredmethods="9"/>
+        <line num="1" count="9" type="stmt"/>
+        <line num="4" count="5" type="stmt"/>
+        <line num="5" count="5" type="stmt"/>
+        <line num="6" count="10" type="stmt"/>
+        <line num="8" count="5" type="stmt"/>
+        <line num="14" count="5" type="stmt"/>
+        <line num="18" count="1" type="stmt"/>
+        <line num="19" count="1" type="stmt"/>
+        <line num="20" count="1" type="stmt"/>
+        <line num="21" count="1" type="stmt"/>
+        <line num="24" count="1" type="stmt"/>
+        <line num="31" count="1" type="stmt"/>
+        <line num="35" count="5" type="stmt"/>
+        <line num="40" count="5" type="stmt"/>
+        <line num="41" count="5" type="stmt"/>
+        <line num="42" count="5" type="stmt"/>
       <file name="latestActivityModel.js" path="D:\opal\Projek code\api-ufo-veteran-jakarta\src\models\latestActivityModel.js">
         <metrics statements="49" coveredstatements="2" conditionals="4" coveredconditionals="0" methods="10" coveredmethods="0"/>
         <line num="1" count="1" type="stmt"/>
@@ -950,23 +1562,23 @@
         <line num="41" count="0" type="stmt"/>
         <line num="42" count="0" type="stmt"/>
         <line num="44" count="0" type="stmt"/>
-        <line num="50" count="0" type="stmt"/>
-        <line num="52" count="0" type="stmt"/>
-        <line num="53" count="0" type="stmt"/>
-        <line num="54" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="50" count="4" type="stmt"/>
+        <line num="52" count="4" type="stmt"/>
+        <line num="53" count="4" type="stmt"/>
+        <line num="54" count="4" type="cond" truecount="1" falsecount="1"/>
         <line num="56" count="0" type="stmt"/>
-        <line num="61" count="0" type="stmt"/>
-        <line num="65" count="0" type="stmt"/>
-        <line num="66" count="0" type="stmt"/>
-        <line num="68" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="69" count="0" type="stmt"/>
-        <line num="72" count="0" type="stmt"/>
+        <line num="61" count="6" type="stmt"/>
+        <line num="65" count="6" type="stmt"/>
+        <line num="66" count="6" type="stmt"/>
+        <line num="68" count="6" type="cond" truecount="2" falsecount="0"/>
+        <line num="69" count="3" type="stmt"/>
+        <line num="72" count="3" type="stmt"/>
         <line num="74" count="0" type="stmt"/>
         <line num="75" count="0" type="stmt"/>
-        <line num="80" count="0" type="stmt"/>
-        <line num="86" count="0" type="stmt"/>
-        <line num="87" count="0" type="stmt"/>
-        <line num="88" count="0" type="stmt"/>
+        <line num="80" count="1" type="stmt"/>
+        <line num="86" count="1" type="stmt"/>
+        <line num="87" count="1" type="stmt"/>
+        <line num="88" count="1" type="stmt"/>
         <line num="90" count="0" type="stmt"/>
         <line num="92" count="0" type="stmt"/>
         <line num="97" count="0" type="stmt"/>
@@ -975,14 +1587,30 @@
         <line num="101" count="0" type="stmt"/>
         <line num="103" count="0" type="stmt"/>
         <line num="104" count="0" type="stmt"/>
-        <line num="109" count="0" type="stmt"/>
-        <line num="116" count="0" type="stmt"/>
-        <line num="117" count="0" type="stmt"/>
-        <line num="118" count="0" type="stmt"/>
+        <line num="109" count="1" type="stmt"/>
+        <line num="116" count="1" type="stmt"/>
+        <line num="117" count="1" type="stmt"/>
+        <line num="118" count="1" type="stmt"/>
         <line num="120" count="0" type="stmt"/>
         <line num="121" count="0" type="stmt"/>
+        <line num="125" count="9" type="stmt"/>
         <line num="125" count="1" type="stmt"/>
       </file>
+      <file name="partnerModel.js" path="C:\Users\Nugraha Adhitama\Documents\api-ufo-veteran-jakarta\src\models\partnerModel.js">
+        <metrics statements="49" coveredstatements="37" conditionals="2" coveredconditionals="2" methods="7" coveredmethods="6"/>
+        <line num="1" count="9" type="stmt"/>
+        <line num="3" count="9" type="stmt"/>
+        <line num="4" count="7" type="stmt"/>
+        <line num="5" count="7" type="stmt"/>
+        <line num="6" count="7" type="stmt"/>
+        <line num="8" count="7" type="stmt"/>
+        <line num="9" count="14" type="stmt"/>
+        <line num="10" count="14" type="stmt"/>
+        <line num="11" count="14" type="stmt"/>
+        <line num="14" count="7" type="stmt"/>
+        <line num="20" count="7" type="stmt"/>
+        <line num="21" count="7" type="stmt"/>
+        <line num="22" count="7" type="stmt"/>
       <file name="partnerModel.js" path="D:\opal\Projek code\api-ufo-veteran-jakarta\src\models\partnerModel.js">
         <metrics statements="49" coveredstatements="6" conditionals="2" coveredconditionals="0" methods="7" coveredmethods="0"/>
         <line num="1" count="1" type="stmt"/>
@@ -999,6 +1627,11 @@
         <line num="21" count="0" type="stmt"/>
         <line num="22" count="0" type="stmt"/>
         <line num="24" count="0" type="stmt"/>
+        <line num="28" count="9" type="stmt"/>
+        <line num="29" count="1" type="stmt"/>
+        <line num="31" count="1" type="stmt"/>
+        <line num="32" count="1" type="stmt"/>
+        <line num="33" count="1" type="stmt"/>
         <line num="28" count="1" type="stmt"/>
         <line num="29" count="0" type="stmt"/>
         <line num="31" count="0" type="stmt"/>
@@ -1006,6 +1639,12 @@
         <line num="33" count="0" type="stmt"/>
         <line num="35" count="0" type="stmt"/>
         <line num="36" count="0" type="stmt"/>
+        <line num="40" count="9" type="stmt"/>
+        <line num="41" count="5" type="stmt"/>
+        <line num="42" count="5" type="stmt"/>
+        <line num="47" count="5" type="cond" truecount="2" falsecount="0"/>
+        <line num="48" count="2" type="stmt"/>
+        <line num="50" count="3" type="stmt"/>
         <line num="40" count="1" type="stmt"/>
         <line num="41" count="0" type="stmt"/>
         <line num="42" count="0" type="stmt"/>
@@ -1013,6 +1652,18 @@
         <line num="48" count="0" type="stmt"/>
         <line num="50" count="0" type="stmt"/>
         <line num="52" count="0" type="stmt"/>
+        <line num="56" count="9" type="stmt"/>
+        <line num="57" count="1" type="stmt"/>
+        <line num="58" count="1" type="stmt"/>
+        <line num="59" count="1" type="stmt"/>
+        <line num="61" count="1" type="stmt"/>
+        <line num="62" count="1" type="stmt"/>
+        <line num="63" count="1" type="stmt"/>
+        <line num="64" count="1" type="stmt"/>
+        <line num="67" count="1" type="stmt"/>
+        <line num="74" count="1" type="stmt"/>
+        <line num="75" count="1" type="stmt"/>
+        <line num="76" count="1" type="stmt"/>
         <line num="56" count="1" type="stmt"/>
         <line num="57" count="0" type="stmt"/>
         <line num="58" count="0" type="stmt"/>
@@ -1027,6 +1678,7 @@
         <line num="76" count="0" type="stmt"/>
         <line num="78" count="0" type="stmt"/>
         <line num="79" count="0" type="stmt"/>
+        <line num="83" count="9" type="stmt"/>
         <line num="83" count="1" type="stmt"/>
         <line num="84" count="0" type="stmt"/>
         <line num="91" count="0" type="stmt"/>
@@ -1035,13 +1687,26 @@
         <line num="95" count="0" type="stmt"/>
         <line num="96" count="0" type="stmt"/>
       </file>
-      <file name="userModel.js" path="D:\opal\Projek code\api-ufo-veteran-jakarta\src\models\userModel.js">
+      <file name="userModel.js" path="C:\Users\Nugraha Adhitama\Documents\api-ufo-veteran-jakarta\src\models\userModel.js">
         <metrics statements="15" coveredstatements="13" conditionals="0" coveredconditionals="0" methods="4" coveredmethods="3"/>
+        <line num="1" count="9" type="stmt"/>
+        <line num="2" count="9" type="stmt"/>
+        <line num="4" count="9" type="stmt"/>
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="stmt"/>
         <line num="4" count="1" type="stmt"/>
         <line num="5" count="0" type="stmt"/>
         <line num="8" count="0" type="stmt"/>
+        <line num="11" count="9" type="stmt"/>
+        <line num="12" count="177" type="stmt"/>
+        <line num="17" count="177" type="stmt"/>
+        <line num="20" count="9" type="stmt"/>
+        <line num="21" count="96" type="stmt"/>
+        <line num="24" count="96" type="stmt"/>
+        <line num="27" count="9" type="stmt"/>
+        <line num="28" count="76" type="stmt"/>
+        <line num="30" count="76" type="stmt"/>
+        <line num="36" count="76" type="stmt"/>
         <line num="11" count="1" type="stmt"/>
         <line num="12" count="28" type="stmt"/>
         <line num="17" count="28" type="stmt"/>
@@ -1053,6 +1718,24 @@
         <line num="30" count="14" type="stmt"/>
         <line num="36" count="14" type="stmt"/>
       </file>
+      <file name="workProgramModel.js" path="C:\Users\Nugraha Adhitama\Documents\api-ufo-veteran-jakarta\src\models\workProgramModel.js">
+        <metrics statements="49" coveredstatements="35" conditionals="4" coveredconditionals="3" methods="10" coveredmethods="9"/>
+        <line num="1" count="9" type="stmt"/>
+        <line num="4" count="4" type="stmt"/>
+        <line num="5" count="4" type="stmt"/>
+        <line num="6" count="12" type="stmt"/>
+        <line num="8" count="4" type="stmt"/>
+        <line num="14" count="4" type="stmt"/>
+        <line num="18" count="1" type="stmt"/>
+        <line num="19" count="1" type="stmt"/>
+        <line num="20" count="1" type="stmt"/>
+        <line num="21" count="2" type="stmt"/>
+        <line num="24" count="1" type="stmt"/>
+        <line num="31" count="1" type="stmt"/>
+        <line num="35" count="4" type="stmt"/>
+        <line num="37" count="4" type="stmt"/>
+        <line num="38" count="4" type="stmt"/>
+        <line num="39" count="4" type="stmt"/>
       <file name="workProgramModel.js" path="D:\opal\Projek code\api-ufo-veteran-jakarta\src\models\workProgramModel.js">
         <metrics statements="49" coveredstatements="2" conditionals="4" coveredconditionals="0" methods="10" coveredmethods="0"/>
         <line num="1" count="1" type="stmt"/>
@@ -1103,13 +1786,25 @@
         <line num="113" count="0" type="stmt"/>
         <line num="115" count="0" type="stmt"/>
         <line num="116" count="0" type="stmt"/>
+        <line num="120" count="9" type="stmt"/>
         <line num="120" count="1" type="stmt"/>
       </file>
     </package>
     <package name="src.routes">
       <metrics statements="112" coveredstatements="106" conditionals="4" coveredconditionals="0" methods="2" coveredmethods="0"/>
-      <file name="achievementRoutes.js" path="D:\opal\Projek code\api-ufo-veteran-jakarta\src\routes\achievementRoutes.js">
+      <file name="achievementRoutes.js" path="C:\Users\Nugraha Adhitama\Documents\api-ufo-veteran-jakarta\src\routes\achievementRoutes.js">
         <metrics statements="11" coveredstatements="11" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="9" type="stmt"/>
+        <line num="2" count="9" type="stmt"/>
+        <line num="7" count="9" type="stmt"/>
+        <line num="9" count="9" type="stmt"/>
+        <line num="13" count="9" type="stmt"/>
+        <line num="15" count="9" type="stmt"/>
+        <line num="17" count="9" type="stmt"/>
+        <line num="26" count="9" type="stmt"/>
+        <line num="32" count="9" type="stmt"/>
+        <line num="41" count="9" type="stmt"/>
+        <line num="47" count="9" type="stmt"/>
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="stmt"/>
         <line num="7" count="1" type="stmt"/>
@@ -1122,8 +1817,17 @@
         <line num="41" count="1" type="stmt"/>
         <line num="47" count="1" type="stmt"/>
       </file>
-      <file name="authRoutes.js" path="D:\opal\Projek code\api-ufo-veteran-jakarta\src\routes\authRoutes.js">
+      <file name="authRoutes.js" path="C:\Users\Nugraha Adhitama\Documents\api-ufo-veteran-jakarta\src\routes\authRoutes.js">
         <metrics statements="13" coveredstatements="10" conditionals="2" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="1" count="9" type="stmt"/>
+        <line num="2" count="9" type="stmt"/>
+        <line num="8" count="9" type="stmt"/>
+        <line num="12" count="9" type="stmt"/>
+        <line num="14" count="9" type="stmt"/>
+        <line num="16" count="9" type="stmt"/>
+        <line num="24" count="9" type="stmt"/>
+        <line num="32" count="9" type="stmt"/>
+        <line num="40" count="9" type="stmt"/>
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="stmt"/>
         <line num="8" count="1" type="stmt"/>
@@ -1136,10 +1840,21 @@
         <line num="41" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="42" count="0" type="stmt"/>
         <line num="44" count="0" type="stmt"/>
+        <line num="48" count="9" type="stmt"/>
         <line num="48" count="1" type="stmt"/>
       </file>
-      <file name="contentRoutes.js" path="D:\opal\Projek code\api-ufo-veteran-jakarta\src\routes\contentRoutes.js">
+      <file name="contentRoutes.js" path="C:\Users\Nugraha Adhitama\Documents\api-ufo-veteran-jakarta\src\routes\contentRoutes.js">
         <metrics statements="14" coveredstatements="11" conditionals="2" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="1" count="9" type="stmt"/>
+        <line num="2" count="9" type="stmt"/>
+        <line num="7" count="9" type="stmt"/>
+        <line num="8" count="9" type="stmt"/>
+        <line num="10" count="9" type="stmt"/>
+        <line num="12" count="9" type="stmt"/>
+        <line num="20" count="9" type="stmt"/>
+        <line num="22" count="9" type="stmt"/>
+        <line num="29" count="9" type="stmt"/>
+        <line num="31" count="9" type="stmt"/>
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="stmt"/>
         <line num="7" count="1" type="stmt"/>
@@ -1153,10 +1868,21 @@
         <line num="32" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="33" count="0" type="stmt"/>
         <line num="35" count="0" type="stmt"/>
+        <line num="39" count="9" type="stmt"/>
         <line num="39" count="1" type="stmt"/>
       </file>
-      <file name="divisionRoutes.js" path="D:\opal\Projek code\api-ufo-veteran-jakarta\src\routes\divisionRoutes.js">
+      <file name="divisionRoutes.js" path="C:\Users\Nugraha Adhitama\Documents\api-ufo-veteran-jakarta\src\routes\divisionRoutes.js">
         <metrics statements="10" coveredstatements="10" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="9" type="stmt"/>
+        <line num="5" count="9" type="stmt"/>
+        <line num="6" count="9" type="stmt"/>
+        <line num="7" count="9" type="stmt"/>
+        <line num="9" count="9" type="stmt"/>
+        <line num="11" count="9" type="stmt"/>
+        <line num="19" count="9" type="stmt"/>
+        <line num="25" count="9" type="stmt"/>
+        <line num="33" count="9" type="stmt"/>
+        <line num="35" count="9" type="stmt"/>
         <line num="1" count="1" type="stmt"/>
         <line num="5" count="1" type="stmt"/>
         <line num="6" count="1" type="stmt"/>
@@ -1168,8 +1894,20 @@
         <line num="33" count="1" type="stmt"/>
         <line num="35" count="1" type="stmt"/>
       </file>
-      <file name="eventRoutes.js" path="D:\opal\Projek code\api-ufo-veteran-jakarta\src\routes\eventRoutes.js">
+      <file name="eventRoutes.js" path="C:\Users\Nugraha Adhitama\Documents\api-ufo-veteran-jakarta\src\routes\eventRoutes.js">
         <metrics statements="12" coveredstatements="12" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="9" type="stmt"/>
+        <line num="2" count="9" type="stmt"/>
+        <line num="7" count="9" type="stmt"/>
+        <line num="8" count="9" type="stmt"/>
+        <line num="12" count="9" type="stmt"/>
+        <line num="14" count="9" type="stmt"/>
+        <line num="16" count="9" type="stmt"/>
+        <line num="26" count="9" type="stmt"/>
+        <line num="27" count="9" type="stmt"/>
+        <line num="29" count="9" type="stmt"/>
+        <line num="39" count="9" type="stmt"/>
+        <line num="41" count="9" type="stmt"/>
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="stmt"/>
         <line num="7" count="1" type="stmt"/>
@@ -1183,8 +1921,27 @@
         <line num="39" count="1" type="stmt"/>
         <line num="41" count="1" type="stmt"/>
       </file>
-      <file name="index.js" path="D:\opal\Projek code\api-ufo-veteran-jakarta\src\routes\index.js">
+      <file name="index.js" path="C:\Users\Nugraha Adhitama\Documents\api-ufo-veteran-jakarta\src\routes\index.js">
         <metrics statements="19" coveredstatements="19" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="9" type="stmt"/>
+        <line num="2" count="9" type="stmt"/>
+        <line num="3" count="9" type="stmt"/>
+        <line num="4" count="9" type="stmt"/>
+        <line num="5" count="9" type="stmt"/>
+        <line num="6" count="9" type="stmt"/>
+        <line num="7" count="9" type="stmt"/>
+        <line num="8" count="9" type="stmt"/>
+        <line num="9" count="9" type="stmt"/>
+        <line num="11" count="9" type="stmt"/>
+        <line num="13" count="9" type="stmt"/>
+        <line num="14" count="9" type="stmt"/>
+        <line num="15" count="9" type="stmt"/>
+        <line num="16" count="9" type="stmt"/>
+        <line num="17" count="9" type="stmt"/>
+        <line num="18" count="9" type="stmt"/>
+        <line num="19" count="9" type="stmt"/>
+        <line num="20" count="9" type="stmt"/>
+        <line num="22" count="9" type="stmt"/>
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="stmt"/>
         <line num="3" count="1" type="stmt"/>
@@ -1205,8 +1962,19 @@
         <line num="20" count="1" type="stmt"/>
         <line num="22" count="1" type="stmt"/>
       </file>
-      <file name="latestActivityRoutes.js" path="D:\opal\Projek code\api-ufo-veteran-jakarta\src\routes\latestActivityRoutes.js">
+      <file name="latestActivityRoutes.js" path="C:\Users\Nugraha Adhitama\Documents\api-ufo-veteran-jakarta\src\routes\latestActivityRoutes.js">
         <metrics statements="11" coveredstatements="11" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="9" type="stmt"/>
+        <line num="5" count="9" type="stmt"/>
+        <line num="6" count="9" type="stmt"/>
+        <line num="10" count="9" type="stmt"/>
+        <line num="11" count="9" type="stmt"/>
+        <line num="13" count="9" type="stmt"/>
+        <line num="15" count="9" type="stmt"/>
+        <line num="24" count="9" type="stmt"/>
+        <line num="30" count="9" type="stmt"/>
+        <line num="39" count="9" type="stmt"/>
+        <line num="45" count="9" type="stmt"/>
         <line num="1" count="1" type="stmt"/>
         <line num="5" count="1" type="stmt"/>
         <line num="6" count="1" type="stmt"/>
@@ -1219,8 +1987,19 @@
         <line num="39" count="1" type="stmt"/>
         <line num="45" count="1" type="stmt"/>
       </file>
-      <file name="partnerRoutes.js" path="D:\opal\Projek code\api-ufo-veteran-jakarta\src\routes\partnerRoutes.js">
+      <file name="partnerRoutes.js" path="C:\Users\Nugraha Adhitama\Documents\api-ufo-veteran-jakarta\src\routes\partnerRoutes.js">
         <metrics statements="11" coveredstatements="11" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="9" type="stmt"/>
+        <line num="2" count="9" type="stmt"/>
+        <line num="7" count="9" type="stmt"/>
+        <line num="8" count="9" type="stmt"/>
+        <line num="12" count="9" type="stmt"/>
+        <line num="14" count="9" type="stmt"/>
+        <line num="16" count="9" type="stmt"/>
+        <line num="25" count="9" type="stmt"/>
+        <line num="31" count="9" type="stmt"/>
+        <line num="40" count="9" type="stmt"/>
+        <line num="42" count="9" type="stmt"/>
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="stmt"/>
         <line num="7" count="1" type="stmt"/>
@@ -1233,8 +2012,19 @@
         <line num="40" count="1" type="stmt"/>
         <line num="42" count="1" type="stmt"/>
       </file>
-      <file name="workProgramRoutes.js" path="D:\opal\Projek code\api-ufo-veteran-jakarta\src\routes\workProgramRoutes.js">
+      <file name="workProgramRoutes.js" path="C:\Users\Nugraha Adhitama\Documents\api-ufo-veteran-jakarta\src\routes\workProgramRoutes.js">
         <metrics statements="11" coveredstatements="11" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="9" type="stmt"/>
+        <line num="2" count="9" type="stmt"/>
+        <line num="7" count="9" type="stmt"/>
+        <line num="8" count="9" type="stmt"/>
+        <line num="12" count="9" type="stmt"/>
+        <line num="14" count="9" type="stmt"/>
+        <line num="16" count="9" type="stmt"/>
+        <line num="25" count="9" type="stmt"/>
+        <line num="31" count="9" type="stmt"/>
+        <line num="40" count="9" type="stmt"/>
+        <line num="46" count="9" type="stmt"/>
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="stmt"/>
         <line num="7" count="1" type="stmt"/>
@@ -1249,30 +2039,51 @@
       </file>
     </package>
     <package name="src.services">
+      <metrics statements="114" coveredstatements="98" conditionals="4" coveredconditionals="3" methods="39" coveredmethods="37"/>
+      <file name="achievementService.js" path="C:\Users\Nugraha Adhitama\Documents\api-ufo-veteran-jakarta\src\services\achievementService.js">
       <metrics statements="114" coveredstatements="62" conditionals="4" coveredconditionals="2" methods="39" coveredmethods="8"/>
       <file name="achievementService.js" path="D:\opal\Projek code\api-ufo-veteran-jakarta\src\services\achievementService.js">
         <metrics statements="14" coveredstatements="12" conditionals="0" coveredconditionals="0" methods="5" coveredmethods="5"/>
+        <line num="7" count="9" type="stmt"/>
+        <line num="9" count="9" type="stmt"/>
         <line num="7" count="1" type="stmt"/>
         <line num="9" count="1" type="stmt"/>
         <line num="10" count="5" type="stmt"/>
+        <line num="13" count="9" type="stmt"/>
         <line num="13" count="1" type="stmt"/>
         <line num="14" count="2" type="stmt"/>
         <line num="15" count="2" type="stmt"/>
         <line num="17" count="0" type="stmt"/>
         <line num="18" count="0" type="stmt"/>
+        <line num="22" count="9" type="stmt"/>
+        <line num="23" count="3" type="stmt"/>
+        <line num="26" count="9" type="stmt"/>
         <line num="22" count="1" type="stmt"/>
         <line num="23" count="6" type="stmt"/>
         <line num="26" count="1" type="stmt"/>
         <line num="27" count="1" type="stmt"/>
+        <line num="30" count="9" type="stmt"/>
         <line num="30" count="1" type="stmt"/>
         <line num="31" count="1" type="stmt"/>
       </file>
+      <file name="authService.js" path="C:\Users\Nugraha Adhitama\Documents\api-ufo-veteran-jakarta\src\services\authService.js">
+        <metrics statements="16" coveredstatements="14" conditionals="4" coveredconditionals="3" methods="4" coveredmethods="3"/>
+        <line num="1" count="9" type="stmt"/>
+        <line num="2" count="9" type="stmt"/>
+        <line num="4" count="9" type="stmt"/>
       <file name="authService.js" path="D:\opal\Projek code\api-ufo-veteran-jakarta\src\services\authService.js">
         <metrics statements="16" coveredstatements="13" conditionals="4" coveredconditionals="2" methods="4" coveredmethods="3"/>
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="stmt"/>
         <line num="4" count="1" type="stmt"/>
         <line num="5" count="0" type="stmt"/>
+        <line num="8" count="9" type="stmt"/>
+        <line num="9" count="89" type="stmt"/>
+        <line num="12" count="9" type="stmt"/>
+        <line num="13" count="75" type="stmt"/>
+        <line num="16" count="9" type="stmt"/>
+        <line num="17" count="87" type="stmt"/>
+        <line num="18" count="87" type="cond" truecount="1" falsecount="1"/>
         <line num="8" count="1" type="stmt"/>
         <line num="9" count="14" type="stmt"/>
         <line num="12" count="1" type="stmt"/>
@@ -1281,11 +2092,28 @@
         <line num="17" count="14" type="stmt"/>
         <line num="18" count="14" type="cond" truecount="1" falsecount="1"/>
         <line num="19" count="0" type="stmt"/>
+        <line num="22" count="87" type="cond" truecount="2" falsecount="0"/>
+        <line num="23" count="1" type="stmt"/>
+        <line num="25" count="86" type="stmt"/>
+        <line num="26" count="86" type="stmt"/>
         <line num="22" count="14" type="cond" truecount="1" falsecount="1"/>
         <line num="23" count="0" type="stmt"/>
         <line num="25" count="14" type="stmt"/>
         <line num="26" count="14" type="stmt"/>
       </file>
+      <file name="contentService.js" path="C:\Users\Nugraha Adhitama\Documents\api-ufo-veteran-jakarta\src\services\contentService.js">
+        <metrics statements="11" coveredstatements="11" conditionals="0" coveredconditionals="0" methods="5" coveredmethods="5"/>
+        <line num="7" count="9" type="stmt"/>
+        <line num="9" count="9" type="stmt"/>
+        <line num="10" count="2" type="stmt"/>
+        <line num="12" count="9" type="stmt"/>
+        <line num="13" count="5" type="stmt"/>
+        <line num="15" count="9" type="stmt"/>
+        <line num="16" count="11" type="stmt"/>
+        <line num="18" count="9" type="stmt"/>
+        <line num="19" count="1" type="stmt"/>
+        <line num="22" count="9" type="stmt"/>
+        <line num="23" count="1" type="stmt"/>
       <file name="contentService.js" path="D:\opal\Projek code\api-ufo-veteran-jakarta\src\services\contentService.js">
         <metrics statements="11" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="5" coveredmethods="0"/>
         <line num="7" count="1" type="stmt"/>
@@ -1300,6 +2128,14 @@
         <line num="22" count="1" type="stmt"/>
         <line num="23" count="0" type="stmt"/>
       </file>
+      <file name="divisionSerice.js" path="C:\Users\Nugraha Adhitama\Documents\api-ufo-veteran-jakarta\src\services\divisionSerice.js">
+        <metrics statements="13" coveredstatements="12" conditionals="0" coveredconditionals="0" methods="5" coveredmethods="5"/>
+        <line num="7" count="9" type="stmt"/>
+        <line num="9" count="9" type="stmt"/>
+        <line num="10" count="4" type="stmt"/>
+        <line num="13" count="9" type="stmt"/>
+        <line num="14" count="1" type="stmt"/>
+        <line num="15" count="1" type="stmt"/>
       <file name="divisionSerice.js" path="D:\opal\Projek code\api-ufo-veteran-jakarta\src\services\divisionSerice.js">
         <metrics statements="13" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="5" coveredmethods="0"/>
         <line num="7" count="1" type="stmt"/>
@@ -1309,6 +2145,12 @@
         <line num="14" count="0" type="stmt"/>
         <line num="15" count="0" type="stmt"/>
         <line num="17" count="0" type="stmt"/>
+        <line num="21" count="9" type="stmt"/>
+        <line num="22" count="7" type="stmt"/>
+        <line num="25" count="9" type="stmt"/>
+        <line num="26" count="1" type="stmt"/>
+        <line num="29" count="9" type="stmt"/>
+        <line num="30" count="2" type="stmt"/>
         <line num="21" count="1" type="stmt"/>
         <line num="22" count="0" type="stmt"/>
         <line num="25" count="1" type="stmt"/>
@@ -1316,6 +2158,14 @@
         <line num="29" count="1" type="stmt"/>
         <line num="30" count="0" type="stmt"/>
       </file>
+      <file name="eventService.js" path="C:\Users\Nugraha Adhitama\Documents\api-ufo-veteran-jakarta\src\services\eventService.js">
+        <metrics statements="17" coveredstatements="13" conditionals="0" coveredconditionals="0" methods="5" coveredmethods="5"/>
+        <line num="7" count="9" type="stmt"/>
+        <line num="9" count="9" type="stmt"/>
+        <line num="10" count="3" type="stmt"/>
+        <line num="13" count="9" type="stmt"/>
+        <line num="14" count="1" type="stmt"/>
+        <line num="15" count="1" type="stmt"/>
       <file name="eventService.js" path="D:\opal\Projek code\api-ufo-veteran-jakarta\src\services\eventService.js">
         <metrics statements="17" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="5" coveredmethods="0"/>
         <line num="7" count="1" type="stmt"/>
@@ -1326,16 +2176,31 @@
         <line num="15" count="0" type="stmt"/>
         <line num="17" count="0" type="stmt"/>
         <line num="18" count="0" type="stmt"/>
+        <line num="22" count="9" type="stmt"/>
+        <line num="23" count="3" type="stmt"/>
+        <line num="24" count="3" type="stmt"/>
         <line num="22" count="1" type="stmt"/>
         <line num="23" count="0" type="stmt"/>
         <line num="24" count="0" type="stmt"/>
         <line num="26" count="0" type="stmt"/>
         <line num="27" count="0" type="stmt"/>
+        <line num="31" count="9" type="stmt"/>
+        <line num="32" count="1" type="stmt"/>
+        <line num="35" count="9" type="stmt"/>
+        <line num="36" count="2" type="stmt"/>
         <line num="31" count="1" type="stmt"/>
         <line num="32" count="0" type="stmt"/>
         <line num="35" count="1" type="stmt"/>
         <line num="36" count="0" type="stmt"/>
       </file>
+      <file name="latestActivityService.js" path="C:\Users\Nugraha Adhitama\Documents\api-ufo-veteran-jakarta\src\services\latestActivityService.js">
+        <metrics statements="14" coveredstatements="12" conditionals="0" coveredconditionals="0" methods="5" coveredmethods="5"/>
+        <line num="7" count="9" type="stmt"/>
+        <line num="9" count="9" type="stmt"/>
+        <line num="10" count="5" type="stmt"/>
+        <line num="13" count="9" type="stmt"/>
+        <line num="14" count="4" type="stmt"/>
+        <line num="15" count="4" type="stmt"/>
       <file name="latestActivityService.js" path="D:\opal\Projek code\api-ufo-veteran-jakarta\src\services\latestActivityService.js">
         <metrics statements="14" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="5" coveredmethods="0"/>
         <line num="7" count="1" type="stmt"/>
@@ -1346,6 +2211,12 @@
         <line num="15" count="0" type="stmt"/>
         <line num="17" count="0" type="stmt"/>
         <line num="18" count="0" type="stmt"/>
+        <line num="22" count="9" type="stmt"/>
+        <line num="23" count="6" type="stmt"/>
+        <line num="26" count="9" type="stmt"/>
+        <line num="27" count="1" type="stmt"/>
+        <line num="30" count="9" type="stmt"/>
+        <line num="31" count="1" type="stmt"/>
         <line num="22" count="1" type="stmt"/>
         <line num="23" count="0" type="stmt"/>
         <line num="26" count="1" type="stmt"/>
@@ -1353,6 +2224,15 @@
         <line num="30" count="1" type="stmt"/>
         <line num="31" count="0" type="stmt"/>
       </file>
+      <file name="partnerService.js" path="C:\Users\Nugraha Adhitama\Documents\api-ufo-veteran-jakarta\src\services\partnerService.js">
+        <metrics statements="15" coveredstatements="12" conditionals="0" coveredconditionals="0" methods="5" coveredmethods="4"/>
+        <line num="1" count="9" type="stmt"/>
+        <line num="7" count="9" type="stmt"/>
+        <line num="9" count="9" type="stmt"/>
+        <line num="10" count="7" type="stmt"/>
+        <line num="13" count="9" type="stmt"/>
+        <line num="14" count="1" type="stmt"/>
+        <line num="15" count="1" type="stmt"/>
       <file name="partnerService.js" path="D:\opal\Projek code\api-ufo-veteran-jakarta\src\services\partnerService.js">
         <metrics statements="15" coveredstatements="7" conditionals="0" coveredconditionals="0" methods="5" coveredmethods="0"/>
         <line num="1" count="1" type="stmt"/>
@@ -1364,6 +2244,11 @@
         <line num="15" count="0" type="stmt"/>
         <line num="17" count="0" type="stmt"/>
         <line num="18" count="0" type="stmt"/>
+        <line num="22" count="9" type="stmt"/>
+        <line num="23" count="5" type="stmt"/>
+        <line num="26" count="9" type="stmt"/>
+        <line num="27" count="1" type="stmt"/>
+        <line num="30" count="9" type="stmt"/>
         <line num="22" count="1" type="stmt"/>
         <line num="23" count="0" type="stmt"/>
         <line num="26" count="1" type="stmt"/>
@@ -1371,6 +2256,14 @@
         <line num="30" count="1" type="stmt"/>
         <line num="31" count="0" type="stmt"/>
       </file>
+      <file name="workProgramService.js" path="C:\Users\Nugraha Adhitama\Documents\api-ufo-veteran-jakarta\src\services\workProgramService.js">
+        <metrics statements="14" coveredstatements="12" conditionals="0" coveredconditionals="0" methods="5" coveredmethods="5"/>
+        <line num="7" count="9" type="stmt"/>
+        <line num="9" count="9" type="stmt"/>
+        <line num="10" count="4" type="stmt"/>
+        <line num="13" count="9" type="stmt"/>
+        <line num="14" count="4" type="stmt"/>
+        <line num="15" count="4" type="stmt"/>
       <file name="workProgramService.js" path="D:\opal\Projek code\api-ufo-veteran-jakarta\src\services\workProgramService.js">
         <metrics statements="14" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="5" coveredmethods="0"/>
         <line num="7" count="1" type="stmt"/>
@@ -1381,6 +2274,12 @@
         <line num="15" count="0" type="stmt"/>
         <line num="17" count="0" type="stmt"/>
         <line num="18" count="0" type="stmt"/>
+        <line num="22" count="9" type="stmt"/>
+        <line num="23" count="6" type="stmt"/>
+        <line num="26" count="9" type="stmt"/>
+        <line num="27" count="1" type="stmt"/>
+        <line num="30" count="9" type="stmt"/>
+        <line num="31" count="1" type="stmt"/>
         <line num="22" count="1" type="stmt"/>
         <line num="23" count="0" type="stmt"/>
         <line num="26" count="1" type="stmt"/>
@@ -1390,9 +2289,18 @@
       </file>
     </package>
     <package name="src.utils">
+      <metrics statements="44" coveredstatements="40" conditionals="12" coveredconditionals="8" methods="10" coveredmethods="10"/>
+      <file name="jwt.js" path="C:\Users\Nugraha Adhitama\Documents\api-ufo-veteran-jakarta\src\utils\jwt.js">
       <metrics statements="44" coveredstatements="25" conditionals="12" coveredconditionals="1" methods="10" coveredmethods="5"/>
       <file name="jwt.js" path="D:\opal\Projek code\api-ufo-veteran-jakarta\src\utils\jwt.js">
         <metrics statements="8" coveredstatements="7" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
+        <line num="1" count="9" type="stmt"/>
+        <line num="3" count="9" type="stmt"/>
+        <line num="4" count="86" type="stmt"/>
+        <line num="11" count="9" type="stmt"/>
+        <line num="12" count="210" type="stmt"/>
+        <line num="13" count="210" type="stmt"/>
+        <line num="14" count="210" type="stmt"/>
         <line num="1" count="1" type="stmt"/>
         <line num="3" count="1" type="stmt"/>
         <line num="4" count="14" type="stmt"/>
@@ -1402,14 +2310,39 @@
         <line num="14" count="32" type="stmt"/>
         <line num="16" count="0" type="stmt"/>
       </file>
-      <file name="limiter.js" path="D:\opal\Projek code\api-ufo-veteran-jakarta\src\utils\limiter.js">
+      <file name="limiter.js" path="C:\Users\Nugraha Adhitama\Documents\api-ufo-veteran-jakarta\src\utils\limiter.js">
         <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="9" type="stmt"/>
+        <line num="3" count="9" type="stmt"/>
+        <line num="11" count="9" type="stmt"/>
         <line num="1" count="1" type="stmt"/>
         <line num="3" count="1" type="stmt"/>
         <line num="11" count="1" type="stmt"/>
       </file>
-      <file name="logger.js" path="D:\opal\Projek code\api-ufo-veteran-jakarta\src\utils\logger.js">
+      <file name="logger.js" path="C:\Users\Nugraha Adhitama\Documents\api-ufo-veteran-jakarta\src\utils\logger.js">
         <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="9" type="stmt"/>
+        <line num="3" count="9" type="stmt"/>
+        <line num="9" count="9" type="stmt"/>
+      </file>
+      <file name="uploadFile.js" path="C:\Users\Nugraha Adhitama\Documents\api-ufo-veteran-jakarta\src\utils\uploadFile.js">
+        <metrics statements="30" coveredstatements="27" conditionals="12" coveredconditionals="8" methods="8" coveredmethods="8"/>
+        <line num="1" count="10" type="stmt"/>
+        <line num="2" count="10" type="stmt"/>
+        <line num="3" count="10" type="stmt"/>
+        <line num="5" count="10" type="stmt"/>
+        <line num="6" count="29" type="stmt"/>
+        <line num="7" count="29" type="stmt"/>
+        <line num="14" count="29" type="cond" truecount="1" falsecount="1"/>
+        <line num="15" count="29" type="stmt"/>
+        <line num="22" count="29" type="stmt"/>
+        <line num="26" count="10" type="stmt"/>
+        <line num="27" count="1" type="stmt"/>
+        <line num="28" count="1" type="stmt"/>
+        <line num="30" count="1" type="stmt"/>
+        <line num="35" count="10" type="stmt"/>
+        <line num="36" count="1" type="stmt"/>
+        <line num="37" count="1" type="cond" truecount="1" falsecount="1"/>
         <line num="1" count="1" type="stmt"/>
         <line num="3" count="1" type="stmt"/>
         <line num="9" count="1" type="stmt"/>
@@ -1445,13 +2378,20 @@
         <line num="62" count="0" type="stmt"/>
         <line num="67" count="0" type="stmt"/>
         <line num="70" count="0" type="stmt"/>
+        <line num="75" count="10" type="stmt"/>
         <line num="75" count="1" type="stmt"/>
       </file>
     </package>
     <package name="src.validators">
+      <metrics statements="93" coveredstatements="92" conditionals="27" coveredconditionals="22" methods="21" coveredmethods="21"/>
+      <file name="achievementValidator.js" path="C:\Users\Nugraha Adhitama\Documents\api-ufo-veteran-jakarta\src\validators\achievementValidator.js">
       <metrics statements="93" coveredstatements="61" conditionals="27" coveredconditionals="8" methods="21" coveredmethods="14"/>
       <file name="achievementValidator.js" path="D:\opal\Projek code\api-ufo-veteran-jakarta\src\validators\achievementValidator.js">
         <metrics statements="9" coveredstatements="9" conditionals="2" coveredconditionals="2" methods="2" coveredmethods="2"/>
+        <line num="1" count="9" type="stmt"/>
+        <line num="3" count="9" type="stmt"/>
+        <line num="4" count="18" type="stmt"/>
+        <line num="25" count="9" type="stmt"/>
         <line num="1" count="1" type="stmt"/>
         <line num="3" count="1" type="stmt"/>
         <line num="4" count="2" type="stmt"/>
@@ -1460,8 +2400,22 @@
         <line num="27" count="10" type="cond" truecount="2" falsecount="0"/>
         <line num="28" count="4" type="stmt"/>
         <line num="30" count="6" type="stmt"/>
+        <line num="33" count="9" type="stmt"/>
         <line num="33" count="1" type="stmt"/>
       </file>
+      <file name="authValidator.js" path="C:\Users\Nugraha Adhitama\Documents\api-ufo-veteran-jakarta\src\validators\authValidator.js">
+        <metrics statements="11" coveredstatements="11" conditionals="2" coveredconditionals="2" methods="3" coveredmethods="3"/>
+        <line num="1" count="9" type="stmt"/>
+        <line num="3" count="9" type="stmt"/>
+        <line num="4" count="9" type="stmt"/>
+        <line num="28" count="9" type="stmt"/>
+        <line num="29" count="9" type="stmt"/>
+        <line num="47" count="9" type="stmt"/>
+        <line num="48" count="180" type="stmt"/>
+        <line num="49" count="180" type="cond" truecount="2" falsecount="0"/>
+        <line num="50" count="4" type="stmt"/>
+        <line num="52" count="176" type="stmt"/>
+        <line num="55" count="9" type="stmt"/>
       <file name="authValidator.js" path="D:\opal\Projek code\api-ufo-veteran-jakarta\src\validators\authValidator.js">
         <metrics statements="11" coveredstatements="10" conditionals="2" coveredconditionals="1" methods="3" coveredmethods="3"/>
         <line num="1" count="1" type="stmt"/>
@@ -1476,6 +2430,17 @@
         <line num="52" count="28" type="stmt"/>
         <line num="55" count="1" type="stmt"/>
       </file>
+      <file name="contentValidator.js" path="C:\Users\Nugraha Adhitama\Documents\api-ufo-veteran-jakarta\src\validators\contentValidator.js">
+        <metrics statements="9" coveredstatements="9" conditionals="2" coveredconditionals="2" methods="2" coveredmethods="2"/>
+        <line num="1" count="9" type="stmt"/>
+        <line num="3" count="9" type="stmt"/>
+        <line num="4" count="18" type="stmt"/>
+        <line num="22" count="9" type="stmt"/>
+        <line num="23" count="18" type="stmt"/>
+        <line num="24" count="18" type="cond" truecount="2" falsecount="0"/>
+        <line num="25" count="4" type="stmt"/>
+        <line num="27" count="14" type="stmt"/>
+        <line num="30" count="9" type="stmt"/>
       <file name="contentValidator.js" path="D:\opal\Projek code\api-ufo-veteran-jakarta\src\validators\contentValidator.js">
         <metrics statements="9" coveredstatements="5" conditionals="2" coveredconditionals="0" methods="2" coveredmethods="1"/>
         <line num="1" count="1" type="stmt"/>
@@ -1488,6 +2453,22 @@
         <line num="27" count="0" type="stmt"/>
         <line num="30" count="1" type="stmt"/>
       </file>
+      <file name="divisionValidator.js" path="C:\Users\Nugraha Adhitama\Documents\api-ufo-veteran-jakarta\src\validators\divisionValidator.js">
+        <metrics statements="14" coveredstatements="14" conditionals="5" coveredconditionals="3" methods="3" coveredmethods="3"/>
+        <line num="1" count="9" type="stmt"/>
+        <line num="4" count="18" type="stmt"/>
+        <line num="11" count="18" type="cond" truecount="1" falsecount="1"/>
+        <line num="12" count="18" type="stmt"/>
+        <line num="19" count="18" type="stmt"/>
+        <line num="22" count="9" type="stmt"/>
+        <line num="23" count="18" type="stmt"/>
+        <line num="26" count="9" type="stmt"/>
+        <line num="27" count="9" type="stmt"/>
+        <line num="28" count="9" type="cond" truecount="2" falsecount="0"/>
+        <line num="29" count="3" type="stmt"/>
+        <line num="32" count="6" type="stmt"/>
+        <line num="33" count="6" type="stmt"/>
+        <line num="36" count="9" type="stmt"/>
       <file name="divisionValidator.js" path="D:\opal\Projek code\api-ufo-veteran-jakarta\src\validators\divisionValidator.js">
         <metrics statements="14" coveredstatements="9" conditionals="5" coveredconditionals="1" methods="3" coveredmethods="2"/>
         <line num="1" count="1" type="stmt"/>
@@ -1505,6 +2486,12 @@
         <line num="33" count="0" type="stmt"/>
         <line num="36" count="1" type="stmt"/>
       </file>
+      <file name="eventValidator.js" path="C:\Users\Nugraha Adhitama\Documents\api-ufo-veteran-jakarta\src\validators\eventValidator.js">
+        <metrics statements="13" coveredstatements="12" conditionals="4" coveredconditionals="3" methods="3" coveredmethods="3"/>
+        <line num="1" count="9" type="stmt"/>
+        <line num="3" count="9" type="stmt"/>
+        <line num="4" count="18" type="stmt"/>
+        <line num="78" count="5" type="cond" truecount="1" falsecount="1"/>
       <file name="eventValidator.js" path="D:\opal\Projek code\api-ufo-veteran-jakarta\src\validators\eventValidator.js">
         <metrics statements="13" coveredstatements="5" conditionals="4" coveredconditionals="0" methods="3" coveredmethods="1"/>
         <line num="1" count="1" type="stmt"/>
@@ -1512,6 +2499,14 @@
         <line num="4" count="2" type="stmt"/>
         <line num="78" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="79" count="0" type="stmt"/>
+        <line num="81" count="5" type="stmt"/>
+        <line num="102" count="9" type="stmt"/>
+        <line num="103" count="5" type="stmt"/>
+        <line num="104" count="5" type="cond" truecount="2" falsecount="0"/>
+        <line num="105" count="1" type="stmt"/>
+        <line num="108" count="4" type="stmt"/>
+        <line num="109" count="4" type="stmt"/>
+        <line num="112" count="9" type="stmt"/>
         <line num="81" count="0" type="stmt"/>
         <line num="102" count="1" type="stmt"/>
         <line num="103" count="0" type="stmt"/>
@@ -1521,6 +2516,22 @@
         <line num="109" count="0" type="stmt"/>
         <line num="112" count="1" type="stmt"/>
       </file>
+      <file name="latestActivityValidator.js" path="C:\Users\Nugraha Adhitama\Documents\api-ufo-veteran-jakarta\src\validators\latestActivityValidator.js">
+        <metrics statements="14" coveredstatements="14" conditionals="5" coveredconditionals="3" methods="3" coveredmethods="3"/>
+        <line num="1" count="9" type="stmt"/>
+        <line num="4" count="18" type="stmt"/>
+        <line num="11" count="18" type="cond" truecount="1" falsecount="1"/>
+        <line num="12" count="18" type="stmt"/>
+        <line num="19" count="18" type="stmt"/>
+        <line num="22" count="9" type="stmt"/>
+        <line num="23" count="18" type="stmt"/>
+        <line num="26" count="9" type="stmt"/>
+        <line num="27" count="8" type="stmt"/>
+        <line num="28" count="8" type="cond" truecount="2" falsecount="0"/>
+        <line num="29" count="2" type="stmt"/>
+        <line num="32" count="6" type="stmt"/>
+        <line num="33" count="6" type="stmt"/>
+        <line num="36" count="9" type="stmt"/>
       <file name="latestActivityValidator.js" path="D:\opal\Projek code\api-ufo-veteran-jakarta\src\validators\latestActivityValidator.js">
         <metrics statements="14" coveredstatements="9" conditionals="5" coveredconditionals="1" methods="3" coveredmethods="2"/>
         <line num="1" count="1" type="stmt"/>
@@ -1538,6 +2549,17 @@
         <line num="33" count="0" type="stmt"/>
         <line num="36" count="1" type="stmt"/>
       </file>
+      <file name="partnerValidator.js" path="C:\Users\Nugraha Adhitama\Documents\api-ufo-veteran-jakarta\src\validators\partnerValidator.js">
+        <metrics statements="9" coveredstatements="9" conditionals="2" coveredconditionals="2" methods="2" coveredmethods="2"/>
+        <line num="1" count="9" type="stmt"/>
+        <line num="3" count="9" type="stmt"/>
+        <line num="4" count="18" type="stmt"/>
+        <line num="16" count="9" type="stmt"/>
+        <line num="17" count="11" type="stmt"/>
+        <line num="18" count="11" type="cond" truecount="2" falsecount="0"/>
+        <line num="19" count="2" type="stmt"/>
+        <line num="21" count="9" type="stmt"/>
+        <line num="24" count="9" type="stmt"/>
       <file name="partnerValidator.js" path="D:\opal\Projek code\api-ufo-veteran-jakarta\src\validators\partnerValidator.js">
         <metrics statements="9" coveredstatements="5" conditionals="2" coveredconditionals="0" methods="2" coveredmethods="1"/>
         <line num="1" count="1" type="stmt"/>
@@ -1550,6 +2572,22 @@
         <line num="21" count="0" type="stmt"/>
         <line num="24" count="1" type="stmt"/>
       </file>
+      <file name="workProgramValidator.js" path="C:\Users\Nugraha Adhitama\Documents\api-ufo-veteran-jakarta\src\validators\workProgramValidator.js">
+        <metrics statements="14" coveredstatements="14" conditionals="5" coveredconditionals="5" methods="3" coveredmethods="3"/>
+        <line num="1" count="9" type="stmt"/>
+        <line num="4" count="36" type="stmt"/>
+        <line num="11" count="36" type="cond" truecount="2" falsecount="0"/>
+        <line num="12" count="18" type="stmt"/>
+        <line num="19" count="36" type="stmt"/>
+        <line num="22" count="9" type="stmt"/>
+        <line num="23" count="18" type="stmt"/>
+        <line num="29" count="9" type="stmt"/>
+        <line num="30" count="8" type="stmt"/>
+        <line num="31" count="8" type="cond" truecount="2" falsecount="0"/>
+        <line num="32" count="3" type="stmt"/>
+        <line num="34" count="5" type="stmt"/>
+        <line num="35" count="5" type="stmt"/>
+        <line num="38" count="9" type="stmt"/>
       <file name="workProgramValidator.js" path="D:\opal\Projek code\api-ufo-veteran-jakarta\src\validators\workProgramValidator.js">
         <metrics statements="14" coveredstatements="9" conditionals="5" coveredconditionals="3" methods="3" coveredmethods="2"/>
         <line num="1" count="1" type="stmt"/>
