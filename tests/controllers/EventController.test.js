@@ -200,7 +200,69 @@ describe('Event Controller', () => {
       const res = await request(app).put('/api/v1/events/some-slug');
       validateErrorResponse(res, 401, 401, 'Unauthorized');
     });
+    
+    it('should return 404 if event does not exist', async () => {
+      const { headers } = await setupAuthHeaders();
+      const updatedData = {
+        name: 'Event Test',
+        start_event_date: '2024-07-26',
+        end_event_date: '2024-07-26',
+        start_event_time: '1000',
+        end_event_time: '1800',
+        registration_start_date: '2024-07-26',
+        registration_end_date: '2024-07-26',
+        registration_start_time: '1000',
+        registration_end_time: '1800',
+        body: 'Event Test Body',
+        link_registration: 'https://link-registration.com',
+        location: 'Test Location',
+        snippets: 'Test Snippets',
+      };
+      const res = await request(app)
+        .put('/api/v1/events/non-existent-slug')
+        .set(headers)
+        .send(updatedData);
 
+      validateErrorResponse(res, 404, 404, 'Event Not Found');
+    });
+
+    it('should return if Cover and Cover Landscape is not Webp', async () => {
+       const { headers } = await setupAuthHeaders();
+       const eventData = {
+         name: 'Event Test',
+         start_event_date: '2024-07-26',
+         end_event_date: '2024-07-26',
+         start_event_time: '1000',
+         end_event_time: '1800',
+         registration_start_date: '2024-07-26',
+         registration_end_date: '2024-07-26',
+         registration_start_time: '1000',
+         registration_end_time: '1800',
+         body: 'Event Test Body',
+         link_registration: 'https://link-registration.com',
+         location: 'Test Location',
+         snippets: 'Test Snippets',
+       };
+
+       const event = await createEvent(headers, eventData);
+
+       const slug = event.body.data.slug;
+      
+      const filePath = path.resolve(__dirname, '../test.jpg');
+      const res = await request(app)
+        .put(`/api/v1/events/${slug}`)
+        .set(headers)
+        .attach('cover', filePath)
+        .attach('cover_landscape', filePath);
+
+      validateErrorResponse(
+        res,
+        500,
+        500,
+        'Cover/Cover Landscape must be in WEBP Format',
+      );
+    });
+    
     it('should be able to edit event', async () => {
       const { headers } = await setupAuthHeaders();
       const eventData = {
