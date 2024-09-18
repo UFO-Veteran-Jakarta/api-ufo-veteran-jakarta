@@ -1,6 +1,7 @@
 {
   "scripts": {
-    "start": "nodemon src/server.js",
+    "start": "node dist/server.js",
+    "build": "babel src -d dist",
     "test": "cross-env NODE_ENV=test jest --detectOpenHandles --runInBand",
     "dev": "cross-env NODE_ENV=development nodemon --exec babel-node src/server.js",
     "migrate": "cross-env NODE_ENV=development node src/migrate.js",
@@ -36,9 +37,11 @@
     "winston": "^3.13.1"
   },
   "devDependencies": {
+    "@babel/cli": "^7.25.6",
     "@babel/core": "^7.24.9",
     "@babel/node": "^7.24.8",
-    "@babel/preset-env": "^7.24.8",
+    "@babel/preset-env": "^7.25.4",
+    "@codecov/vite-plugin": "^1.1.0",
     "@vitest/coverage-v8": "^2.0.4",
     "cross-env": "^7.0.3",
     "eslint": "^8.57.0",
