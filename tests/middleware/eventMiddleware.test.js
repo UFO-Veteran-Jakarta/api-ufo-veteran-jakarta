@@ -307,5 +307,85 @@ describe('Event Middleware', () => {
           'Cover/Cover Landscape size is too big, please upload a file smaller than 500 KB',
         );
         },30000);
+
+    it('should return an error if Cover not in 1080px x 1080px during update', async () => {
+     const { headers } = await setupAuthHeaders();
+     const event = await createEvent(
+       headers,
+       {
+         name: 'Initial Event',
+         start_event_date: '2024-07-26',
+         end_event_date: '2024-07-26',
+         start_event_time: '1000',
+         end_event_time: '1800',
+         registration_start_date: '2024-07-26',
+         registration_end_date: '2024-07-26',
+         registration_start_time: '1000',
+         registration_end_time: '1800',
+         body: 'Initial Event Body',
+         link_registration: 'https://initial-link-registration.com',
+         location: 'Initial Location',
+         snippets: 'Initial Snippets',
+       },
+       validFilePath,
+       largeFileEvent,
+     );
+
+     const eventId = event.body.data.slug;
+
+     const res = await updateEvent(
+       headers,
+       eventId,
+       validEventData,
+       largeFileEvent,
+       validFilePath,
+     );
+
+      validateErrorResponse(
+        res,
+        500,
+        500,
+        'Cover must in 1080px x 1080px in size',
+      );
+    }, 30000);
+    it('should return if Cover Landscape not in 2000px x 1047px in size during update', async () => {
+      const { headers } = await setupAuthHeaders();
+      const event = await createEvent(
+        headers,
+        {
+          name: 'Initial Event',
+          start_event_date: '2024-07-26',
+          end_event_date: '2024-07-26',
+          start_event_time: '1000',
+          end_event_time: '1800',
+          registration_start_date: '2024-07-26',
+          registration_end_date: '2024-07-26',
+          registration_start_time: '1000',
+          registration_end_time: '1800',
+          body: 'Initial Event Body',
+          link_registration: 'https://initial-link-registration.com',
+          location: 'Initial Location',
+          snippets: 'Initial Snippets',
+        },
+        validFilePath,
+        largeFileEvent,
+      );
+
+      const eventId = event.body.data.slug;
+      const res = await updateEvent(
+        headers,
+        eventId,
+        validEventData,
+        validFilePath,
+        validFilePath,
+      );
+
+     validateErrorResponse(
+        res,
+        500,
+        500,
+        'Cover Landscape must in 2000px x 1047px in size',
+      );
+    }, 30000);
   });
-});
+})
