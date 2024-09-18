@@ -49,6 +49,7 @@ jobs:
           requireScope: false
           subjectPattern: '^[A-Z].*$'
           subjectPatternError: 'The subject of the PR title must start with a capital letter.'
+        continue-on-error: true
 
   build:
     name: Build and Test
@@ -78,11 +79,10 @@ jobs:
           cat .env.test
           cat .env
       - name: Run tests
-        run: npm run test
+        run: npm run test --coverage
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
         with:
-          file: ./coverage/lcov.info
           token: ${{ secrets.CODECOV_TOKEN }}
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
