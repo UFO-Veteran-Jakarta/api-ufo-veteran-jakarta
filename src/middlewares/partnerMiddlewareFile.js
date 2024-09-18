@@ -17,7 +17,6 @@ exports.checkFile = (form) => {
     }
 
     if (file.size > 500 * 1024) {
-      // 500KB
       return sendResponse(
         res,
         500,
@@ -42,7 +41,6 @@ exports.checkUpdateFile = (form) => {
       }
 
       if (file.size > 500 * 1024) {
-        // 500KB
         return sendResponse(
           res,
           500,
