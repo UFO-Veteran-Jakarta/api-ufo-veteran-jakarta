@@ -251,6 +251,33 @@ describe('Latest Activity Controller', () => {
       validateErrorResponse(res, 404, 404, 'Latest Activity not found');
     });
 
+    it('should return 404 if latest activity not found when updating', async () => {
+        const token = await authenticateUser();
+        const filePathImage = path.resolve(__dirname, '../test-small.webp');
+        fileExists(filePathImage);
+
+          const latestActivityData = {
+          title: 'title latest activity lama',
+          image: filePathImage,
+        };
+
+        await createLatestActivity(token, latestActivityData);
+
+        const latestActivityUpdated = {
+          title: 'title latest activity baru ceunah',
+          image: filePathImage,
+        };
+
+      const res = await request(app)
+        .put(`/api/v1/latest-activities?id=20`)
+        .set('Cookie', [`token=${token}`])
+        .set('Authorization', `Bearer ${token}`)
+        .field('title', latestActivityUpdated.title)
+        .attach('image', latestActivityUpdated.image);
+
+      validateErrorResponse(res, 404, 404, 'Latest Activity not found');
+    });
+
     it('should be able to update latest activity by id', async () => {
       const latestActivities = await request(app).get(
         '/api/v1/latest-activities',
