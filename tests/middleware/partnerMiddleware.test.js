@@ -125,7 +125,7 @@ describe('Partner Middleware', () => {
         expect(res.body.message).toBe(expectedMessage);
       },
     );
-  }, 30000);
+  });
 
   describe('checkUpdateFile Middleware', () => {
     testFileMiddleware(
@@ -143,5 +143,22 @@ describe('Partner Middleware', () => {
         expect(res.body.message).toBe(expectedMessage);
       },
     );
-  }, 30000);
+
+    testFileMiddleware(
+      'should return 500 if new logo size is more than 500KB',
+      () => ({
+        filePathLogo: path.resolve(__dirname, '../test-small.webp'),
+        partnerData: { name: 'Test Partner' },
+        updateData: { name: 'Updated Partner' },
+        newFilePathLogo: path.resolve(__dirname, '../tes-large.webp'), // Assuming this file is > 500KB
+        expectedStatus: 500,
+        expectedMessage:
+          'Partner logo size is too big, please upload a file smaller than 500 KB',
+      }),
+      (res, expectedStatus, expectedMessage) => {
+        expect(res.statusCode).toEqual(expectedStatus);
+        expect(res.body.message).toBe(expectedMessage);
+      },
+    );
+  });
 });
