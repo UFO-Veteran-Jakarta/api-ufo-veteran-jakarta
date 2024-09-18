@@ -6,8 +6,7 @@ require('dotenv').config();
 const fs = require('fs');
 const { deleteAchievementAll } = require('../../src/models/achievementsModel');
 
-const TEST_USERNAME = process.env.TEST_USERNAME;
-const TEST_PASSWORD = process.env.TEST_PASSWORD;
+const { TEST_USERNAME, TEST_PASSWORD } = process.env;
 
 describe('Achievement Controller', () => {
   beforeEach(async () => {
@@ -53,7 +52,7 @@ describe('Achievement Controller', () => {
     it('should be rejected if user not authenticated', async () => {
       const res = await request(app).post('/api/v1/achievements');
       validateErrorResponse(res, 401, 401, 'Unauthorized');
-    }, 60000);
+    });
 
     it('should be rejected if name is not provided', async () => {
       const token = await authenticateUser();
@@ -69,8 +68,8 @@ describe('Achievement Controller', () => {
         res.body.errors.some(
           (error) => error.msg === 'Achievement name is required',
         ),
-      ).toBeTruthy();
-    }, 60000);
+      );
+    });
 
     it('should be rejected if name is longer than 255 characters', async () => {
       const token = await authenticateUser();
@@ -89,7 +88,7 @@ describe('Achievement Controller', () => {
       expect(res.body.errors[0].msg).toBe(
         'Achievement name must be no more than 255 characters',
       );
-    }, 60000);
+    });
 
     it('should be rejected if year is more than 4 characters', async () => {
       const token = await authenticateUser();
@@ -108,7 +107,7 @@ describe('Achievement Controller', () => {
       expect(res.body.errors[0].msg).toBe(
         'Achievement year must be no more than 4 characters',
       );
-    }, 60000);
+    });
 
     it('should be rejected if year is not provided', async () => {
       const token = await authenticateUser();
@@ -124,8 +123,8 @@ describe('Achievement Controller', () => {
         res.body.errors.some(
           (error) => error.msg === 'Achievement year is required',
         ),
-      ).toBeTruthy();
-    }, 60000);
+      );
+    });
 
     it('should be rejected if logo is not provided', async () => {
       const token = await authenticateUser();
@@ -136,7 +135,7 @@ describe('Achievement Controller', () => {
       expect(res.statusCode).toEqual(500);
       expect(res.body.status).toEqual(500);
       expect(res.body.message).toBe('Achievement logo are required');
-    }, 60000);
+    });
 
     it('should be rejected if logo is not webp', async () => {
       const token = await authenticateUser();
@@ -153,8 +152,7 @@ describe('Achievement Controller', () => {
       expect(res.statusCode).toEqual(500);
       expect(res.body.status).toEqual(500);
       expect(res.body.message).toBe('Achievement logo must be in WEBP format');
-    }, 60000);
-
+    });
     it('should be rejected if logo is larger than 500kb', async () => {
       const token = await authenticateUser();
       const filePathLogo = path.resolve(__dirname, '../tes-large.webp');
@@ -172,7 +170,7 @@ describe('Achievement Controller', () => {
       expect(res.body.message).toBe(
         'Achievement logo size is too big, please upload a file smaller than 500 KB',
       );
-    }, 60000);
+    });
 
     it('should be able to add achievement', async () => {
       const token = await authenticateUser();
@@ -189,7 +187,7 @@ describe('Achievement Controller', () => {
       expect(res.statusCode).toEqual(200);
       expect(res.body.status).toEqual(200);
       expect(res.body.message).toBe('Successfully Add New Achievement');
-    }, 60000);
+    }, 7000);
   });
 
   const testGetAllAchievements = (res) => {
@@ -205,9 +203,20 @@ describe('Achievement Controller', () => {
 
   describe('GET /api/v1/achievements', () => {
     it('Should get all achievements', async () => {
+      const token = await authenticateUser();
+      const filePathLogo = path.resolve(__dirname, '../test-small.webp');
+      fileExists(filePathLogo);
+
+      const achievementData = {
+        name: 'Achievement',
+        logo: filePathLogo,
+        year: '2021',
+      };
+      await createAchievement(token, achievementData);
       const res = await request(app).get('/api/v1/achievements');
+
       testGetAllAchievements(res);
-    }, 60000);
+    }, 7000);
 
     it('Should return 500 if error', async () => {
       await deleteAchievementAll();
@@ -218,10 +227,22 @@ describe('Achievement Controller', () => {
         500,
         'Failed to Get All Achievements: No data found',
       );
-    }, 60000);
+    }, 7000);
   });
 
   describe('GET /api/v1/achievements?id=id_achievement', () => {
+
+    it('Should return 404 if achievement not found', async () => {
+      const res = await request(app).get('/api/v1/achievements?id=1');
+
+      validateErrorResponse(
+        res,
+        404,
+        404,
+        'Achievement not found',
+      );
+    });
+
     it('Should get achievement by id', async () => {
       const token = await authenticateUser();
       const filePathLogo = path.resolve(__dirname, '../test-small.webp');
@@ -233,6 +254,7 @@ describe('Achievement Controller', () => {
         year: '2021',
       };
       const achievement = await createAchievement(token, achievementData);
+
       const res = await request(app).get(
         `/api/v1/achievements?id=${achievement.body.data.id}`,
       );
@@ -244,10 +266,21 @@ describe('Achievement Controller', () => {
       expect(res.body.data.name).toBeDefined();
       expect(res.body.data.year).toBeDefined();
       expect(res.body.data.created_at).toBeDefined();
-    }, 60000);
+    }, 30000);
   });
 
   describe('PUT /api/v1/achievements?id=id_achievement', () => {
+    it('Should return 404 if achievement to update not found', async () => {
+      const token = await authenticateUser();
+
+      const res = await request(app)
+        .delete(`/api/v1/achievements?id=2`)
+        .set('Cookie', `token=${token}`)
+        .set('Authorization', `Bearer ${token}`)
+
+      validateErrorResponse(res, 404, 404, 'Achievement not found');
+    });
+
     it('Should update achievement by id', async () => {
       const token = await authenticateUser();
       const filePathLogo = path.resolve(__dirname, '../test-small.webp');
@@ -267,6 +300,7 @@ describe('Achievement Controller', () => {
         year: '2022',
       };
       const achievement = await createAchievement(token, achievementData);
+
       const res = await request(app)
         .put(`/api/v1/achievements?id=${achievement.body.data.id}`)
         .set('Cookie', `token=${token}`)
@@ -278,10 +312,22 @@ describe('Achievement Controller', () => {
       expect(res.statusCode).toEqual(200);
       expect(res.body.status).toEqual(200);
       expect(res.body.message).toEqual('Successfully Update Achievement');
-    });
+    }, 30000);
   });
 
   describe('DELETE /api/v1/achievements?id=id_achievement', () => {
+
+    it('Should return 404 if achievement to delete not found', async () => {
+      const token = await authenticateUser();
+
+      const res = await request(app)
+        .delete('/api/v1/achievements?id=2')
+        .set('Cookie', `token=${token}`)
+        .set('Authorization', `Bearer ${token}`);
+
+      validateErrorResponse(res, 404, 404, 'Achievement not found');
+    });
+
     it('Should delete achievement by id', async () => {
       const token = await authenticateUser();
       const filePathLogo = path.resolve(__dirname, '../test-small.webp');
@@ -293,15 +339,15 @@ describe('Achievement Controller', () => {
         year: '2021',
       };
       const achievement = await createAchievement(token, achievementData);
-      console.log('woii', achievement.body.data.id);
+
       const res = await request(app)
         .delete(`/api/v1/achievements?id=${achievement.body.data.id}`)
         .set('Cookie', `token=${token}`)
         .set('Authorization', `Bearer ${token}`);
-      console.log(res.body);
+
       expect(res.statusCode).toEqual(200);
       expect(res.body.status).toEqual(200);
       expect(res.body.message).toEqual('Successfully Delete Achievement');
-    }, 60000);
+    }, 30000);
   });
 });

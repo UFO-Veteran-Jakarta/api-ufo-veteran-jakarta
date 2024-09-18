@@ -1,8 +1,8 @@
-const request = require("supertest");
-const app = require("src/app");
-const path = require("path");
+const request = require('supertest');
+const app = require('src/app');
+const path = require('path');
 
-describe("Partner Middleware", () => {
+describe('Partner Middleware', () => {
   let token;
 
   const authenticateUser = async () => {
@@ -10,8 +10,8 @@ describe("Partner Middleware", () => {
       username: process.env.TEST_USERNAME,
       password: process.env.TEST_PASSWORD,
     };
-    await request(app).post("/api/v1/register").send(data);
-    const loginResponse = await request(app).post("/api/v1/login").send(data);
+    await request(app).post('/api/v1/register').send(data);
+    const loginResponse = await request(app).post('/api/v1/login').send(data);
     return loginResponse.body.authorization.token;
   };
 
@@ -22,13 +22,13 @@ describe("Partner Middleware", () => {
   const sendRequest = (method, url, token, bodyData = {}, logoPath) => {
     let req = request(app)
       [method](url)
-      .set("Cookie", `token=${token}`)
-      .set("Authorization", `Bearer ${token}`);
+      .set('Cookie', `token=${token}`)
+      .set('Authorization', `Bearer ${token}`);
 
     if (logoPath) {
       req = req
-        .field("name", bodyData.name || "Default Name")
-        .attach("logo", logoPath);
+        .field('name', bodyData.name || 'Default Name')
+        .attach('logo', logoPath);
     } else {
       req = req.send(bodyData);
     }
@@ -39,16 +39,16 @@ describe("Partner Middleware", () => {
   const postPartner = (
     token,
     logoPath,
-    partnerData = { name: "Default Name" }
-  ) => sendRequest("post", "/api/v1/partners", token, partnerData, logoPath);
+    partnerData = { name: 'Default Name' },
+  ) => sendRequest('post', '/api/v1/partners', token, partnerData, logoPath);
 
   const updatePartner = (token, id, updateData, logoPath) =>
     sendRequest(
-      "put",
+      'put',
       `/api/v1/partners?id=${id}`,
       token,
       updateData,
-      logoPath
+      logoPath,
     );
 
   const prepareTestPartner = async (token, filePathLogo, partnerData) => {
@@ -71,7 +71,7 @@ describe("Partner Middleware", () => {
         const partner = await prepareTestPartner(
           token,
           filePathLogo,
-          partnerData
+          partnerData,
         );
         const res = newFilePathLogo
           ? await updatePartner(token, partner.id, updateData, newFilePathLogo)
@@ -79,69 +79,86 @@ describe("Partner Middleware", () => {
 
         assertions(res, expectedStatus, expectedMessage);
       },
-      60000
+      30000,
     );
   };
 
-  describe("checkFile Middleware", () => {
+  describe('checkFile Middleware', () => {
     testFileMiddleware(
-      "should return 500 if logo is not provided",
+      'should return 500 if logo is not provided',
       () => ({
         filePathLogo: undefined,
         partnerData: {},
         expectedStatus: 500,
-        expectedMessage: "Partner logo are required",
+        expectedMessage: 'Partner logo are required',
       }),
       (res, expectedStatus, expectedMessage) => {
         expect(res.statusCode).toEqual(expectedStatus);
         expect(res.body.message).toBe(expectedMessage);
-      }
+      },
     );
 
     testFileMiddleware(
-      "should return 500 if logo is not in WEBP format",
+      'should return 500 if logo is not in WEBP format',
       () => ({
-        filePathLogo: path.resolve(__dirname, "../test.jpg"),
+        filePathLogo: path.resolve(__dirname, '../test.jpg'),
         partnerData: {},
         expectedStatus: 500,
-        expectedMessage: "Partner logo must be in WEBP format",
+        expectedMessage: 'Partner logo must be in WEBP format',
       }),
       (res, expectedStatus, expectedMessage) => {
         expect(res.statusCode).toEqual(expectedStatus);
         expect(res.body.message).toBe(expectedMessage);
-      }
+      },
     );
 
     testFileMiddleware(
-      "should pass if logo is provided in WEBP format and is less than 500KB",
+      'should pass if logo is provided in WEBP format and is less than 500KB',
       () => ({
-        filePathLogo: path.resolve(__dirname, "../test-small.webp"),
-        partnerData: { name: "Test Partner" },
+        filePathLogo: path.resolve(__dirname, '../test-small.webp'),
+        partnerData: { name: 'Test Partner' },
         expectedStatus: 200,
-        expectedMessage: "Successfully Add New Partner",
+        expectedMessage: 'Successfully Add New Partner',
       }),
       (res, expectedStatus, expectedMessage) => {
         expect(res.statusCode).toEqual(expectedStatus);
         expect(res.body.message).toBe(expectedMessage);
-      }
+      },
     );
   });
 
-  describe("checkUpdateFile Middleware", () => {
+  describe('checkUpdateFile Middleware', () => {
     testFileMiddleware(
-      "should return 500 if new logo is not in WEBP format",
+      'should return 500 if new logo is not in WEBP format',
       () => ({
-        filePathLogo: path.resolve(__dirname, "../test-small.webp"),
-        partnerData: { name: "Test Partner" },
-        updateData: { name: "Updated Partner" },
-        newFilePathLogo: path.resolve(__dirname, "../test.jpg"),
+        filePathLogo: path.resolve(__dirname, '../test-small.webp'),
+        partnerData: { name: 'Test Partner' },
+        updateData: { name: 'Updated Partner' },
+        newFilePathLogo: path.resolve(__dirname, '../test.jpg'),
         expectedStatus: 500,
-        expectedMessage: "Partner logo must be in WEBP format",
+        expectedMessage: 'Partner logo must be in WEBP format',
       }),
       (res, expectedStatus, expectedMessage) => {
         expect(res.statusCode).toEqual(expectedStatus);
         expect(res.body.message).toBe(expectedMessage);
-      }
+      },
+    );
+
+    testFileMiddleware(
+      'should return 500 if new logo size is more than 500KB',
+      () => ({
+        filePathLogo: path.resolve(__dirname, '../test-small.webp'),
+        partnerData: { name: 'Test Partner' },
+        updateData: { name: 'Updated Partner' },
+        newFilePathLogo: path.resolve(__dirname, '../tes-large.webp'), // Assuming this file is > 500KB
+        expectedStatus: 500,
+        expectedMessage:
+          'Partner logo size is too big, please upload a file smaller than 500 KB',
+      }),
+      (res, expectedStatus, expectedMessage) => {
+        expect(res.statusCode).toEqual(expectedStatus);
+        expect(res.body.message).toBe(expectedMessage);
+      },
     );
   });
 });

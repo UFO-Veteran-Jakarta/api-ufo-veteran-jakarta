@@ -6,6 +6,7 @@ on:
       - main
   pull_request:
     branches:
+      - main
       - master
       - testing
       - testing-ci
@@ -67,6 +68,8 @@ jobs:
           cache: 'npm'
       - name: Install dependencies
         run: npm ci
+      - name: Check Lint
+        run: npm run lint
       - name: Create .env.test file
         run: |
           touch .env.test
@@ -75,9 +78,12 @@ jobs:
           echo "${{ secrets.ENV }}" >> .env
           cat .env.test
           cat .env
-
-      - name: Run tests and coverage
-        run: npm run test
+      - name: Run tests
+        run: npm run test --coverage
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
