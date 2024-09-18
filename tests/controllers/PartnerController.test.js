@@ -125,6 +125,7 @@ describe('Partner Controller', () => {
       const filePathLogo = path.resolve(__dirname, '../test-small.webp');
       const partnerData = { name: 'Test Partner' };
       const res = await postPartner(token, filePathLogo, partnerData);
+
       expect(res.statusCode).toEqual(200);
       expect(res.body.status).toEqual(200);
       expect(res.body.message).toBe('Successfully Add New Partner');

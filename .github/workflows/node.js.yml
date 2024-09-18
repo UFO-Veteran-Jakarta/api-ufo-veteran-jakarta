@@ -3,10 +3,10 @@ name: CI
 on:
   push:
     branches:
-      - "**"
+      - main
   pull_request:
     branches:
-      - main
+      - master
       - testing
       - testing-ci
     types:
@@ -46,8 +46,8 @@ jobs:
             style
             test
           requireScope: false
-          subjectPattern: "^[A-Z].*$"
-          subjectPatternError: "The subject of the PR title must start with a capital letter."
+          subjectPattern: '^[A-Z].*$'
+          subjectPatternError: 'The subject of the PR title must start with a capital letter.'
         continue-on-error: true
 
   build:
@@ -64,11 +64,19 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-          cache: "npm"
+          cache: 'npm'
       - name: Install dependencies
         run: npm ci
+      - name: Create .env.test file
+        run: |
+          touch .env.test
+          echo "${{ secrets.ENV_TESTING }}" >> .env.test
+          touch .env
+          echo "${{ secrets.ENV }}" >> .env
+          cat .env.test
+          cat .env
       - name: Run tests and coverage
-        run: npm test
+        run: npm run test
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:

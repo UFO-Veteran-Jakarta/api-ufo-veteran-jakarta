@@ -178,6 +178,19 @@ describe('Auth Controller', () => {
       expect(res.body.status).toEqual(401);
       expect(res.body.message).toBeDefined();
     }, 60000);
+
+   it('should handle logout error when no token is provided', async () => {
+    const res = await request(app)
+      .delete('/api/v1/logout')
+      .set('Cookie', '')
+      .set('Authorization', '');
+
+    expect(res.statusCode).toEqual(401);
+    expect(res.body.message).toBe('Unauthorized');
+    expect(res.body.status).toEqual(401);
+   });
+
+
     it('should be able to logout', async () => {
       const data = {
         username: 'admin',
