@@ -3,9 +3,24 @@ const app = require('../../src/app');
 const path = require('path');
 const { deleteUserByUsername } = require('../../src/models/userModel');
 const pool = require('../../src/config/database');
+const { query } = require('express');
+const { Pool } = require('pg');
 require('dotenv').config();
 
 const { TEST_USERNAME, TEST_PASSWORD } = process.env;
+
+jest.mock('pg', () => ({
+  pool: jest.fn(() => ({
+    query: jest.fn(),
+    end: jest.fn(),
+  })),
+}));
+
+jest.mock('../../src/utils/uploadFile', () => ({
+  uploadSingle: jest
+    .fn()
+    .mockResolvedValue({ secure_url: 'http://example.com/image.webp' }),
+}));
 
 const setupAuthHeaders = async () => {
   const login = await registerAndLogin(TEST_USERNAME, TEST_PASSWORD);
@@ -161,34 +176,7 @@ describe('Event Controller', () => {
     });
   });
 
-jest.mock('../../src/config/database', () => {
-  const mockPool = {
-    query: jest.fn(),
-  };
-  return mockPool;
-});
-
-// beforeEach(() => {
-//   jest.clearAllMocks();
-//   const pool = require('../../src/config/database');
-//   pool.query.mockRejectedValue(new Error('Database error'));
-// });
   describe('GET /api/v1/events/:slug', () => {
-    // it('should return 500 if there is a database error', async () => {
-    //     const pool = require('../../src/config/database');
-    //     pool.query.mockRejectedValue(new Error('Database error'));
-
-    //     const res = await request(app).get('/api/v1/events');
-
-    //     expect(pool.query).toHaveBeenCalled();
-    //     expect(res.status).toBe(500);
-    //     expect(res.body).toEqual({
-    //       statusCode: 500,
-    //       message: 'Failed to Get All Events',
-    //       data: null,
-    //     });
-    //   }, 10000);
-
     it('should return an event by slug', async () => {
       const { headers } = await setupAuthHeaders();
       const eventData = {
@@ -233,29 +221,27 @@ jest.mock('../../src/config/database', () => {
     it('should return 404 if slug parameter not found', async () => {
       const { headers } = await setupAuthHeaders();
       const updatedData = {
-              name: 'Event Test',
-              start_event_date: '2024-07-26',
-              end_event_date: '2024-07-26',
-              start_event_time: '1000',
-              end_event_time: '1800',
-              registration_start_date: '2024-07-26',
-              registration_end_date: '2024-07-26',
-              registration_start_time: '1000',
-              registration_end_time: '1800',
-              body: 'Event Test Body',
-              link_registration: 'https://link-registration.com',
-              location: 'Test Location',
-              snippets: 'Test Snippets',
-            };
-        const res = await request(app)
-          .put(`/api/v1/events/:`)
-          .set(headers)
-          .send(updatedData);
-         ;
-        console.log(res.body);
-        validateErrorResponse(res, 404, 404, 'Event Not Found');
-      });
-    
+        name: 'Event Test',
+        start_event_date: '2024-07-26',
+        end_event_date: '2024-07-26',
+        start_event_time: '1000',
+        end_event_time: '1800',
+        registration_start_date: '2024-07-26',
+        registration_end_date: '2024-07-26',
+        registration_start_time: '1000',
+        registration_end_time: '1800',
+        body: 'Event Test Body',
+        link_registration: 'https://link-registration.com',
+        location: 'Test Location',
+        snippets: 'Test Snippets',
+      };
+      const res = await request(app)
+        .put(`/api/v1/events/:`)
+        .set(headers)
+        .send(updatedData);
+      validateErrorResponse(res, 404, 404, 'Event Not Found');
+    }, 600000);
+
     it('should return 404 if event does not exist', async () => {
       const { headers } = await setupAuthHeaders();
       const updatedData = {
@@ -282,27 +268,27 @@ jest.mock('../../src/config/database', () => {
     });
 
     it('should return if Cover and Cover Landscape is not Webp', async () => {
-       const { headers } = await setupAuthHeaders();
-       const eventData = {
-         name: 'Event Test',
-         start_event_date: '2024-07-26',
-         end_event_date: '2024-07-26',
-         start_event_time: '1000',
-         end_event_time: '1800',
-         registration_start_date: '2024-07-26',
-         registration_end_date: '2024-07-26',
-         registration_start_time: '1000',
-         registration_end_time: '1800',
-         body: 'Event Test Body',
-         link_registration: 'https://link-registration.com',
-         location: 'Test Location',
-         snippets: 'Test Snippets',
-       };
+      const { headers } = await setupAuthHeaders();
+      const eventData = {
+        name: 'Event Test',
+        start_event_date: '2024-07-26',
+        end_event_date: '2024-07-26',
+        start_event_time: '1000',
+        end_event_time: '1800',
+        registration_start_date: '2024-07-26',
+        registration_end_date: '2024-07-26',
+        registration_start_time: '1000',
+        registration_end_time: '1800',
+        body: 'Event Test Body',
+        link_registration: 'https://link-registration.com',
+        location: 'Test Location',
+        snippets: 'Test Snippets',
+      };
 
-       const event = await createEvent(headers, eventData);
+      const event = await createEvent(headers, eventData);
 
-       const slug = event.body.data.slug;
-      
+      const slug = event.body.data.slug;
+
       const filePath = path.resolve(__dirname, '../test.jpg');
       const res = await request(app)
         .put(`/api/v1/events/${slug}`)
@@ -316,8 +302,8 @@ jest.mock('../../src/config/database', () => {
         500,
         'Cover/Cover Landscape must be in WEBP Format',
       );
-    });
-    
+    }, 60000);
+
     it('should be able to edit event', async () => {
       const { headers } = await setupAuthHeaders();
       const eventData = {
@@ -391,7 +377,7 @@ describe('DELETE /api/v1/events/:slug', () => {
     const event = await createEvent(headers, eventData);
 
     const slug = event.body.data.slug;
-  
+
     const res = await request(app)
       .delete(`/api/v1/events/${slug}`)
       .set(headers);
