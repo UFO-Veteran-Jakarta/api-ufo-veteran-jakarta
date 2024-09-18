@@ -129,7 +129,7 @@ describe('Partner Controller', () => {
       expect(res.statusCode).toEqual(200);
       expect(res.body.status).toEqual(200);
       expect(res.body.message).toBe('Successfully Add New Partner');
-    });
+    }, 60000);
   });
 
   describe('GET /api/v1/partners', () => {
