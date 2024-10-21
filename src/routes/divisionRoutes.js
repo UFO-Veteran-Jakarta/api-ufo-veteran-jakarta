@@ -4,6 +4,7 @@ const {
   validate,
 } = require('../validators/divisionValidator');
 const { authentication } = require('../middlewares/authMiddleware');
+const checkFileDivision = require('../middlewares/divisionMiddlewareFile'); 
 const divisionController = require('../controllers/divisionController');
 
 const router = express.Router();
@@ -13,6 +14,7 @@ router.post(
   authentication(),
   postDivisionValidationRules(),
   validate,
+  checkFileDivision,
   divisionController.addDivision,
 );
 
