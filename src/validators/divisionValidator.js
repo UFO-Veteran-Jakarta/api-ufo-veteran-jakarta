@@ -20,13 +20,34 @@ function createStringFieldValidator(fieldName, errorMessage, maxLength = null) {
 }
 
 const postDivisionValidationRules = () => {
-  return [createStringFieldValidator('name', 'Latest activity title', 255)];
+  return [
+    createStringFieldValidator('name', 'Division name', 255),
+    check('image')
+      .optional()
+      .isString()
+      .withMessage('Image must be a string (file path)'),
+  ];
+};
+
+const updateDivisionValidationRules = () => {
+  return [
+    check('name')
+      .optional()
+      .isString()
+      .trim()
+      .isLength({ max: 255 })
+      .withMessage('Division name must be no more than 255 characters'),
+    check('image')
+      .optional()
+      .isString()
+      .withMessage('Image must be a string (file path)'),
+  ];
 };
 
 const validate = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return res.status(500).json({ status: 500, errors: errors.array() });
+    return res.status(400).json({ status: 400, errors: errors.array() });
   }
 
   req.body = matchedData(req, { onlyValidData: true });
@@ -35,5 +56,6 @@ const validate = (req, res, next) => {
 
 module.exports = {
   postDivisionValidationRules,
+  updateDivisionValidationRules,
   validate,
 };
