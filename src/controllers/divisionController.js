@@ -39,8 +39,6 @@ exports.getAllDivisions = async (req, res, next) => {
   try {
     const divisions = await getAllDivisions();
 
-    console.log(divisions);
-
     if (divisions.length === 0) {
       logger.info('No divisions data available.');
       return sendResponse(res, 204, 'No divisions data are available.', []);
