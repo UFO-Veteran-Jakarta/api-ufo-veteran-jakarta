@@ -21,17 +21,17 @@ router.post(
 router.get(
   '/',
   divisionController.getAllDivisions,
-  divisionController.getDivisionById,
 );
+router.get('/:slug', divisionController.getDivisionBySlug);
 
 router.put(
   '/',
   authentication(),
   postDivisionValidationRules(),
   validate,
-  divisionController.updateDivisionById,
+  divisionController.updateDivisionBySlug,
 );
 
-router.delete('/', authentication(), divisionController.deleteDivisionById);
+router.delete('/', authentication(), divisionController.deleteDivisionBySlug);
 
 module.exports = router;
