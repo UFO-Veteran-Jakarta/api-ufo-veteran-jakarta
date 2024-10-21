@@ -4,18 +4,33 @@ const {
   getDivisionById,
   updateDivisionById,
   deleteDivisionById,
+  checkSlugExistsInDb,
 } = require('../services/divisionSerice');
 const logger = require('../utils/logger');
 const { sendResponse } = require('../helpers/response');
+const {createSlugDivision } = require('../helpers/slug');
+const uploadFileDivision = require('../utils/uploadFileDivision');
 
 exports.addDivision = async (req, res) => {
   try {
+    req.body.slug = await createSlugDivision(
+      req.body.name,
+      checkSlugExistsInDb,
+    );
+
+    if (req.files?.image) {
+      const imagePath = uploadFileDivision(req.files.image);
+      if (imagePath) {
+        req.body.image = imagePath;
+      }
+    }
+
     const result = await addDivision(req.body);
 
     logger.info('Add Success: Success Add Division');
-    return sendResponse(res, 200, 'Successfully Add New Division', result);
+    return sendResponse(res, 201, 'Successfully insert division data', result);
   } catch (error) {
-    logger.error('Add Error: Failed Add Division');
+    logger.error('Add Error: Failed Add Division', error);
     return sendResponse(res, 500, error.message);
   }
 };
