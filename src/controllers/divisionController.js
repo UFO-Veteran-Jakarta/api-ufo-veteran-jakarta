@@ -1,9 +1,9 @@
 const {
   addDivision,
   getAllDivisions,
-  getDivisionById,
-  updateDivisionById,
-  deleteDivisionById,
+  getDivisionBySlug,
+  updateDivisionBySlug,
+  deleteDivisionBySlug,
   checkSlugExistsInDb,
 } = require('../services/divisionSerice');
 const logger = require('../utils/logger');
@@ -57,37 +57,37 @@ exports.getAllDivisions = async (req, res, next) => {
   }
 };
 
-exports.getDivisionById = async (req, res) => {
+exports.getDivisionBySlug = async (req, res) => {
   try {
-    const { id } = req.query;
-    const division = await getDivisionById(id);
+    const { slug } = req.params;
+    const division = await getDivisionBySlug(slug);
 
     if (!division) {
-      logger.error(`Division with id ${id} not found`);
-      return sendResponse(res, 404, `Division with id ${id} not found`);
+      logger.error(`Division not found`);
+      return sendResponse(res, 404, `Division not found`);
     }
 
-    logger.info(`Successfully Get Division with id ${id}`);
+    logger.info(`Successfully Get Division with slug '${slug}'`);
     return sendResponse(res, 200, 'Successfully Get Division', division);
   } catch (error) {
-    logger.error('Failed to Get Division');
+    logger.error('Failed to Get Division', error);
     return sendResponse(res, 500, error.message);
   }
 };
 
-exports.updateDivisionById = async (req, res) => {
+exports.updateDivisionBySlug = async (req, res) => {
   try {
-    const { id } = req.query;
-    const division = await getDivisionById(id);
+   const { slug } = req.params;
+   const division = await getDivisionBySlug(slug);
 
     if (!division) {
-      logger.error(`Division with id ${id} not found`);
-      return sendResponse(res, 404, `Division with id ${id} not found`);
+      logger.error(`Division with slug ${slug} not found`);
+      return sendResponse(res, 404, `Division with slug ${slug} not found`);
     }
 
-    const updatedDivision = await updateDivisionById(id, req.body);
+    const updatedDivision = await updateDivisionBySlug(slug, req.body);
 
-    logger.info(`Successfully Update Division with id ${id}`);
+    logger.info(`Successfully Update Division with slug ${slug}`);
     return sendResponse(
       res,
       200,
@@ -100,20 +100,19 @@ exports.updateDivisionById = async (req, res) => {
   }
 };
 
-exports.deleteDivisionById = async (req, res) => {
+exports.deleteDivisionBySlug = async (req, res) => {
   try {
-    const { id } = req.query;
-
-    const division = await getDivisionById(id);
+    const { slug } = req.params;
+    const division = await getDivisionBySlug(slug);
 
     if (!division) {
-      logger.error(`Division with id ${id} not found`);
-      return sendResponse(res, 404, `Division with id ${id} not found`);
+      logger.error(`Division with slug ${slug} not found`);
+      return sendResponse(res, 404, `Division with slug ${slug} not found`);
     }
 
-    const deletedDivision = await deleteDivisionById(id);
+    const deletedDivision = await deleteDivisionBySlug(slug);
 
-    logger.info(`Successfully Delete Division with id ${id}`);
+    logger.info(`Successfully Delete Division with slug ${slug}`);
     return sendResponse(
       res,
       200,
