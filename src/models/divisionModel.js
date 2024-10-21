@@ -45,17 +45,18 @@ async function addDivision(data) {
 
 async function getAllDivisions() {
   const query = `
-        SELECT * FROM myschema.divisions WHERE deleted_at IS NULL;
-    `;
+    SELECT * FROM myschema.divisions WHERE deleted_at IS NULL;
+  `;
 
   try {
     const res = await pool.query(query);
-    return res.rows.length > 0 ? res.rows : null;
+    return res.rows.length > 0 ? res.rows : [];
   } catch (error) {
     console.error('Error fetching divisions:', error);
-    throw error;
+    throw error; 
   }
 }
+
 
 async function getDivisionBySlug(slug) {
   const query = `
