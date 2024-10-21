@@ -37,16 +37,25 @@ exports.addDivision = async (req, res) => {
 
 exports.getAllDivisions = async (req, res, next) => {
   try {
-    if (req.query.id) {
-      return next();
+    const divisions = await getAllDivisions();
+
+    console.log(divisions);
+
+    if (divisions.length === 0) {
+      logger.info('No divisions data available.');
+      return sendResponse(res, 204, 'No divisions data are available.', []);
     }
 
-    const divisions = await getAllDivisions();
-    logger.info('Successfully Get All Divisions');
-    return sendResponse(res, 200, 'Successfully Get All Divisions', divisions);
+    logger.info('Successfully retrieved all divisions data');
+    return sendResponse(
+      res,
+      200,
+      'Successfully retrieved all divisions data',
+      divisions,
+    );
   } catch (error) {
-    logger.error('Failed to Get All Divisions');
-    return sendResponse(res, 500, 'Failed to Get All Divisions');
+    logger.error('Failed to retrieve divisions data:', error);
+    return sendResponse(res, 500, 'Failed to retrieve divisions data.', []);
   }
 };
 
