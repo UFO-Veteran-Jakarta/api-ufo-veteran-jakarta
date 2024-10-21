@@ -158,8 +158,8 @@ exports.deleteDivisionBySlug = async (req, res) => {
     const division = await getDivisionBySlug(slug);
 
     if (!division) {
-      logger.error(`Division with slug ${slug} not found`);
-      return sendResponse(res, 404, `Division with slug ${slug} not found`);
+      logger.error(`Division not found.`);
+      return sendResponse(res, 404, `Division not found.`);
     }
 
     const deletedDivision = await deleteDivisionBySlug(slug);
@@ -168,7 +168,7 @@ exports.deleteDivisionBySlug = async (req, res) => {
     return sendResponse(
       res,
       200,
-      'Successfully Delete Division',
+      'Successfully delete division data',
       deletedDivision,
     );
   } catch (error) {
