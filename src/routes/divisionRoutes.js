@@ -34,6 +34,6 @@ router.patch(
   divisionController.updateDivisionBySlug,
 );
 
-router.delete('/', authentication(), divisionController.deleteDivisionBySlug);
+router.delete('/:slug', authentication(), divisionController.deleteDivisionBySlug);
 
 module.exports = router;
