@@ -77,28 +77,80 @@ exports.getDivisionBySlug = async (req, res) => {
 
 exports.updateDivisionBySlug = async (req, res) => {
   try {
-   const { slug } = req.params;
-   const division = await getDivisionBySlug(slug);
+    const { slug } = req.params;
+    const updateData = {};
+    let oldData = await getDivisionBySlug(slug);
 
-    if (!division) {
-      logger.error(`Division with slug ${slug} not found`);
-      return sendResponse(res, 404, `Division with slug ${slug} not found`);
+    if (!oldData) {
+      return res
+        .status(404)
+        .json({ status: 404, message: 'Division not found' });
     }
 
-    const updatedDivision = await updateDivisionBySlug(slug, req.body);
+    if (req.body.name) {
+      updateData.name = req.body.name;
+      updateData.slug = await createSlugDivision(
+        req.body.name,
+        checkSlugExistsInDb,
+      );
+    }
 
-    logger.info(`Successfully Update Division with slug ${slug}`);
-    return sendResponse(
-      res,
-      200,
-      'Successfully Update Division',
-      updatedDivision,
+    if (req.files?.image) {
+      const imagePath = uploadFileDivision(req.files.image);
+      if (imagePath) {
+        updateData.image = imagePath;
+      }
+    }
+
+    if (Object.keys(updateData).length === 0) {
+      return res
+        .status(400)
+        .json({ status: 400, message: 'No update data provided' });
+    }
+
+    const updatedDivision = await updateDivisionBySlug(
+      slug,
+      updateData,
     );
+
+    let responseData = {
+      id: updatedDivision.id,
+    };
+
+    let responseMessage = 'Successfully update division';
+
+    if (updateData.name) {
+      responseData.old_name = oldData.name;
+      responseData.new_name = updatedDivision.name;
+      responseData.old_slug = oldData.slug;
+      responseData.new_slug = updatedDivision.slug;
+      responseMessage += ' name';
+    }
+
+    if (updateData.image) {
+      responseData.old_image = oldData.image;
+      responseData.new_image = updatedDivision.image;
+      responseMessage += updateData.name ? ' and' : '';
+      responseMessage += ' image';
+    }
+
+    responseData.created_at = updatedDivision.created_at;
+    responseData.updated_at = updatedDivision.updated_at;
+    responseData.deleted_at = updatedDivision.deleted_at;
+
+    return res.status(200).json({
+      status: 200,
+      message: responseMessage,
+      data: responseData,
+    });
   } catch (error) {
-    logger.error('Failed to Update Division');
-    return sendResponse(res, 500, error.message);
+    console.error('Error updating division:', error);
+    return res
+      .status(500)
+      .json({ status: 500, message: 'Internal server error' });
   }
 };
+
 
 exports.deleteDivisionBySlug = async (req, res) => {
   try {
