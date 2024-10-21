@@ -17,13 +17,13 @@ exports.addDivision = async (data) => {
 
 exports.getAllDivisions = async () => {
   try {
-    return await getAllDivisions();
+    const divisions = await getAllDivisions();
+    return divisions;
   } catch (error) {
-    console.error('Error fetching divisions: ', error);
-    throw error;
+    console.error('Error fetching divisions:', error);
+    throw error; 
   }
 };
-
 exports.getDivisionBySlug = async (slug) => {
  try {
     return await getDivisionBySlug(slug);
