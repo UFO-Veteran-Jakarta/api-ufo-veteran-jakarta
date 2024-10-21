@@ -14,7 +14,7 @@ function createInsertQuery(data, tableName) {
   return { query, values };
 }
 
-function createUpdateQuery(data, tableName, id) {
+function createUpdateQuery(data, tableName, slug) {
   const fields = Object.keys(data);
   const values = Object.values(data);
   const setClause = fields
@@ -23,12 +23,12 @@ function createUpdateQuery(data, tableName, id) {
 
   const query = `
         UPDATE ${tableName}
-        SET ${setClause}, updated_at  = NOW()
-        WHERE id = $${fields.length + 1}
+        SET ${setClause}, updated_at = NOW()
+        WHERE slug = $${fields.length + 1}
         RETURNING *;
     `;
 
-  return { query, values: [...values, id] };
+  return { query, values: [...values, slug] };
 }
 
 async function addDivision(data) {
@@ -39,6 +39,7 @@ async function addDivision(data) {
     return res.rows[0];
   } catch (error) {
     console.error('Error inserting division:', error);
+    throw error;
   }
 }
 
@@ -52,16 +53,17 @@ async function getAllDivisions() {
     return res.rows.length > 0 ? res.rows : null;
   } catch (error) {
     console.error('Error fetching divisions:', error);
+    throw error;
   }
 }
 
-async function getDivisionById(id) {
+async function getDivisionBySlug(slug) {
   const query = `
-        SELECT * FROM myschema.divisions WHERE id = $1 AND deleted_at IS NULL
+        SELECT * FROM myschema.divisions WHERE slug = $1 AND deleted_at IS NULL
     `;
 
   try {
-    const res = await pool.query(query, [id]);
+    const res = await pool.query(query, [slug]);
 
     if (res.rows.length === 0) {
       return null;
@@ -69,18 +71,20 @@ async function getDivisionById(id) {
 
     return res.rows[0];
   } catch (error) {
-    console.error('Error fetching division by id:', error);
+    console.error('Error fetching division by slug:', error);
+    throw error;
   }
 }
 
-async function updateDivisionById(id, data) {
-  const { query, values } = createUpdateQuery(data, 'myschema.divisions', id);
+async function updateDivisionBySlug(slug, data) {
+  const { query, values } = createUpdateQuery(data, 'myschema.divisions', slug);
 
   try {
     const res = await pool.query(query, values);
     return res.rows[0];
   } catch (error) {
-    console.error(`Error updating latest activity with id ${id}:`, error);
+    console.error(`Error updating division with slug ${slug}:`, error);
+    throw error;
   }
 }
 
@@ -92,27 +96,29 @@ async function deleteAllDivisions() {
     return res.rows;
   } catch (error) {
     console.error('Error deleting all divisions:', error);
+    throw error;
   }
 }
 
-async function deleteDivisionById(id) {
+async function deleteDivisionBySlug(slug) {
   const query = `
-        UPDATE myschema.divisions SET deleted_at = NOW() WHERE id = $1 RETURNING *;
+        UPDATE myschema.divisions SET deleted_at = NOW() WHERE slug = $1 RETURNING *;
     `;
 
   try {
-    const res = await pool.query(query, [id]);
+    const res = await pool.query(query, [slug]);
     return res.rows[0];
   } catch (error) {
-    console.error(`Error deleting division with id ${id}:`, error);
+    console.error(`Error deleting division with slug ${slug}:`, error);
+    throw error;
   }
 }
 
 module.exports = {
   addDivision,
   getAllDivisions,
-  getDivisionById,
-  updateDivisionById,
+  getDivisionBySlug,
+  updateDivisionBySlug,
   deleteAllDivisions,
-  deleteDivisionById,
+  deleteDivisionBySlug,
 };
