@@ -32,4 +32,33 @@ const checkFileDivision = (req, res, next) => {
   next();
 };
 
-module.exports = checkFileDivision;
+const checkUpdatedFileDivision = (req, res, next) => {
+  if (!req.files?.image) {
+    return next();
+  }
+
+  const image = req.files.image;
+
+  const maxSize = 500 * 1024;
+  if (image.size > maxSize) {
+    return res
+      .status(413)
+      .json({ status: 413, message: 'Image size is more than 500 KB.' });
+  }
+
+  const ext = path.extname(image.name).toLowerCase();
+  if (ext !== '.webp') {
+    return res
+      .status(415)
+      .json({ status: 415, message: 'Image must be in WEBP Format.' });
+  }
+
+  const uploadDir = './public/images/divisions/';
+  if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir, { recursive: true });
+  }
+
+  next();
+};
+
+module.exports = {checkFileDivision, checkUpdatedFileDivision};
