@@ -7,14 +7,12 @@ require('dotenv').config();
 
 const { TEST_USERNAME, TEST_PASSWORD } = process.env;
 
-// Test image paths
 const TEST_PATHS = {
   SMALL_IMAGE: path.resolve(__dirname, '../test-small.webp'),
   LARGE_IMAGE: path.resolve(__dirname, '../tes-large.webp'),
   INVALID_FORMAT: path.resolve(__dirname, '../test.jpg'),
 };
 
-// Auth helpers
 const setupAuthHeaders = async () => {
   const login = await registerAndLogin(TEST_USERNAME, TEST_PASSWORD);
   const { token } = login.body.authorization;
@@ -33,7 +31,6 @@ const registerAndLogin = async (username, password) => {
   return await request(app).post('/api/v1/login').send(data);
 };
 
-// Response validation helpers
 const validateErrorResponse = (res, statusCode, status, errorMessage) => {
   expect(res.statusCode).toEqual(statusCode);
   expect(res.body.status).toEqual(status);
