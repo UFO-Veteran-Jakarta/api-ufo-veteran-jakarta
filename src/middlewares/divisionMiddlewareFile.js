@@ -12,14 +12,14 @@ const checkFileDivision = (req, res, next) => {
   const maxSize = 500 * 1024; 
   if (image.size > maxSize) {
     return res
-      .status(500)
+      .status(413)
       .json({ status: 413, message: 'Image size is more than 500 KB.' });
   }
 
   const ext = path.extname(image.name).toLowerCase();
   if (ext !== '.webp') {
     return res
-      .status(500)
+      .status(413)
       .json({ status: 413, message: 'Image must be in WEBP Format.' });
   }
 
