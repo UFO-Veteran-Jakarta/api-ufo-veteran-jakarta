@@ -172,6 +172,19 @@ describe('Division Controller', () => {
 });
 
   describe('PATCH /api/v1/divisions/:slug', () => {
+
+    it('should return 401 if user is not authenticated when attempting to update a division', async () => {
+      const { headers } = await setupAuthHeaders();
+      const createRes = await createDivisionHelper({ headers, name: 'Marketing' });
+      const slug = createRes.body.data.slug;
+
+      const res = await request(app).patch(`/api/v1/divisions/${slug}`).send({
+        name: 'Updated Division',
+      });
+
+      validateErrorResponse(res, 401, 401, 'Unauthorized');
+    });
+      
     it('should return 404 if the division with the specified slug is not found during update', async () => {
       const { headers } = await setupAuthHeaders();
       const res = await request(app)
