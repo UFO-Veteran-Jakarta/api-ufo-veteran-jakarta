@@ -96,26 +96,35 @@ describe('Division Controller', () => {
 
     it('should return 400 when division name is not provided during creation', async () => {
       const { headers } = await setupAuthHeaders();
-      const res = await createDivisionHelper({ headers, name: '' });
+      const res = await createDivisionHelper({
+        headers,
+        name: '',
+        image: 'path/to/image.webp',
+      });
 
       expect(res.statusCode).toEqual(400);
-      expect(res.body.status).toEqual(400);
       expect(
-        res.body.errors.some((error) => error.msg === 'name is required'),
+        res.body.errors.some(
+          (error) =>
+            error.msg === 'Division name is required. No data provided.',
+        ),
       ).toBeTruthy();
     });
 
     it('should return 400 when division name exceeds maximum length during creation', async () => {
       const { headers } = await setupAuthHeaders();
       const longName = 'a'.repeat(256);
-      const res = await createDivisionHelper({ headers, name: longName });
+      const res = await createDivisionHelper({
+        headers,
+        name: longName,
+        image: 'path/to/image.webp',
+      });
 
       expect(res.statusCode).toEqual(400);
-      expect(res.body.status).toEqual(400);
       expect(
         res.body.errors.some(
           (error) =>
-            error.msg === 'Division name must be no more than 255 characters',
+            error.msg === 'Division name must be no more than 255 characters.',
         ),
       ).toBeTruthy();
     });

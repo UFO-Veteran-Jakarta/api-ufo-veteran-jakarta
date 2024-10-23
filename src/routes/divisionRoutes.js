@@ -13,9 +13,9 @@ const router = express.Router();
 router.post(
   '/',
   authentication(),
-  checkFileDivision('image'),
   postDivisionValidationRules(),
   validate,
+  checkFileDivision('image'),
   divisionController.addDivision,
 );
 
