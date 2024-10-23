@@ -82,6 +82,18 @@ describe('Division Controller', () => {
       validateErrorResponse(res, 401, 401, 'Unauthorized');
     });
 
+      it('should return 413 if image is more than 500KB', async () => {
+        const { headers } = await setupAuthHeaders();
+        const filePathImage = path.resolve(__dirname, '../tes-large.webp');
+        const res = await request(app)
+          .post('/api/v1/divisions')
+          .set(headers)
+          .attach('image', filePathImage)
+          .field({ name: 'Marketing' });
+
+        validateErrorResponse(res, 413, 413, 'image size is more than 500 KB.');
+      });
+
     it('should return 400 when division name is not provided during creation', async () => {
       const { headers } = await setupAuthHeaders();
       const res = await createDivisionHelper({ headers, name: '' });

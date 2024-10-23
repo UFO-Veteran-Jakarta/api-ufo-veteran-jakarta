@@ -45,7 +45,7 @@ const validateSuccessResponse = (res, statusCode, status, successMessage) => {
   expect(res.body.message).toEqual(successMessage);
 };
 
-const createDivisionHelper = async ({ headers, name, image}) => {
+const createDivisionHelper = async ({ headers, name, image }) => {
   return await request(app)
     .post('/api/v1/divisions')
     .set(headers)
