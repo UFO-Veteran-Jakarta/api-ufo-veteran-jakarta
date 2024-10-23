@@ -1,62 +1,80 @@
 const path = require('path');
 const fs = require('fs');
+const { sendResponse } = require('../helpers/response');
 
-const checkFileDivision = (req, res, next) => {
-  if (!req.files?.image) {
-    return res.status(400).json({ status: 400, message: 'Image is required.' });
-  }
+const checkFileDivision = (fieldName) => {
+  return (req, res, next) => {
+    try {
+      if (!req.files?.[fieldName]) {
+        return sendResponse(res, 400, `${fieldName} is required.`);
+      }
 
-  const { image } = req.files;
+      const file = req.files[fieldName];
+      const maxSize = 500 * 1024;
+      if (file.size > maxSize) {
+        return sendResponse(
+          res,
+          413,
+          `${fieldName} size is more than ${maxSize / 1024} KB.`,
+        );
+      }
 
-  const maxSize = 500 * 1024;
-  if (image.size > maxSize) {
-    return res
-      .status(413)
-      .json({ status: 413, message: 'Image size is more than 500 KB.' });
-  }
+      const ext = path.extname(file.name).toLowerCase();
+      if (ext !== '.webp') {
+        return sendResponse(res, 415, `Image must be in WEBP Format.`);
+      }
 
-  const ext = path.extname(image.name).toLowerCase();
-  if (ext !== '.webp') {
-    return res
-      .status(413)
-      .json({ status: 413, message: 'Image must be in WEBP Format.' });
-  }
+      const uploadDir = './public/images/divisions/';
+      if (!fs.existsSync(uploadDir)) {
+        fs.mkdirSync(uploadDir, { recursive: true });
+      }
 
-  const uploadDir = './public/images/divisions/';
-  if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir, { recursive: true });
-  }
-
-  next();
+      next();
+    } catch (error) {
+      return sendResponse(res, 500, 'Error processing file upload.');
+    }
+  };
 };
 
-const checkUpdatedFileDivision = (req, res, next) => {
-  if (!req.files?.image) {
-    return next();
-  }
+const checkUpdatedFileDivision = (fieldName) => {
+  return (req, res, next) => {
+    try {
+      if (!req.files?.[fieldName]) {
+        return next();
+      }
 
-  const { image } = req.files;
+      const file = req.files[fieldName];
 
-  const maxSize = 500 * 1024;
-  if (image.size > maxSize) {
-    return res
-      .status(413)
-      .json({ status: 413, message: 'Image size is more than 500 KB.' });
-  }
+      // Validasi ukuran file
+      const maxSize = 500 * 1024;
+      if (file.size > maxSize) {
+        return sendResponse(
+          res,
+          413,
+          `${fieldName} size is more than ${maxSize / 1024} KB.`,
+        );
+      }
 
-  const ext = path.extname(image.name).toLowerCase();
-  if (ext !== '.webp') {
-    return res
-      .status(415)
-      .json({ status: 415, message: 'Image must be in WEBP Format.' });
-  }
+      // Validasi format file
+      const ext = path.extname(file.name).toLowerCase();
+      if (ext !== '.webp') {
+        return sendResponse(res, 415, `Image must be in WEBP Format.`);
+      }
 
-  const uploadDir = './public/images/divisions/';
-  if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir, { recursive: true });
-  }
+      // Buat direktori jika belum ada
+      const uploadDir = './public/images/divisions/';
+      if (!fs.existsSync(uploadDir)) {
+        fs.mkdirSync(uploadDir, { recursive: true });
+      }
 
-  next();
+      next();
+    } catch (error) {
+      return sendResponse(res, 500, 'Error processing file update.');
+    }
+  };
 };
 
-module.exports = { checkFileDivision, checkUpdatedFileDivision };
+module.exports = {
+  checkFileDivision,
+  checkUpdatedFileDivision,
+};
