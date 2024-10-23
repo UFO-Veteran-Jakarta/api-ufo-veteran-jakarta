@@ -13,9 +13,9 @@ const router = express.Router();
 router.post(
   '/',
   authentication(),
+  checkFileDivision('image'),
   postDivisionValidationRules(),
   validate,
-  checkFileDivision,
   divisionController.addDivision,
 );
 
@@ -28,8 +28,8 @@ router.get('/:slug', divisionController.getDivisionBySlug);
 router.patch(
   '/:slug',
   authentication(),
+  checkUpdatedFileDivision('image'),
   updateDivisionValidationRules(),
-  checkUpdatedFileDivision,
   validate,
   divisionController.updateDivisionBySlug,
 );
