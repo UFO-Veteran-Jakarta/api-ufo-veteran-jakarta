@@ -3,7 +3,7 @@ const crypto = require('crypto');
 
 exports.generateUniqueSlug = (title) => {
   const baseSlug = slugify(title, { lower: true, strict: true });
-  const uniqueCode = crypto.randomBytes(4).toString('hex'); 
+  const uniqueCode = crypto.randomBytes(4).toString('hex');
   return `${baseSlug}-${uniqueCode}`;
 };
 
@@ -13,7 +13,7 @@ exports.createSlugDivision = async (title, checkSlugExistsInDb) => {
   const exists = await checkSlugExistsInDb(baseSlug);
 
   if (!exists) {
-    return baseSlug; 
+    return baseSlug;
   }
 
   const uniqueCode = crypto.randomBytes(4).toString('hex');

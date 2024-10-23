@@ -11,11 +11,11 @@ const uploadFileDivision = (file) => {
     fs.mkdirSync(uploadDir, { recursive: true });
   }
 
-const ext = path.extname(file.name);
+  const ext = path.extname(file.name);
 
   const generateRandomFilename = () => {
     return crypto
-      .randomBytes(12) 
+      .randomBytes(12)
       .toString('base64')
       .replace(/\+/g, 'A')
       .replace(/\//g, 'B')
@@ -23,12 +23,11 @@ const ext = path.extname(file.name);
       .substring(0, 16);
   };
 
-const randomFilename = generateRandomFilename() + ext;
+  const randomFilename = generateRandomFilename() + ext;
 
   const filePath = path.join(uploadDir, randomFilename);
 
-  fs.writeFileSync(filePath, file.data); 
-  return `/images/divisions/${randomFilename}`; 
-
+  fs.writeFileSync(filePath, file.data);
+  return `/images/divisions/${randomFilename}`;
 };
 module.exports = uploadFileDivision;

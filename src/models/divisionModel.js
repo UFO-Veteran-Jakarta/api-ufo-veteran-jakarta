@@ -53,10 +53,9 @@ async function getAllDivisions() {
     return res.rows.length > 0 ? res.rows : [];
   } catch (error) {
     console.error('Error fetching divisions:', error);
-    throw error; 
+    throw error;
   }
 }
-
 
 async function getDivisionBySlug(slug) {
   const query = `

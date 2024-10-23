@@ -8,7 +8,7 @@ const {
 } = require('../services/divisionSerice');
 const logger = require('../utils/logger');
 const { sendResponse } = require('../helpers/response');
-const {createSlugDivision } = require('../helpers/slug');
+const { createSlugDivision } = require('../helpers/slug');
 const uploadFileDivision = require('../utils/uploadFileDivision');
 
 exports.addDivision = async (req, res) => {
@@ -35,7 +35,7 @@ exports.addDivision = async (req, res) => {
   }
 };
 
-exports.getAllDivisions = async (req, res, next) => {
+exports.getAllDivisions = async (req, res) => {
   try {
     const divisions = await getAllDivisions();
 
@@ -63,8 +63,8 @@ exports.getDivisionBySlug = async (req, res) => {
     const division = await getDivisionBySlug(slug);
 
     if (!division) {
-      logger.error(`Division not found`);
-      return sendResponse(res, 404, `Division not found`);
+      logger.error('Division not found');
+      return sendResponse(res, 404, 'Division not found');
     }
 
     logger.info(`Successfully Get Division with slug '${slug}'`);
@@ -79,7 +79,7 @@ exports.updateDivisionBySlug = async (req, res) => {
   try {
     const { slug } = req.params;
     const updateData = {};
-    let oldData = await getDivisionBySlug(slug);
+    const oldData = await getDivisionBySlug(slug);
 
     if (!oldData) {
       return res
@@ -113,7 +113,7 @@ exports.updateDivisionBySlug = async (req, res) => {
       updateData,
     );
 
-    let responseData = {
+    const responseData = {
       id: updatedDivision.id,
     };
 
@@ -151,15 +151,14 @@ exports.updateDivisionBySlug = async (req, res) => {
   }
 };
 
-
 exports.deleteDivisionBySlug = async (req, res) => {
   try {
     const { slug } = req.params;
     const division = await getDivisionBySlug(slug);
 
     if (!division) {
-      logger.error(`Division not found.`);
-      return sendResponse(res, 404, `Division not found.`);
+      logger.error('Division not found.');
+      return sendResponse(res, 404, 'Division not found.');
     }
 
     const deletedDivision = await deleteDivisionBySlug(slug);
