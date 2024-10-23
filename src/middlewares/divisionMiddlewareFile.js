@@ -21,7 +21,7 @@ const checkFileDivision = (fieldName) => {
 
       const ext = path.extname(file.name).toLowerCase();
       if (ext !== '.webp') {
-        return sendResponse(res, 415, `Image must be in WEBP Format.`);
+        return sendResponse(res, 415, 'Image must be in WEBP Format.');
       }
 
       const uploadDir = './public/images/divisions/';
@@ -58,7 +58,7 @@ const checkUpdatedFileDivision = (fieldName) => {
       // Validasi format file
       const ext = path.extname(file.name).toLowerCase();
       if (ext !== '.webp') {
-        return sendResponse(res, 415, `Image must be in WEBP Format.`);
+        return sendResponse(res, 415, 'Image must be in WEBP Format.');
       }
 
       // Buat direktori jika belum ada
