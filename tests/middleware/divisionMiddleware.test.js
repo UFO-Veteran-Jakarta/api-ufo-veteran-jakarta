@@ -1,179 +1,164 @@
-const request = require('supertest');
-const app = require('../../src/app');
 const path = require('path');
-const { deleteUserByUsername } = require('../../src/models/userModel');
-const { deleteAllDivisions } = require('src/models/divisionModel');
-require('dotenv').config();
+const fs = require('fs');
+const {
+  checkFileDivision,
+  checkUpdatedFileDivision,
+} = require('../../src/middlewares/divisionMiddlewareFile');
 
-const { TEST_USERNAME, TEST_PASSWORD } = process.env;
+jest.mock('fs');
 
-const TEST_PATHS = {
-  SMALL_IMAGE: path.resolve(__dirname, '../test-small.webp'),
-  LARGE_IMAGE: path.resolve(__dirname, '../tes-large.webp'),
-  INVALID_FORMAT: path.resolve(__dirname, '../test.jpg'),
-};
+describe('File Division Middleware Tests', () => {
 
-const setupAuthHeaders = async () => {
-  const login = await registerAndLogin(TEST_USERNAME, TEST_PASSWORD);
-  const { token } = login.body.authorization;
-  return {
-    token,
-    headers: {
-      Cookie: [`token=${token}`],
-      Authorization: `Bearer ${token}`,
+  const createMockData = ({
+    hasFiles = true,
+    fileName = 'test.webp',
+    fileSize = 300 * 1024,
+  } = {}) => ({
+    req: {
+      files: hasFiles
+        ? {
+            image: {
+              name: fileName,
+              size: fileSize,
+            },
+          }
+        : {},
     },
+    res: {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn().mockReturnThis(),
+    },
+    next: jest.fn(),
+  });
+
+  const validateErrorResponse = (
+    mockData,
+    { expectedStatus, expectedMessage, shouldCallNext = false },
+  ) => {
+    expect(mockData.res.status).toHaveBeenCalledWith(expectedStatus);
+    expect(mockData.res.json).toHaveBeenCalledWith({
+      status: expectedStatus,
+      message: expectedMessage,
+    });
+    if (shouldCallNext) {
+      expect(mockData.next).toHaveBeenCalled();
+    } else {
+      expect(mockData.next).not.toHaveBeenCalled();
+    }
   };
-};
 
-const registerAndLogin = async (username, password) => {
-  const data = { username, password };
-  await request(app).post('/api/v1/register').send(data);
-  return await request(app).post('/api/v1/login').send(data);
-};
+  const validateSuccessResponse = (
+    mockData,
+    { shouldCreateDirectory = true, directoryExists = false },
+  ) => {
+    if (shouldCreateDirectory && !directoryExists) {
+      expect(fs.mkdirSync).toHaveBeenCalledWith('./public/images/divisions/', {
+        recursive: true,
+      });
+    } else {
+      expect(fs.mkdirSync).not.toHaveBeenCalled();
+    }
+    expect(mockData.next).toHaveBeenCalled();
+    expect(mockData.res.status).not.toHaveBeenCalled();
+    expect(mockData.res.json).not.toHaveBeenCalled();
+  };
 
-const validateErrorResponse = (res, statusCode, status, errorMessage) => {
-  expect(res.statusCode).toEqual(statusCode);
-  expect(res.body.status).toEqual(status);
-  expect(res.body.message).toBeDefined();
-  expect(res.body.message).toEqual(errorMessage);
-};
-
-const validateSuccessResponse = (res, statusCode, status, successMessage) => {
-  expect(res.statusCode).toEqual(statusCode);
-  expect(res.body.status).toEqual(status);
-  expect(res.body.message).toBeDefined();
-  expect(res.body.message).toEqual(successMessage);
-};
-
-const createDivisionHelper = async ({ headers, name, image}) => {
-  return await request(app)
-    .post('/api/v1/divisions')
-    .set(headers)
-    .attach('image', image)
-    .field({ name });
-};
-
-const updateDivisionHelper = async ({ headers, slug, data }) => {
-  const req = request(app).patch(`/api/v1/divisions/${slug}`).set(headers);
-
-  if (data.image) {
-    req.attach('image', data.image);
-  }
-
-  const fieldsToUpdate = { ...data };
-  delete fieldsToUpdate.image;
-
-  return req.field(fieldsToUpdate);
-};
-
-describe('Division Controller', () => {
-  beforeEach(async () => {
-    await deleteUserByUsername(TEST_USERNAME);
-    await deleteAllDivisions();
+  beforeEach(() => {
+    jest.clearAllMocks();
+    fs.existsSync.mockReturnValue(false);
   });
 
-  describe('Check File Division Middleware', () => {
-    it('should return 400 if image is not provided', async () => {
-      const { headers } = await setupAuthHeaders();
-      const res = await createDivisionHelper({
-        headers,
-        name: 'Division',
-        image: undefined,
+  describe('checkFileDivision', () => {
+    test('returns 400 when no image is provided', () => {
+      const mockData = createMockData({ hasFiles: false });
+      checkFileDivision(mockData.req, mockData.res, mockData.next);
+      validateErrorResponse(mockData, {
+        expectedStatus: 400,
+        expectedMessage: 'Image is required.',
       });
-
-      validateErrorResponse(res, 400, 400, 'Image is required.');
     });
 
-    it('should return 413 if image is more than 500KB', async () => {
-      const { headers } = await setupAuthHeaders();
-      const res = await createDivisionHelper({
-        headers,
-        name: 'Division',
-        image: TEST_PATHS.LARGE_IMAGE,
+    test('returns 413 when image size exceeds limit', () => {
+      const mockData = createMockData({ fileSize: 600 * 1024 });
+      checkFileDivision(mockData.req, mockData.res, mockData.next);
+      validateErrorResponse(mockData, {
+        expectedStatus: 413,
+        expectedMessage: 'Image size is more than 500 KB.',
       });
-
-      validateErrorResponse(res, 413, 413, 'Image size is more than 500 KB.');
     });
 
-    it('should return 413 if image is not in WEBP format', async () => {
-      const { headers } = await setupAuthHeaders();
-      const res = await createDivisionHelper({
-        headers,
-        name: 'Division',
-        image: TEST_PATHS.INVALID_FORMAT,
+    test('returns 413 when image format is invalid', () => {
+      const mockData = createMockData({ fileName: 'test.jpg' });
+      checkFileDivision(mockData.req, mockData.res, mockData.next);
+      validateErrorResponse(mockData, {
+        expectedStatus: 413,
+        expectedMessage: 'Image must be in WEBP Format.',
       });
-
-      validateErrorResponse(res, 413, 413, 'Image must be in WEBP Format.');
     });
 
-    it('should successfully create division with valid image', async () => {
-      const { headers } = await setupAuthHeaders();
-      const res = await createDivisionHelper({
-        headers,
-        name: 'Division',
-        image: TEST_PATHS.SMALL_IMAGE,
+    test('succeeds with valid image when directory needs creation', () => {
+      const mockData = createMockData();
+      checkFileDivision(mockData.req, mockData.res, mockData.next);
+      validateSuccessResponse(mockData, {
+        shouldCreateDirectory: true,
+        directoryExists: false,
       });
+    });
 
-      validateSuccessResponse(
-        res,
-        201,
-        201,
-        'Successfully insert division data',
-      );
-      expect(res.body.data.name).toEqual('Division');
+    test('succeeds with valid image when directory exists', () => {
+      fs.existsSync.mockReturnValue(true);
+      const mockData = createMockData();
+      checkFileDivision(mockData.req, mockData.res, mockData.next);
+      validateSuccessResponse(mockData, {
+        shouldCreateDirectory: false,
+        directoryExists: true,
+      });
     });
   });
 
-  describe('Update Division Middleware', () => {
-    let division;
-    let headers;
-
-    beforeEach(async () => {
-      headers = (await setupAuthHeaders()).headers;
-      const createRes = await createDivisionHelper({
-        headers,
-        name: 'Division',
-        image: TEST_PATHS.SMALL_IMAGE,
+  describe('checkUpdatedFileDivision', () => {
+    test('calls next when no image is provided', () => {
+      const mockData = createMockData({ hasFiles: false });
+      checkUpdatedFileDivision(mockData.req, mockData.res, mockData.next);
+      validateSuccessResponse(mockData, {
+        shouldCreateDirectory: false,
       });
-      division = createRes.body.data;
     });
 
-    it('should return 415 if new logo is not in WEBP format', async () => {
-      const res = await updateDivisionHelper({
-        headers,
-        slug: division.slug,
-        data: { image: TEST_PATHS.INVALID_FORMAT },
+    test('returns 413 when image size exceeds limit', () => {
+      const mockData = createMockData({ fileSize: 600 * 1024 });
+      checkUpdatedFileDivision(mockData.req, mockData.res, mockData.next);
+      validateErrorResponse(mockData, {
+        expectedStatus: 413,
+        expectedMessage: 'Image size is more than 500 KB.',
       });
-
-      validateErrorResponse(res, 415, 415, 'Image must be in WEBP Format.');
     });
 
-    it('should return 413 if new logo size is more than 500KB', async () => {
-      const res = await updateDivisionHelper({
-        headers,
-        slug: division.slug,
-        data: { image: TEST_PATHS.LARGE_IMAGE },
+    test('returns 415 when image format is invalid', () => {
+      const mockData = createMockData({ fileName: 'test.jpg' });
+      checkUpdatedFileDivision(mockData.req, mockData.res, mockData.next);
+      validateErrorResponse(mockData, {
+        expectedStatus: 415,
+        expectedMessage: 'Image must be in WEBP Format.',
       });
-
-      validateErrorResponse(res, 413, 413, 'Image size is more than 500 KB.');
     });
 
-    it('should successfully update division with new image', async () => {
-      const res = await updateDivisionHelper({
-        headers,
-        slug: division.slug,
-        data: {
-          name: 'Updated Division',
-          image: TEST_PATHS.SMALL_IMAGE,
-        },
+    test('succeeds with valid image', () => {
+      const mockData = createMockData();
+      checkUpdatedFileDivision(mockData.req, mockData.res, mockData.next);
+      validateSuccessResponse(mockData, {
+        shouldCreateDirectory: true,
       });
+    });
 
-      validateSuccessResponse(
-        res,
-        200,
-        200,
-        'Successfully update division name and image',
-      );
+    test('succeeds with valid image when directory exists', () => {
+      fs.existsSync.mockReturnValue(true);
+      const mockData = createMockData();
+      checkUpdatedFileDivision(mockData.req, mockData.res, mockData.next);
+      validateSuccessResponse(mockData, {
+        shouldCreateDirectory: false,
+        directoryExists: true,
+      });
     });
   });
 });
