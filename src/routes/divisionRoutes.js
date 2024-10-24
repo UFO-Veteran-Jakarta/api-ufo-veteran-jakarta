@@ -1,9 +1,11 @@
 const express = require('express');
 const {
   postDivisionValidationRules,
+  updateDivisionValidationRules,
   validate,
 } = require('../validators/divisionValidator');
 const { authentication } = require('../middlewares/authMiddleware');
+const { checkFileDivision, checkUpdatedFileDivision } = require('../middlewares/divisionMiddlewareFile');
 const divisionController = require('../controllers/divisionController');
 
 const router = express.Router();
@@ -13,23 +15,25 @@ router.post(
   authentication(),
   postDivisionValidationRules(),
   validate,
+  checkFileDivision('image'),
   divisionController.addDivision,
 );
 
 router.get(
   '/',
   divisionController.getAllDivisions,
-  divisionController.getDivisionById,
 );
+router.get('/:slug', divisionController.getDivisionBySlug);
 
-router.put(
-  '/',
+router.patch(
+  '/:slug',
   authentication(),
-  postDivisionValidationRules(),
+  checkUpdatedFileDivision('image'),
+  updateDivisionValidationRules(),
   validate,
-  divisionController.updateDivisionById,
+  divisionController.updateDivisionBySlug,
 );
 
-router.delete('/', authentication(), divisionController.deleteDivisionById);
+router.delete('/:slug', authentication(), divisionController.deleteDivisionBySlug);
 
 module.exports = router;
