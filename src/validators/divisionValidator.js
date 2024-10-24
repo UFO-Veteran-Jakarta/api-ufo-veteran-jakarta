@@ -60,5 +60,5 @@ module.exports = {
   postDivisionValidationRules,
   updateDivisionValidationRules,
   validate,
-  checkRequiredFields
+  checkRequiredFields,
 };
