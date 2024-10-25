@@ -14,20 +14,29 @@ const uploadFileDivision = (file) => {
   const ext = path.extname(file.name);
 
   const generateRandomFilename = () => {
-    return crypto
-      .randomBytes(12)
-      .toString('base64')
-      .replace(/\+/g, 'A')
-      .replace(/\//g, 'B')
-      .replace(/=+$/, '')
-      .substring(0, 16);
+    let baseSlug;
+
+    do {
+      baseSlug = crypto
+        .randomBytes(18)
+        .toString('base64')
+        .replace(/\+/g, 'A')
+        .replace(/\//g, 'B')
+        .replace(/=+$/, '');
+    } while (
+      !/[A-Z]/.test(baseSlug) ||
+      !/[a-z]/.test(baseSlug) ||
+      !/\d/.test(baseSlug)
+    );
+
+    return baseSlug.substring(0, 16);
   };
 
   const randomFilename = generateRandomFilename() + ext;
-
   const filePath = path.join(uploadDir, randomFilename);
 
   fs.writeFileSync(filePath, file.data);
   return `/images/divisions/${randomFilename}`;
 };
+
 module.exports = uploadFileDivision;
