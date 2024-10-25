@@ -106,9 +106,7 @@ exports.createTable = async () => {
     `
     CREATE TABLE IF NOT EXISTS myschema.divisions(
       id SERIAL PRIMARY KEY,
-      slug text NOT NULL, 
       name varchar(255) NOT NULL,
-      image text NOT NULL,
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       updated_at TIMESTAMP ,
       deleted_at TIMESTAMP

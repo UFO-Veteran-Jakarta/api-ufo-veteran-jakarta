@@ -1,15 +1,10 @@
 const {
   addDivision,
   getAllDivisions,
-  getDivisionBySlug,
-  updateDivisionBySlug,
-  deleteDivisionBySlug,
+  getDivisionById,
+  updateDivisionById,
+  deleteDivisionById,
 } = require('../models/divisionModel');
-
-exports.checkSlugExistsInDb = async (slug) => {
-  const division = await getDivisionBySlug(slug);
-  return !!division;
-};
 
 exports.addDivision = async (data) => {
   return addDivision(data);
@@ -17,26 +12,20 @@ exports.addDivision = async (data) => {
 
 exports.getAllDivisions = async () => {
   try {
-    const divisions = await getAllDivisions();
-    return divisions;
+    return await getAllDivisions();
   } catch (error) {
-    console.error('Error fetching divisions:', error);
-    throw error;
-  }
-};
-exports.getDivisionBySlug = async (slug) => {
-  try {
-    return await getDivisionBySlug(slug);
-  } catch (error) {
-    console.error('Error fetching division by slug: ', error);
-    throw error;
+    console.error('Error fetching divisions: ', error);
   }
 };
 
-exports.updateDivisionBySlug = async (slug, data) => {
-  return updateDivisionBySlug(slug, data);
+exports.getDivisionById = async (id) => {
+  return getDivisionById(id);
 };
 
-exports.deleteDivisionBySlug = async (slug) => {
-  return deleteDivisionBySlug(slug);
+exports.updateDivisionById = async (id, data) => {
+  return updateDivisionById(id, data);
+};
+
+exports.deleteDivisionById = async (id) => {
+  return deleteDivisionById(id);
 };
