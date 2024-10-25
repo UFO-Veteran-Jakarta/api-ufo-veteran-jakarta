@@ -14,22 +14,31 @@ const uploadFileDivision = (file) => {
   const ext = path.extname(file.name);
 
   const generateRandomFilename = () => {
-    let baseSlug;
+    const upperChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const lowerChars = 'abcdefghijklmnopqrstuvwxyz';
+    const numbers = '0123456789';
 
-    do {
-      baseSlug = crypto
-        .randomBytes(18)
-        .toString('base64')
-        .replace(/\+/g, 'A')
-        .replace(/\//g, 'B')
-        .replace(/=+$/, '');
-    } while (
-      !/[A-Z]/.test(baseSlug) ||
-      !/[a-z]/.test(baseSlug) ||
-      !/\d/.test(baseSlug)
-    );
+    const upper = upperChars[crypto.randomInt(upperChars.length)];
+    const lower = lowerChars[crypto.randomInt(lowerChars.length)];
+    const num = numbers[crypto.randomInt(numbers.length)];
 
-    return baseSlug.substring(0, 16);
+    const allChars = upperChars + lowerChars + numbers;
+    const remainingLength = 13;
+
+    let remaining = '';
+    for (let i = 0; i < remainingLength; i += 1) {
+      remaining += allChars[crypto.randomInt(allChars.length)];
+    }
+
+    const combined = upper + lower + num + remaining;
+    const shuffled = combined
+      .split('')
+      .map((value) => ({ value, sort: crypto.randomInt(1000000) }))
+      .sort((a, b) => a.sort - b.sort)
+      .map(({ value }) => value)
+      .join('');
+
+    return shuffled;
   };
 
   const randomFilename = generateRandomFilename() + ext;

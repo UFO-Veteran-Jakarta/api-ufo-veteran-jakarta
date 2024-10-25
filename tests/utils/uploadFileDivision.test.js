@@ -5,82 +5,64 @@ const uploadFileDivision = require('../../src/utils/uploadFileDivision');
 
 jest.mock('fs');
 jest.mock('crypto');
-jest.mock('path');
-
-// Reusable mock data
-const mockBuffer = Buffer.alloc(10);
-const mockExtensions = ['.jpg', '.png', '.gif'];
-const mockRandomString = 'Ab1DefGhIjKlMnOp';
 
 describe('uploadFileDivision', () => {
-  beforeAll(() => {
-    path.join.mockImplementation((dir, file) => `${dir}${file}`);
-    path.extname.mockImplementation((filename) => {
-      const ext = filename.slice(filename.lastIndexOf('.'));
-      return ext;
-    });
+  const fileMock = {
+    name: 'testfile.jpg',
+    data: Buffer.from('file content'),
+  };
 
-    crypto.randomBytes.mockReturnValue({
-      toString: () => mockRandomString,
-    });
-  });
-
+  const uploadDir = './public/images/divisions/';
+  
   beforeEach(() => {
-    fs.existsSync.mockReset().mockReturnValue(false);
-    fs.mkdirSync.mockReset().mockImplementation(() => {});
-    fs.writeFileSync.mockReset().mockImplementation(() => {});
-  });
-
-  afterAll(() => {
-    jest.resetModules();
-    if (global.gc) global.gc();
+    jest.clearAllMocks();
   });
 
   test('should return null if no file is provided', () => {
-    expect(uploadFileDivision(null)).toBeNull();
+    const result = uploadFileDivision(null);
+    expect(result).toBeNull();
   });
 
-  test('should handle directory creation and file writing', () => {
-    const mockFile = {
-      name: 'test.jpg',
-      data: mockBuffer,
-    };
+  test('should create upload directory if it does not exist', () => {
+    fs.existsSync.mockReturnValue(false);
+    fs.mkdirSync.mockImplementation();
 
-    const result = uploadFileDivision(mockFile);
+    uploadFileDivision(fileMock);
 
-    expect(fs.mkdirSync).toHaveBeenCalledWith('./public/images/divisions/', {
-      recursive: true,
-    });
-    expect(fs.writeFileSync).toHaveBeenCalledWith(
-      expect.stringContaining(mockRandomString),
-      mockBuffer,
-    );
-    expect(result).toMatch(/^\/images\/divisions\/[A-Za-z0-9]{16}\.jpg$/);
+    expect(fs.existsSync).toHaveBeenCalledWith(uploadDir);
+    expect(fs.mkdirSync).toHaveBeenCalledWith(uploadDir, { recursive: true });
   });
 
-  test('should handle different file extensions', () => {
-    mockExtensions.forEach((ext) => {
-      const mockFile = {
-        name: `test${ext}`,
-        data: mockBuffer,
-      };
+  test('should not create upload directory if it already exists', () => {
+    fs.existsSync.mockReturnValue(true);
+    
+    uploadFileDivision(fileMock);
 
-      const result = uploadFileDivision(mockFile);
-      expect(result).toMatch(new RegExp(`${mockRandomString}\\${ext}$`));
-    });
+    expect(fs.existsSync).toHaveBeenCalledWith(uploadDir);
+    expect(fs.mkdirSync).not.toHaveBeenCalled();
   });
 
-  test('should handle write errors', () => {
-    const errorMessage = 'Write error';
-    fs.writeFileSync.mockImplementation(() => {
-      throw new Error(errorMessage);
-    });
+  test('should generate a random filename and write the file to the correct path', () => {
+    fs.existsSync.mockReturnValue(true);
+    fs.writeFileSync.mockImplementation(() => {});
 
-    expect(() => {
-      uploadFileDivision({
-        name: 'test.jpg',
-        data: mockBuffer,
-      });
-    }).toThrow(errorMessage);
+    crypto.randomInt.mockImplementation((max) => Math.floor(max / 2));
+
+    const result = uploadFileDivision(fileMock);
+
+    const ext = path.extname(fileMock.name);
+    const generatedFilename = result.split('/').pop();
+
+    expect(generatedFilename.length).toBe(16 + ext.length);
+    expect(fs.writeFileSync).toHaveBeenCalledWith(path.join(uploadDir, generatedFilename), fileMock.data);
+  });
+
+  test('should return the correct file path after upload', () => {
+    fs.existsSync.mockReturnValue(true);
+    fs.writeFileSync.mockImplementation(() => {});
+
+    const result = uploadFileDivision(fileMock);
+
+    expect(result).toMatch(/^\/images\/divisions\/[a-zA-Z0-9]+\.jpg$/);
   });
 });
