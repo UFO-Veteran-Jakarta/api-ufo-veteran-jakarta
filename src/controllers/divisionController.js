@@ -5,7 +5,7 @@ const {
   updateDivisionBySlug,
   deleteDivisionBySlug,
   checkSlugExistsInDb,
-} = require('../services/divisionSerice');
+} = require('../services/divisionService');
 const logger = require('../utils/logger');
 const { sendResponse } = require('../helpers/response');
 const { createSlugDivision } = require('../helpers/slug');
@@ -108,10 +108,7 @@ exports.updateDivisionBySlug = async (req, res) => {
         .json({ status: 400, message: 'No update data provided' });
     }
 
-    const updatedDivision = await updateDivisionBySlug(
-      slug,
-      updateData,
-    );
+    const updatedDivision = await updateDivisionBySlug(slug, updateData);
 
     const responseData = {
       id: updatedDivision.id,
