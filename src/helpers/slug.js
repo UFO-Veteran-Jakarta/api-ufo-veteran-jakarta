@@ -8,7 +8,8 @@ exports.generateUniqueSlug = (title) => {
 };
 
 exports.createSlugDivision = async (title, checkSlugExistsInDb) => {
-  const baseSlug = slugify(title, { lower: true, strict: true });
+  const cleanedTitle = title.replace(/\//g, '-').replace(/_/g, '-');
+  const baseSlug = slugify(cleanedTitle, { lower: true, strict: true });
 
   const exists = await checkSlugExistsInDb(baseSlug);
 
