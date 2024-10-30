@@ -12,7 +12,7 @@ exports.addPartner = async function insertParnter(data) {
   });
 
   const query = `
-    INSERT INTO myschema.partners (${fields.join(', ')})
+    INSERT INTO partners (${fields.join(', ')})
     VALUES (${placeholders.join(', ')})
     RETURNING *;
  `;
@@ -26,7 +26,7 @@ exports.addPartner = async function insertParnter(data) {
 };
 
 exports.getAllPartners = async function getAllPartners() {
-  const query = 'SELECT * FROM myschema.partners WHERE deleted_at IS NULL';
+  const query = 'SELECT * FROM partners WHERE deleted_at IS NULL';
 
   try {
     const res = await pool.query(query);
@@ -40,7 +40,7 @@ exports.getAllPartners = async function getAllPartners() {
 exports.getPartnerById = async (id) => {
   try {
     const res = await pool.query(
-      'SELECT * FROM myschema.partners WHERE id = $1 AND deleted_at IS NULL',
+      'SELECT * FROM partners WHERE id = $1 AND deleted_at IS NULL',
       [id],
     );
 
@@ -65,7 +65,7 @@ exports.updatePartner = async (id, data) => {
   });
 
   const query = `
-    UPDATE myschema.events
+    UPDATE events
     SET ${fields.join(', ')}, updated_at = NOW()
     WHERE id = $${index}
     RETURNING *;
@@ -82,7 +82,7 @@ exports.updatePartner = async (id, data) => {
 
 exports.deletePartner = async (id) => {
   const query = `
-    UPDATE myschema.partners
+    UPDATE partners
     SET deleted_at = NOW()
     WHERE id = $1
     RETURNING *;

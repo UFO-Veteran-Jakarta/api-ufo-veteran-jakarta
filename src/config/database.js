@@ -11,4 +11,13 @@ const pool = new Pool({
   port: process.env.DB_PORT,
 });
 
+pool.on('connect', async (client) => {
+  try {
+    const schema = process.env.DB_SCHEMA || 'myschema';
+    await client.query(`SET search_path TO ${schema}`);
+  } catch (error) {
+    console.error("Error setting search path:", error);
+  }
+});
+
 module.exports = pool;

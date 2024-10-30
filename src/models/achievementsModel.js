@@ -40,7 +40,7 @@ const logError = (message, error) => {
 };
 
 exports.addAchievement = async (data) => {
-  const { query, values } = constructInsertQuery(data, 'myschema.achievements');
+  const { query, values } = constructInsertQuery(data, 'achievements');
   try {
     const res = await pool.query(query, values);
     return res.rows[0];
@@ -51,7 +51,7 @@ exports.addAchievement = async (data) => {
 };
 
 exports.getAllAchievements = async () => {
-  const query = 'SELECT * FROM myschema.achievements WHERE deleted_at IS NULL';
+  const query = 'SELECT * FROM achievements WHERE deleted_at IS NULL';
   try {
     const res = await pool.query(query);
     return res.rows.length > 0 ? res.rows : null;
@@ -64,7 +64,7 @@ exports.getAllAchievements = async () => {
 exports.getAchievementById = async (id) => {
   try {
     const res = await pool.query(
-      'SELECT * FROM myschema.achievements WHERE id = $1 AND deleted_at IS NULL',
+      'SELECT * FROM achievements WHERE id = $1 AND deleted_at IS NULL',
       [id],
     );
 
@@ -78,7 +78,7 @@ exports.getAchievementById = async (id) => {
 exports.updateAchievement = async (id, data) => {
   const { query, values } = constructUpdateQuery(
     data,
-    'myschema.achievements',
+    'achievements',
     id,
   );
   try {
@@ -91,7 +91,7 @@ exports.updateAchievement = async (id, data) => {
 };
 
 exports.deleteAchievementAll = async () => {
-  const query = 'UPDATE myschema.achievements SET deleted_at = NOW()';
+  const query = 'UPDATE achievements SET deleted_at = NOW()';
   try {
     const res = await pool.query(query);
     return res.rows;
@@ -103,7 +103,7 @@ exports.deleteAchievementAll = async () => {
 
 exports.deleteAchievement = async (id) => {
   const query = `
-    UPDATE myschema.achievements
+    UPDATE achievements
     SET deleted_at = NOW()
     WHERE id = $1
     RETURNING *;

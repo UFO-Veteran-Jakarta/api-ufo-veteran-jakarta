@@ -32,7 +32,7 @@ function createUpdateQuery(data, tableName, id) {
 }
 
 async function addWorkProgram(data) {
-  const { query, values } = createInsertQuery(data, 'myschema.work_programs');
+  const { query, values } = createInsertQuery(data, 'work_programs');
 
   try {
     const res = await pool.query(query, values);
@@ -43,7 +43,7 @@ async function addWorkProgram(data) {
 }
 
 async function getAllWorkPrograms() {
-  const query = 'SELECT * FROM myschema.work_programs WHERE deleted_at IS NULL';
+  const query = 'SELECT * FROM work_programs WHERE deleted_at IS NULL';
 
   try {
     const res = await pool.query(query);
@@ -55,7 +55,7 @@ async function getAllWorkPrograms() {
 
 async function getWorkProgramById(id) {
   const query = `
-    SELECT * FROM myschema.work_programs
+    SELECT * FROM work_programs
     WHERE id = $1 AND deleted_at IS NULL
   `;
 
@@ -75,7 +75,7 @@ async function getWorkProgramById(id) {
 async function updateWorkProgram(id, data) {
   const { query, values } = createUpdateQuery(
     data,
-    'myschema.work_programs',
+    'work_programs',
     id,
   );
 
@@ -89,7 +89,7 @@ async function updateWorkProgram(id, data) {
 }
 
 async function deleteAllWorkPrograms() {
-  const query = 'UPDATE myschema.work_programs SET deleted_at = NOW()';
+  const query = 'UPDATE work_programs SET deleted_at = NOW()';
 
   try {
     const res = await pool.query(query);
@@ -102,7 +102,7 @@ async function deleteAllWorkPrograms() {
 
 async function deleteWorkProgram(id) {
   const query = `
-    UPDATE myschema.work_programs
+    UPDATE work_programs
     SET deleted_at = NOW()
     WHERE id = $1
     RETURNING *;

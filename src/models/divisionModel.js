@@ -32,7 +32,7 @@ function createUpdateQuery(data, tableName, slug) {
 }
 
 async function addDivision(data) {
-  const { query, values } = createInsertQuery(data, 'myschema.divisions');
+  const { query, values } = createInsertQuery(data, 'divisions');
 
   try {
     const res = await pool.query(query, values);
@@ -45,7 +45,7 @@ async function addDivision(data) {
 
 async function getAllDivisions() {
   const query = `
-    SELECT * FROM myschema.divisions WHERE deleted_at IS NULL;
+    SELECT * FROM divisions WHERE deleted_at IS NULL;
   `;
 
   try {
@@ -59,7 +59,7 @@ async function getAllDivisions() {
 
 async function getDivisionBySlug(slug) {
   const query = `
-        SELECT * FROM myschema.divisions WHERE slug = $1 AND deleted_at IS NULL
+        SELECT * FROM divisions WHERE slug = $1 AND deleted_at IS NULL
     `;
 
   try {
@@ -77,7 +77,7 @@ async function getDivisionBySlug(slug) {
 }
 
 async function updateDivisionBySlug(slug, data) {
-  const { query, values } = createUpdateQuery(data, 'myschema.divisions', slug);
+  const { query, values } = createUpdateQuery(data, 'divisions', slug);
 
   try {
     const res = await pool.query(query, values);
@@ -89,7 +89,7 @@ async function updateDivisionBySlug(slug, data) {
 }
 
 async function deleteAllDivisions() {
-  const query = 'UPDATE myschema.divisions SET deleted_at = NOW()';
+  const query = 'UPDATE divisions SET deleted_at = NOW()';
 
   try {
     const res = await pool.query(query);
@@ -102,7 +102,7 @@ async function deleteAllDivisions() {
 
 async function deleteDivisionBySlug(slug) {
   const query = `
-        UPDATE myschema.divisions SET deleted_at = NOW() WHERE slug = $1 RETURNING *;
+        UPDATE divisions SET deleted_at = NOW() WHERE slug = $1 RETURNING *;
     `;
 
   try {
