@@ -2,7 +2,7 @@ const request = require('supertest');
 const app = require('../../src/app');
 const path = require('path');
 const { deleteUserByUsername } = require('../../src/models/userModel');
-const { deleteAllDivisions } = require('src/models/divisionModel');
+const { deleteAllDivisions } = require('../../src/models/divisionModel');
 require('dotenv').config();
 
 const { TEST_USERNAME, TEST_PASSWORD } = process.env;
@@ -144,14 +144,14 @@ describe('Division Controller', () => {
 
   describe('GET /api/v1/divisions', () => {
 
-  it('should return 204 if no divisions are found', async () => {
-    const { headers } = await setupAuthHeaders();
+    it('should return 204 if no divisions are found', async () => {
+      const { headers } = await setupAuthHeaders();
 
-    const res = await request(app).get('/api/v1/divisions').set(headers);
+      const res = await request(app).get('/api/v1/divisions').set(headers);
 
-    expect(res.status).toBe(204);
-    expect(res.body).toEqual({});
-  });
+      expect(res.status).toBe(204);
+      expect(res.body).toEqual({});
+    });
 
     it('should return 200 and all divisions when the request is successful', async () => {
       const { headers } = await setupAuthHeaders();
@@ -190,19 +190,18 @@ describe('Division Controller', () => {
       validateDivision(res);
     });
   });
-});
 
   describe('PATCH /api/v1/divisions/:slug', () => {
-
+  
     it('should return 401 if user is not authenticated when attempting to update a division', async () => {
       const { headers } = await setupAuthHeaders();
       const createRes = await createDivisionHelper({ headers, name: 'Marketing' });
       const slug = createRes.body.data.slug;
-
+  
       const res = await request(app).patch(`/api/v1/divisions/${slug}`).send({
         name: 'Updated Division',
       });
-
+  
       validateErrorResponse(res, 401, 401, 'Unauthorized');
     });
       
@@ -212,10 +211,10 @@ describe('Division Controller', () => {
         .patch('/api/v1/divisions/non-existent-slug')
         .set(headers)
         .send({ name: 'Updated Division' });
-
+  
       validateErrorResponse(res, 404, 404, 'Division not found');
     });
-
+  
     it('should return 400 if data is not provided when updating a division', async () => {
       const { headers } = await setupAuthHeaders();
       const createRes = await createDivisionHelper({
@@ -229,10 +228,10 @@ describe('Division Controller', () => {
         slug,
         data: { name: '' }
       });
-
+  
       validateErrorResponse(res, 400, 400, 'No update data provided');
     });
-
+  
     it('should return 400 if division name exceeds maximum length during update', async () => {
       const { headers } = await setupAuthHeaders();
       const createRes = await createDivisionHelper({
@@ -240,13 +239,13 @@ describe('Division Controller', () => {
         name: 'Marketing',
       });
       const slug = createRes.body.data.slug;
-
+  
       const res = await updateDivisionHelper({
         headers,
         slug,
         data: { name: 'a'.repeat(256) },
       });
-
+  
       expect(res.statusCode).toEqual(400);
       expect(res.body.status).toEqual(400);
       expect(
@@ -256,7 +255,7 @@ describe('Division Controller', () => {
         ),
       ).toBeTruthy();
     });
-
+  
     it('should return 200 if and update division name successfully', async () => {
       const { headers } = await setupAuthHeaders();
       const currentDivision = await createDivisionHelper({
@@ -270,7 +269,7 @@ describe('Division Controller', () => {
         slug,
         data: { name: 'Updated Division' }
       });
-
+  
       validateSuccessResponse(
         res,
         200,
@@ -278,8 +277,8 @@ describe('Division Controller', () => {
         'Successfully update division name',
       );
     });
-
- it('should return 200 and update the division image successfully', async () => {
+  
+  it('should return 200 and update the division image successfully', async () => {
       const { headers } = await setupAuthHeaders();
       const createRes = await createDivisionHelper({
         headers,
@@ -288,12 +287,12 @@ describe('Division Controller', () => {
       const slug = createRes.body.data.slug;
       
       const updatedImage = path.resolve(__dirname, '../test-cc-2000-1047.webp');
-
+  
       const res = await request(app)
         .patch(`/api/v1/divisions/${slug}`)
         .set(headers)
         .attach('image', updatedImage);
-
+  
       validateSuccessResponse(
         res,
         200,
@@ -302,7 +301,7 @@ describe('Division Controller', () => {
       );
     });
     
-
+  
     it('should return 200 and update the division successfully when valid data is provided', async () => {
       const { headers } = await setupAuthHeaders();
       const createRes = await createDivisionHelper({
@@ -317,7 +316,7 @@ describe('Division Controller', () => {
         .set(headers)
         .attach('image', updatedImage)
         .field({ name: 'Updated Division' });
-
+  
       validateSuccessResponse(
         res,
         200,
@@ -326,32 +325,32 @@ describe('Division Controller', () => {
       );
     });
   });
-
+  
   describe('DELETE /api/v1/divisions/:slug', () => {
-
+  
     it('should return 401 if user is not authenticated', async () => {
       const res = await request(app).delete('/api/v1/divisions/123');
       validateErrorResponse(res, 401, 401, 'Unauthorized');
     });
-
+  
     it('should return 404 if the division with the specified slug is not found during deletion', async () => {
       const { headers } = await setupAuthHeaders();
-
+  
       const res = await deleteDivisionHelper({ headers, slug: 'non-existent-slug' });
-
+  
       validateErrorResponse(res, 404, 404, 'Division not found.');
     });
-
+  
     it('should return 200 and delete the division successfully when the division with the specified slug is found', async () => {
       const { headers } = await setupAuthHeaders();
-
+  
       const createRes = await createDivisionHelper({
         headers,
         name: 'Marketing',
       });
-
+  
       const res = await deleteDivisionHelper({ headers, slug: createRes.body.data.slug });
-
+  
       validateSuccessResponse(
         res,
         200,
@@ -360,27 +359,30 @@ describe('Division Controller', () => {
       );
     });
   });
-
-describe('Soft Delete Division', () => {
-  it('should soft delete a division by setting the deleted_at timestamp and return 200', async () => {
-    const { headers } = await setupAuthHeaders();
-
-    const createRes = await createDivisionHelper({
-      headers,
-      name: 'Marketing',
+  
+  describe('Soft Delete Division', () => {
+    it('should soft delete a division by setting the deleted_at timestamp and return 200', async () => {
+      const { headers } = await setupAuthHeaders();
+  
+      const createRes = await createDivisionHelper({
+        headers,
+        name: 'Marketing',
+      });
+  
+      const deleteRes = await deleteDivisionHelper({ headers, slug: createRes.body.data.slug });
+  
+      validateSuccessResponse(
+        deleteRes,
+        200,
+        200,
+        'Successfully delete division data',
+      );
+  
+      expect(deleteRes.body.data).toBeDefined();
+      expect(deleteRes.body.data.deleted_at).toBeDefined();
+      expect(deleteRes.body.data.deleted_at).not.toBeNull();
     });
-
-    const deleteRes = await deleteDivisionHelper({ headers, slug: createRes.body.data.slug });
-
-    validateSuccessResponse(
-      deleteRes,
-      200,
-      200,
-      'Successfully delete division data',
-    );
-
-    expect(deleteRes.body.data).toBeDefined();
-    expect(deleteRes.body.data.deleted_at).toBeDefined();
-    expect(deleteRes.body.data.deleted_at).not.toBeNull();
   });
 });
+
+
