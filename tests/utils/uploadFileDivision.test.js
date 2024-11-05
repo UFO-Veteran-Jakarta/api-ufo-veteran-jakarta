@@ -18,50 +18,53 @@ describe('uploadFileDivision', () => {
     jest.clearAllMocks();
   });
 
-  test('should return null if no file is provided', () => {
-    const result = uploadFileDivision(null);
+  test('should return null if no file is provided', async () => {
+    const result = await uploadFileDivision(null);
     expect(result).toBeNull();
   });
 
-  test('should create upload directory if it does not exist', () => {
+  test('should create upload directory if it does not exist', async () => {
     fs.existsSync.mockReturnValue(false);
     fs.mkdirSync.mockImplementation();
 
-    uploadFileDivision(fileMock);
+    await uploadFileDivision(fileMock);
 
     expect(fs.existsSync).toHaveBeenCalledWith(uploadDir);
     expect(fs.mkdirSync).toHaveBeenCalledWith(uploadDir, { recursive: true });
   });
 
-  test('should not create upload directory if it already exists', () => {
+  test('should not create upload directory if it already exists', async () => {
     fs.existsSync.mockReturnValue(true);
     
-    uploadFileDivision(fileMock);
+    await uploadFileDivision(fileMock);
 
     expect(fs.existsSync).toHaveBeenCalledWith(uploadDir);
     expect(fs.mkdirSync).not.toHaveBeenCalled();
   });
 
-  test('should generate a random filename and write the file to the correct path', () => {
-    fs.existsSync.mockReturnValue(true);
-    fs.writeFileSync.mockImplementation(() => {});
+  test(
+    'should generate a random filename and write the file to the correct path',
+    async () => {
+      fs.existsSync.mockReturnValue(true);
+      fs.writeFileSync.mockImplementation(() => {});
 
-    crypto.randomInt.mockImplementation((max) => Math.floor(max / 2));
+      crypto.randomInt.mockImplementation((max) => Math.floor(max / 2));
 
-    const result = uploadFileDivision(fileMock);
+      const result = await uploadFileDivision(fileMock);
 
-    const ext = path.extname(fileMock.name);
-    const generatedFilename = result.split('/').pop();
+      const ext = path.extname(fileMock.name);
+      const generatedFilename = result.split('/').pop();
 
-    expect(generatedFilename.length).toBe(16 + ext.length);
-    expect(fs.writeFileSync).toHaveBeenCalledWith(path.join(uploadDir, generatedFilename), fileMock.data);
+      expect(generatedFilename.length).toBe(16 + ext.length);
+      expect(fs.writeFileSync)
+        .toHaveBeenCalledWith(path.join(uploadDir, generatedFilename), fileMock.data);
   });
 
-  test('should return the correct file path after upload', () => {
+  test('should return the correct file path after upload', async () => {
     fs.existsSync.mockReturnValue(true);
     fs.writeFileSync.mockImplementation(() => {});
 
-    const result = uploadFileDivision(fileMock);
+    const result = await uploadFileDivision(fileMock);
 
     expect(result).toMatch(/^\/images\/divisions\/[a-zA-Z0-9]+\.jpg$/);
   });
