@@ -22,7 +22,7 @@ const checkSlugExistsInDb = async (slug) => {
   const division = await getDivisionBySlug(slug, useCache);
   return !!division;
 };
-exports.checkSlugExistsInDb;
+exports.checkSlugExistsInDb = checkSlugExistsInDb;
 
 /**
  * Add new division into the database.
