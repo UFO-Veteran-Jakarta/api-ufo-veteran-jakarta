@@ -4,7 +4,6 @@ const {
   addPosition,
   updatePositionById,
   deletePositionById,
-  deleteAllPositions,
 } = require('../services/positionService');
 const logger = require('../utils/logger');
 const { sendResponse } = require('../helpers/response');
@@ -82,30 +81,27 @@ exports.updatePositionById = async (req, res) => {
   }
 };
 
-exports.deleteAllPositions = async (req, res) => {
-  try {
-    const deletePositions = await deleteAllPositions();
-    logger.info('Delete Success: Successfully delete all positions');
-    return sendResponse(res, 200, 'Successfully delete all positions', deletePositions);
-  } catch (error) {
-    logger.error('Delete Error: Failed to delete all positions');
-    return sendResponse(res, 500, error.message);
-  }
-};
-
 exports.deletePositionById = async (req, res) => {
   try {
     const { id } = req.params;
     const positionById = await getPositionById(id);
+
     if (!positionById) {
+      logger.error('Position Not Found.');
       return sendResponse(res, 404, 'Position Not Found');
     }
 
-    await deletePositionById(id);
-    logger.info('Delete Success: Successfully delete position');
-    return sendResponse(res, 200, 'Successfully delete position');
+    const deletedPosition = await deletePositionById(id);
+
+    logger.info(`Successfully deleted position with ID ${id}`);
+    return sendResponse(
+      res,
+      200,
+      'Successfully delete position data',
+      deletedPosition,
+    );
   } catch (error) {
-    logger.error('Delete Error: Failed to delete position');
+    logger.error('Failed to delete position');
     return sendResponse(res, 500, error.message);
   }
 };
