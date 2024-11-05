@@ -130,7 +130,7 @@ exports.stageDataUpdateDivisionBySlug = async (req) => {
     updateData.name = req.body.name;
     updateData.slug = await createSlugDivision(
       req.body.name,
-      this.checkSlugExistsInDb,
+      this.checkSlugExistsInDb.bind(this),
     );
   }
 

@@ -1,7 +1,7 @@
 const path = require('path');
 const fs = require('fs');
 const crypto = require('crypto');
-const uploadFileDivision = require('../../src/utils/uploadFileDivision');
+const { uploadFileDivision } = require('../../src/utils/uploadFileDivision');
 
 jest.mock('fs');
 jest.mock('crypto');
