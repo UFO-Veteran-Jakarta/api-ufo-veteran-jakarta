@@ -1,4 +1,4 @@
-const { pool, runTransaction } = require('../config/database');
+const pool = require('../config/database');
 
 /**
  *
@@ -39,7 +39,7 @@ exports.doInsertQuery = async (data, tableName) => {
   // Query logging
   console.log(query);
 
-  const result = await runTransaction(query, values);
+  const result = await pool.runTransaction(query, values);
   return result;
 };
 
@@ -139,7 +139,7 @@ exports.doUpdateQuery = async (data, tableName, slug) => {
   // Query logging
   console.log(query);
 
-  const result = await runTransaction(query, [...values, slug]);
+  const result = await pool.runTransaction(query, [...values, slug]);
   return result;
 };
 
@@ -164,6 +164,6 @@ exports.doSoftDeleteQuery = async (tableName, slug = '') => {
   // Query logging
   console.log(query);
 
-  const result = await runTransaction(query);
+  const result = await pool.runTransaction(query);
   return result;
 };

@@ -22,7 +22,7 @@ pool.on('connect', async (client) => {
 });
 
 // Run a single query inside a transaction. Retries if failed
-const runTransaction = async (query, values = [], retries = 3, delay = 1000) => {
+pool.runTransaction = async (query, values = [], retries = 3, delay = 1000) => {
   // Get a connection from the pool
   const client = await pool.connect();
 
@@ -75,7 +75,4 @@ const runTransaction = async (query, values = [], retries = 3, delay = 1000) => 
   /* eslint-enable no-await-in-loop */
 };
 
-module.exports = {
-  pool,
-  runTransaction,
-};
+module.exports = pool;

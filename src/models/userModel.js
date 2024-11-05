@@ -1,4 +1,4 @@
-const { pool } = require('../config/database');
+const pool = require('../config/database');
 const { hash } = require('../helpers/bcrypt');
 
 exports.getAllUser = async () => {
