@@ -16,8 +16,8 @@ const validateFileType = (fileName) => {
     throw new Error('Invalid file type');
   }
 
-  return '.' + fileType;
-}
+  return `.${fileType}`;
+};
 
 module.exports = {
   validateMaxSize,

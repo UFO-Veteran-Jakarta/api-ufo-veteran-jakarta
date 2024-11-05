@@ -1,7 +1,7 @@
 const { pool, runTransaction } = require('../config/database');
 
 /**
- * 
+ *
  * SQL Query Builder for CRUD Operations.
  */
 
@@ -20,10 +20,10 @@ function generateCacheKey(query, values) {
 
 /**
  * Query builder for INSERT
- * 
- * @param {*} data 
- * @param {*} tableName 
- * @returns 
+ *
+ * @param {*} data
+ * @param {*} tableName
+ * @returns
  */
 exports.doInsertQuery = async (data, tableName) => {
   const fields = Object.keys(data);
@@ -39,25 +39,28 @@ exports.doInsertQuery = async (data, tableName) => {
   // Query logging
   console.log(query);
 
-  return await runTransaction(query, values);
+  const result = await runTransaction(query, values);
+  return result;
 };
 
 /**
  * Query builder for SELECT with automatic query caching.
  * This function will first check if the query result is in cache,
  * and if not, it will execute the query on the database and cache the result.
- * 
- * @param {Array} comparator - An array of conditions, where each condition is an array like ['column', operator, value']
+ *
+ * @param {Array} comparator - An array of conditions, where each condition is
+ *                             an array like ['column', operator, value']
  * @param {string} tableName - The name of the table to query from
- * @returns {Promise<Array>} - Returns the rows from the cached result or from the database
+ * @returns {Promise<Array>} - Returns the rows from the cached result or from
+ *                             the database
  */
 exports.doSelectQuery = async (tableName, comparator = [], useCache = true) => {
   if (typeof tableName !== 'string' || tableName.trim() === '') {
-    throw new Error("Table name must be a non-empty string");
+    throw new Error('Table name must be a non-empty string');
   }
 
-  let whereConditions = [];
-  let values = [];
+  const whereConditions = [];
+  const values = [];
 
   // If comparator is empty, then it doesn't have WHERE comparators
   if (Array.isArray(comparator) && comparator.length !== 0) {
@@ -65,20 +68,20 @@ exports.doSelectQuery = async (tableName, comparator = [], useCache = true) => {
       if (condition.length !== 3) {
         throw new Error(
           'Each condition should be an array with 3 elements ' +
-          '[column, operator, value], but received: ' +
-          JSON.stringify(condition));
+          `[column, operator, value], but received: ${
+            JSON.stringify(condition)}`,
+        );
       }
-      
+
       const [column, operator, value] = condition;
       whereConditions.push(`${column} ${operator} $${index + 1}`);
       values.push(value);
     });
   }
-  
-  const whereClause = 'WHERE ' + (whereConditions.length
-    ? whereConditions.join(' AND ') + ' AND '
-    : ''
-  ) + 'deleted_at IS NULL';
+
+  const whereClause = `WHERE ${whereConditions.length
+    ? `${whereConditions.join(' AND ')} AND `
+    : ''}deleted_at IS NULL`;
   const query = `SELECT * FROM ${tableName} ${whereClause};`;
 
   // Query logging
@@ -88,12 +91,12 @@ exports.doSelectQuery = async (tableName, comparator = [], useCache = true) => {
   if (useCache) {
     // Generate the cache key for this query
     cacheKey = generateCacheKey(query, values);
-  
+
     // Check if the query result is cached and is still valid
     const cached = queryCache[cacheKey];
     if (cached && (Date.now() - cached.timestamp < CACHE_TTL)) {
-      console.log("Returning cached data for query: ", cacheKey);
-      return { rows: cached.data };  // Return cached result
+      console.log('Returning cached data for query: ', cacheKey);
+      return { rows: cached.data }; // Return cached result
     }
   }
 
@@ -104,20 +107,20 @@ exports.doSelectQuery = async (tableName, comparator = [], useCache = true) => {
     // Cache the result for future use
     queryCache[cacheKey] = {
       data: result.rows,
-      timestamp: Date.now(),  // Store the current timestamp for cache expiration
+      timestamp: Date.now(), // Store the current timestamp for cache expiration
     };
   }
 
-  return result;  // Return the fresh query result
+  return result; // Return the fresh query result
 };
 
 /**
  * Query builder for UPDATE
- * 
- * @param {*} data 
- * @param {*} tableName 
- * @param {*} slug 
- * @returns 
+ *
+ * @param {*} data
+ * @param {*} tableName
+ * @param {*} slug
+ * @returns
  */
 exports.doUpdateQuery = async (data, tableName, slug) => {
   const fields = Object.keys(data);
@@ -136,15 +139,16 @@ exports.doUpdateQuery = async (data, tableName, slug) => {
   // Query logging
   console.log(query);
 
-  return await runTransaction(query, [ ...values, slug ]);
+  const result = await runTransaction(query, [...values, slug]);
+  return result;
 };
 
 /**
  * Query builder for DELETE (soft delete)
- * 
- * @param {*} tableName 
- * @param {*} slug 
- * @returns 
+ *
+ * @param {*} tableName
+ * @param {*} slug
+ * @returns
  */
 exports.doSoftDeleteQuery = async (tableName, slug = '') => {
   let query = `
@@ -160,5 +164,6 @@ exports.doSoftDeleteQuery = async (tableName, slug = '') => {
   // Query logging
   console.log(query);
 
-  return await runTransaction(query);
+  const result = await runTransaction(query);
+  return result;
 };

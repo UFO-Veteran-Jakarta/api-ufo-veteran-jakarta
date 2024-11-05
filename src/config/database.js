@@ -1,7 +1,7 @@
 const { Pool } = require('pg');
 require('dotenv').config({
   // Traces back to root directory (absolute path)
-  path: __dirname + '/../../' + ( process.env.NODE_ENV === 'test' ? '.env.test' : '.env' ),
+  path: `${__dirname}/../../${process.env.NODE_ENV === 'test' ? '.env.test' : '.env'}`,
 });
 
 const pool = new Pool({
@@ -17,32 +17,41 @@ pool.on('connect', async (client) => {
     const schema = process.env.DB_SCHEMA || 'myschema';
     await client.query(`SET search_path TO ${schema}`);
   } catch (error) {
-    console.error("Error setting search path:", error);
+    console.error('Error setting search path:', error);
   }
 });
 
 // Run a single query inside a transaction. Retries if failed
 const runTransaction = async (query, values = [], retries = 3, delay = 1000) => {
-  const client = await pool.connect(); // Get a connection from the pool
+  // Get a connection from the pool
+  const client = await pool.connect();
 
+  /* eslint-disable no-await-in-loop */
   // Retry loop
-  for (let attempt = 1; attempt <= retries; attempt++) {
+  for (let attempt = 1; attempt <= retries; attempt += 1) {
     try {
-      await client.query('BEGIN'); // Start a new transaction
+      // Start a new transaction
+      await client.query('BEGIN');
 
       let result;
 
       // Check if values are provided (i.e., non-empty array), then execute query
       if (values.length > 0) {
-        result = await client.query(query, values); // Run query with values
+        // Run query with values
+        result = await client.query(query, values);
       } else {
-        result = await client.query(query); // Run query without values
+        // Run query without values
+        result = await client.query(query);
       }
 
-      await client.query('COMMIT'); // Commit the transaction if everything succeeded
-      return result; // Return the query result
+      // Commit the transaction if everything succeeded
+      await client.query('COMMIT');
+
+      // Return the query result
+      return result;
     } catch (error) {
-      await client.query('ROLLBACK'); // Rollback the transaction if any query failed
+      // Rollback the transaction if any query failed
+      await client.query('ROLLBACK');
 
       // Log the error
       console.error(`Attempt ${attempt} failed: ${error.message}`);
@@ -53,12 +62,17 @@ const runTransaction = async (query, values = [], retries = 3, delay = 1000) => 
       } else {
         // Wait before retrying
         console.log(`Retrying in ${delay}ms...`);
-        await new Promise(resolve => setTimeout(resolve, delay)); // Wait for `delay` ms before retrying
+        // Wait for `delay` ms before retrying
+        /* eslint-disable no-promise-executor-return */
+        await new Promise((resolve) => setTimeout(resolve, delay));
+        /* eslint-enable no-promise-executor-return */
       }
     } finally {
-      client.release(); // Release the connection back to the pool
+      // Release the connection back to the pool
+      client.release();
     }
   }
+  /* eslint-enable no-await-in-loop */
 };
 
 module.exports = {

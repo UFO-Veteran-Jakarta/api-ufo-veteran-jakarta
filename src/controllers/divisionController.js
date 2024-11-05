@@ -5,7 +5,7 @@ const {
   updateDivisionBySlug,
   deleteDivisionBySlug,
   checkSlugExistsInDb,
-  stageDataUpdateDivisionBySlug
+  stageDataUpdateDivisionBySlug,
 } = require('../services/divisionService');
 const { buildResponse } = require('../utils/buildResponseDivision');
 const logger = require('../utils/logger');
@@ -98,7 +98,9 @@ exports.updateDivisionBySlug = async (req, res) => {
 
     // Build the response
     const [responseMessage, responseData] = await buildResponse(
-      oldData, updateData, updatedDivision
+      oldData,
+      updateData,
+      updatedDivision,
     );
 
     return sendResponse(res, 200, responseMessage, responseData);

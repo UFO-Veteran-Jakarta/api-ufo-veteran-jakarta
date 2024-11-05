@@ -1,4 +1,3 @@
-
 exports.SPECIAL_CHARS_MAP = [
   ['&', ''],
   ['<', ''],

@@ -11,9 +11,9 @@ const {
 const UPLOAD_DIR = '/images/divisions/';
 
 /**
- * 
+ *
  * @returns string
- * 
+ *
  * Generates a random file name.
  */
 const generateRandomFilename = async () => {
@@ -45,10 +45,10 @@ const generateRandomFilename = async () => {
 };
 
 /**
- * 
- * @param {*} file 
+ *
+ * @param {*} file
  * @returns string
- * 
+ *
  * Gets the full upload file path.
  */
 const getUploadFilepath = async (file) => {
@@ -62,9 +62,9 @@ const getUploadFilepath = async (file) => {
 };
 
 /**
- * 
- * @param {*} filePath 
- * 
+ *
+ * @param {*} filePath
+ *
  * Deletes a file from a filesystem.
  */
 const deleteFile = (filePath) => {
@@ -82,10 +82,10 @@ const deleteFile = (filePath) => {
 };
 
 /**
- * 
- * @param {*} file 
+ *
+ * @param {*} file
  * @returns string
- * 
+ *
  * Uploads a file into the local filesystem.
  */
 const uploadFileDivision = async (file) => {
@@ -116,11 +116,11 @@ const uploadFileDivision = async (file) => {
     if (fileSize > filesystem.upload.markAsLargeFile) {
       // Write streaming for large files
       const writeStream = fs.createWriteStream(filePath);
-      writeStream.write(fileData);
+      writeStream.write(file.data);
       writeStream.end();
       writeStream.on('error', (err) => {
         // Cancel write and delete file if error occurred
-        console.error('File Division Upload Error:', error);
+        console.error('File Division Upload Error:', err);
         deleteFile(filePath);
         throw err;
       });
@@ -140,11 +140,11 @@ const uploadFileDivision = async (file) => {
 };
 
 /**
- * 
- * @param {*} oldFilePath 
- * @param {*} newFilePath 
- * @param {*} data 
- * 
+ *
+ * @param {*} oldFilePath
+ * @param {*} newFilePath
+ * @param {*} data
+ *
  * Updates a file on a filesystem.
  */
 const updateFileDivision = async (oldFilePath, newFilePath, data) => {

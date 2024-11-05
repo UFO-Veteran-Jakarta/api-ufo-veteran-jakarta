@@ -13,20 +13,21 @@ const {
 
 /**
  * Checks if 'slug' index exists in the database.
- * 
- * @param {*} slug 
- * @returns 
+ *
+ * @param {*} slug
+ * @returns
  */
 exports.checkSlugExistsInDb = async (slug) => {
-  const division = await getDivisionBySlug(slug, useCache = false);
-  return !! division;
+  const useCache = false;
+  const division = await getDivisionBySlug(slug, useCache);
+  return !!division;
 };
 
 /**
  * Add new division into the database.
- * 
- * @param {*} data 
- * @returns 
+ *
+ * @param {*} data
+ * @returns
  */
 exports.addDivision = async (data) => {
   try {
@@ -39,8 +40,8 @@ exports.addDivision = async (data) => {
 
 /**
  * Get all division from database/cache.
- * 
- * @returns 
+ *
+ * @returns
  */
 exports.getAllDivisions = async () => {
   try {
@@ -54,9 +55,9 @@ exports.getAllDivisions = async () => {
 
 /**
  * Get division by slug from database/cache.
- * 
- * @param {*} slug 
- * @returns 
+ *
+ * @param {*} slug
+ * @returns
  */
 exports.getDivisionBySlug = async (slug) => {
   try {
@@ -69,11 +70,11 @@ exports.getDivisionBySlug = async (slug) => {
 
 /**
  * Update division by slug on the database.
- * 
- * @param {*} slug 
- * @param {*} oldData 
- * @param {*} updateData 
- * @returns 
+ *
+ * @param {*} slug
+ * @param {*} oldData
+ * @param {*} updateData
+ * @returns
  */
 exports.updateDivisionBySlug = async (slug, oldData, updateData) => {
   try {
@@ -94,16 +95,16 @@ exports.updateDivisionBySlug = async (slug, oldData, updateData) => {
 
     return result;
   } catch (error) {
-    console.error('Error updating division by slug:', error); 
+    console.error('Error updating division by slug:', error);
     throw error;
   }
 };
 
 /**
  * Delete division by slug on the database.
- * 
- * @param {*} slug 
- * @returns 
+ *
+ * @param {*} slug
+ * @returns
  */
 exports.deleteDivisionBySlug = async (slug) => {
   try {
