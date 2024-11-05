@@ -164,6 +164,9 @@ exports.doSoftDeleteQuery = async (tableName, slug = '') => {
   // Query logging
   console.log(query);
 
-  const result = await pool.runTransaction(query);
+  const result = slug
+    ? await pool.runTransaction(query, [slug])
+    : await pool.runTransaction(query);
+
   return result;
 };
