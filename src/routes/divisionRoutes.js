@@ -10,6 +10,14 @@ const divisionController = require('../controllers/divisionController');
 
 const router = express.Router();
 
+// Public routes
+router.get(
+  '/',
+  divisionController.getAllDivisions,
+);
+router.get('/:slug', divisionController.getDivisionBySlug);
+
+// Protected routes
 router.post(
   '/',
   authentication(),
@@ -18,13 +26,6 @@ router.post(
   checkFileDivision('image'),
   divisionController.addDivision,
 );
-
-router.get(
-  '/',
-  divisionController.getAllDivisions,
-);
-router.get('/:slug', divisionController.getDivisionBySlug);
-
 router.patch(
   '/:slug',
   authentication(),
@@ -33,7 +34,6 @@ router.patch(
   validate,
   divisionController.updateDivisionBySlug,
 );
-
 router.delete('/:slug', authentication(), divisionController.deleteDivisionBySlug);
 
 module.exports = router;

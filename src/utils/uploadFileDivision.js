@@ -7,7 +7,16 @@ const {
   validateFileType,
 } = require('./uploadFileValidateDivision');
 
-const generateRandomFilename = () => {
+// Publicly accessible upload directory
+const UPLOAD_DIR = '/images/divisions/';
+
+/**
+ * 
+ * @returns string
+ * 
+ * Generates a random file name.
+ */
+const generateRandomFilename = async () => {
   const upperChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
   const lowerChars = 'abcdefghijklmnopqrstuvwxyz';
   const numbers = '0123456789';
@@ -35,10 +44,34 @@ const generateRandomFilename = () => {
   return shuffled;
 };
 
+/**
+ * 
+ * @param {*} file 
+ * @returns string
+ * 
+ * Gets the full upload file path.
+ */
+const getUploadFilepath = async (file) => {
+  // File validation
+  validateMaxSize(file.size);
+  const ext = validateFileType(file.name);
+
+  // Generate file path
+  const randomFilename = await generateRandomFilename() + ext;
+  return UPLOAD_DIR + randomFilename;
+};
+
+/**
+ * 
+ * @param {*} filePath 
+ * 
+ * Deletes a file from a filesystem.
+ */
 const deleteFile = (filePath) => {
   try {
-    if (fs.existsSync(filePath)) {
-      fs.unlinkSync(filePath);
+    const fullFilePath = filesystem.upload.baseDir + filePath;
+    if (fs.existsSync(fullFilePath)) {
+      fs.unlinkSync(fullFilePath);
       console.log('File deleted successfully:', filePath);
     } else {
       console.warn('File not found, cannot delete:', filePath);
@@ -48,26 +81,36 @@ const deleteFile = (filePath) => {
   }
 };
 
-const uploadFileDivision = (file) => {
+/**
+ * 
+ * @param {*} file 
+ * @returns string
+ * 
+ * Uploads a file into the local filesystem.
+ */
+const uploadFileDivision = async (file) => {
   if (!file) return null;
 
+  // Validate file
   const fileSize = validateMaxSize(file.size);
   const ext = validateFileType(file.name);
 
-  const baseSubDir = '/images/divisions/';
-  const uploadDir = filesystem.upload.baseDir + baseSubDir;
+  // Construct the server upload directory
+  const serverUploadDir = filesystem.upload.baseDir + UPLOAD_DIR;
 
-  if (!fs.existsSync(uploadDir)) {
+  if (!fs.existsSync(serverUploadDir)) {
+    // Create the upload directory if not exist
     try {
-      fs.mkdirSync(uploadDir, { recursive: true });
+      fs.mkdirSync(serverUploadDir, { recursive: true });
     } catch (error) {
       console.error('File Division Upload Error:', error);
       throw error;
     }
   }
 
-  const randomFilename = generateRandomFilename() + ext;
-  const filePath = path.join(uploadDir, randomFilename);
+  // Construct the complete file path
+  const randomFilename = await generateRandomFilename() + ext;
+  const filePath = path.join(serverUploadDir, randomFilename);
 
   try {
     if (fileSize > filesystem.upload.markAsLargeFile) {
@@ -76,6 +119,7 @@ const uploadFileDivision = (file) => {
       writeStream.write(fileData);
       writeStream.end();
       writeStream.on('error', (err) => {
+        // Cancel write and delete file if error occurred
         console.error('File Division Upload Error:', error);
         deleteFile(filePath);
         throw err;
@@ -85,12 +129,45 @@ const uploadFileDivision = (file) => {
       fs.writeFileSync(filePath, file.data);
     }
   } catch (error) {
+    // Cancel write and delete file if error occurred
     console.error('File Division Upload Error:', error);
     deleteFile(filePath);
     throw error;
   }
 
-  return baseSubDir + randomFilename;
+  // Returns the publicly accessible file path
+  return UPLOAD_DIR + randomFilename;
 };
 
-module.exports = uploadFileDivision;
+/**
+ * 
+ * @param {*} oldFilePath 
+ * @param {*} newFilePath 
+ * @param {*} data 
+ * 
+ * Updates a file on a filesystem.
+ */
+const updateFileDivision = async (oldFilePath, newFilePath, data) => {
+  try {
+    // Deletes the old file
+    deleteFile(oldFilePath);
+
+    // Create new file
+    await fs.promises.writeFile(
+      filesystem.upload.baseDir + newFilePath,
+      data,
+    );
+
+    console.log(`File updated from '${oldFilePath}' to '${newFilePath}'`);
+  } catch (error) {
+    // Handle any error that occurs
+    console.error('Error updating the file:', error.message);
+    throw new Error(`Failed to update file: ${error.message}`);
+  }
+};
+
+module.exports = {
+  getUploadFilepath,
+  uploadFileDivision,
+  updateFileDivision,
+};

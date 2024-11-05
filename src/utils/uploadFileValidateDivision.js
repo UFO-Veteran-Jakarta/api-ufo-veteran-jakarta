@@ -10,13 +10,13 @@ const validateMaxSize = (size) => {
 };
 
 const validateFileType = (fileName) => {
-  const fileType = path.extname(fileName);
+  const fileType = path.extname(fileName).substring(1);
 
   if (!filesystem.upload.allowedFileTypes.includes(fileType)) {
     throw new Error('Invalid file type');
   }
 
-  return fileType;
+  return '.' + fileType;
 }
 
 module.exports = {

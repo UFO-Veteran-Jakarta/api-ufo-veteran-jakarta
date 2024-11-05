@@ -1,63 +1,13 @@
 const slugify = require('slugify');
 const crypto = require('crypto');
 const he = require('he');
+const { SPECIAL_CHARS_MAP } = require('../config/slug');
 
 exports.generateUniqueSlug = (title) => {
   const baseSlug = slugify(title, { lower: true, strict: true });
   const uniqueCode = crypto.randomBytes(4).toString('hex');
   return `${baseSlug}-${uniqueCode}`;
 };
-
-const SPECIAL_CHARS_MAP = [
-  ['&', ''],
-  ['<', ''],
-  ['>', ''],
-  ['©', ''],
-  ['®', ''],
-  ['™', ''],
-  ['℠', ''],
-  ['§', ''],
-  ['¶', ''],
-  ['†', ''],
-  ['‡', ''],
-  ['°', ''],
-  ['∙', '-'],
-  ['•', '-'],
-  ['⋅', '-'],
-  ['·', '-'],
-  ['★', ''],
-  ['☆', ''],
-  ['♥', ''],
-  ['♦', ''],
-  ['♠', ''],
-  ['♣', ''],
-  ['\u201C', ''],
-  ['\u201D', ''],
-  ['\u2018', ''],
-  ['\u2019', ''],
-  ['«', ''],
-  ['»', ''],
-  ['…', ''],
-  ['—', '-'],
-  ['–', '-'],
-  ['❤', ''],
-  ['♡', ''],
-  ['☺', ''],
-  ['☻', ''],
-  ['♪', ''],
-  ['♫', ''],
-  ['☼', ''],
-  ['♂', ''],
-  ['♀', ''],
-  ['⚤', ''],
-  ['⚢', ''],
-  ['⚣', ''],
-  ['⚥', ''],
-  ['⚦', ''],
-  ['⚧', ''],
-  ['⚨', ''],
-  ['⚩', ''],
-];
 
 exports.createSlugDivision = async (
   title,
@@ -69,19 +19,8 @@ exports.createSlugDivision = async (
       throw new Error('Division name is required');
     }
 
-    let decodedTitle = he.decode(title);
-
-    SPECIAL_CHARS_MAP.forEach(([char, replacement]) => {
-      decodedTitle = decodedTitle.replace(new RegExp(char, 'g'), replacement);
-    });
-
-    const cleanedTitle = decodedTitle
-      .replace(/[\u0300-\u036f]/g, '')
-      .replace(/[^a-zA-Z0-9\s-]/g, '-')
-      .replace(/\s+/g, '-')
-      .replace(/-+/g, '-')
-      .trim()
-      .replace(/(^-+|-+$)/g, '');
+    // Generates a clean title string
+    const cleanedTitle = generateCleanTitle(title);
 
     const baseSlug = slugify(cleanedTitle, {
       lower: true,
@@ -90,9 +29,8 @@ exports.createSlugDivision = async (
       ...options,
     });
 
-    const exists = await checkSlugExistsInDb(baseSlug);
-
-    if (!exists) {
+    // If slug exists in database, then 
+    if (!await checkSlugExistsInDb(baseSlug)) {
       return baseSlug;
     }
 
@@ -104,4 +42,22 @@ exports.createSlugDivision = async (
   }
 };
 
-exports.SPECIAL_CHARS_MAP = SPECIAL_CHARS_MAP;
+// Cleans the title from unwanted string
+const generateCleanTitle = (title) => {
+  // Decode title
+  let decodedTitle = he.decode(title);
+
+  // Character replacement
+  SPECIAL_CHARS_MAP.forEach(([char, replacement]) => {
+    decodedTitle = decodedTitle.replace(new RegExp(char, 'g'), replacement);
+  });
+
+  // Clean the unicode characters
+  return decodedTitle
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-zA-Z0-9\s-]/g, '-')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-')
+    .trim()
+    .replace(/(^-+|-+$)/g, '');
+};
