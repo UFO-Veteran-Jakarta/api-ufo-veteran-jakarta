@@ -43,7 +43,8 @@ exports.getAllDivisions = async (req, res) => {
 
     if (divisions.length === 0) {
       logger.info('No divisions data available.');
-      return sendResponse(res, 204, 'No divisions data are available.', []);
+      // return sendResponse(res, 204, 'No divisions data are available.', []);
+      return sendResponse(res, 200, 'No divisions data are available.', []);
     }
 
     logger.info('Successfully retrieved all divisions data');
