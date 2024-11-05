@@ -17,7 +17,7 @@ const {
  * @param {*} slug
  * @returns
  */
-exports.checkSlugExistsInDb = async (slug) => {
+const checkSlugExistsInDb = async (slug) => {
   const useCache = false;
   const division = await getDivisionBySlug(slug, useCache);
   return !!division;
@@ -29,7 +29,7 @@ exports.checkSlugExistsInDb = async (slug) => {
  * @param {*} data
  * @returns
  */
-exports.addDivision = async (data) => {
+const addDivision = async (data) => {
   try {
     return addDivision(data);
   } catch (error) {
@@ -43,7 +43,7 @@ exports.addDivision = async (data) => {
  *
  * @returns
  */
-exports.getAllDivisions = async () => {
+const getAllDivisions = async () => {
   try {
     const divisions = await getAllDivisions();
     return divisions;
@@ -59,7 +59,7 @@ exports.getAllDivisions = async () => {
  * @param {*} slug
  * @returns
  */
-exports.getDivisionBySlug = async (slug) => {
+const getDivisionBySlug = async (slug) => {
   try {
     return await getDivisionBySlug(slug);
   } catch (error) {
@@ -76,7 +76,7 @@ exports.getDivisionBySlug = async (slug) => {
  * @param {*} updateData
  * @returns
  */
-exports.updateDivisionBySlug = async (slug, oldData, updateData) => {
+const updateDivisionBySlug = async (slug, oldData, updateData) => {
   try {
     // Exclude imageData from updateData payload
     const { imageData, ...newData } = updateData;
@@ -106,7 +106,7 @@ exports.updateDivisionBySlug = async (slug, oldData, updateData) => {
  * @param {*} slug
  * @returns
  */
-exports.deleteDivisionBySlug = async (slug) => {
+const deleteDivisionBySlug = async (slug) => {
   try {
     return deleteDivisionBySlug(slug);
   } catch (error) {
@@ -122,7 +122,7 @@ exports.deleteDivisionBySlug = async (slug) => {
  * On each payload objects, this function will return the
  * appropriate string value back to the data payload.
  */
-exports.stageDataUpdateDivisionBySlug = async (req) => {
+const stageDataUpdateDivisionBySlug = async (req) => {
   // Data payload
   const updateData = {};
 
@@ -149,4 +149,14 @@ exports.stageDataUpdateDivisionBySlug = async (req) => {
     // Returns the data payload itself
     updateData,
   ];
+};
+
+module.exports = {
+  checkSlugExistsInDb,
+  addDivision,
+  getAllDivisions,
+  getDivisionBySlug,
+  updateDivisionBySlug,
+  deleteDivisionBySlug,
+  stageDataUpdateDivisionBySlug,
 };
