@@ -80,7 +80,7 @@ async function updatePositionById(id, data) {
 }
 
 async function deleteAllPositions() {
-  const query = 'DELETE FROM myschema.positions WHERE deleted_at IS NULL;';
+  const query = 'UPDATE myschema.positions SET deleted_at = NOW()';
 
   try {
     const res = await pool.query(query);
