@@ -1,10 +1,10 @@
-const{
-    getAllPositions,
-    getPositionById,
-    addPosition,
-    updatePositionById,
-    deletePositionById,
-    deleteAllPositions
+const {
+  getAllPositions,
+  getPositionById,
+  addPosition,
+  updatePositionById,
+  deletePositionById,
+  deleteAllPositions,
 } = require('../models/positionModel');
 
 exports.getAllPositions = async () => {
@@ -48,7 +48,7 @@ exports.deletePositionById = async (id) => {
     return await deletePositionById(id);
   } catch (error) {
     console.error(`Error deleting position with id ${id}:`, error);
-    throw error;  
+    throw error;
   }
 };
 

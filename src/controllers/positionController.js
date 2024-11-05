@@ -61,7 +61,7 @@ exports.getPositionById = async (req, res) => {
 
 exports.updatePositionById = async (req, res) => {
   try {
-    const { id } = req.params; 
+    const { id } = req.params;
 
     const positionById = await getPositionById(id);
     if (!positionById) {
@@ -77,7 +77,7 @@ exports.updatePositionById = async (req, res) => {
       updatedPosition,
     );
   } catch (error) {
-    logger.error(`Update Error: Failed to update position name`);
+    logger.error('Update Error: Failed to update position name');
     return sendResponse(res, 500, error.message);
   }
 };
@@ -91,15 +91,15 @@ exports.deleteAllPositions = async (req, res) => {
     logger.error('Delete Error: Failed to delete all positions');
     return sendResponse(res, 500, error.message);
   }
-}
+};
 
 exports.deletePositionById = async (req, res) => {
   try {
     const { id } = req.params;
     const positionById = await getPositionById(id);
-    if (!positionById) {  
+    if (!positionById) {
       return sendResponse(res, 404, 'Position Not Found');
-    }        
+    }
 
     await deletePositionById(id);
     logger.info('Delete Success: Successfully delete position');
