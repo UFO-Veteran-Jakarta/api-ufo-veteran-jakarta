@@ -22,6 +22,7 @@ const checkSlugExistsInDb = async (slug) => {
   const division = await getDivisionBySlug(slug, useCache);
   return !!division;
 };
+exports.checkSlugExistsInDb;
 
 /**
  * Add new division into the database.
@@ -29,7 +30,7 @@ const checkSlugExistsInDb = async (slug) => {
  * @param {*} data
  * @returns
  */
-const addDivision = async (data) => {
+exports.addDivision = async (data) => {
   try {
     return addDivision(data);
   } catch (error) {
@@ -43,7 +44,7 @@ const addDivision = async (data) => {
  *
  * @returns
  */
-const getAllDivisions = async () => {
+exports.getAllDivisions = async () => {
   try {
     const divisions = await getAllDivisions();
     return divisions;
@@ -59,7 +60,7 @@ const getAllDivisions = async () => {
  * @param {*} slug
  * @returns
  */
-const getDivisionBySlug = async (slug) => {
+exports.getDivisionBySlug = async (slug) => {
   try {
     return await getDivisionBySlug(slug);
   } catch (error) {
@@ -76,7 +77,7 @@ const getDivisionBySlug = async (slug) => {
  * @param {*} updateData
  * @returns
  */
-const updateDivisionBySlug = async (slug, oldData, updateData) => {
+exports.updateDivisionBySlug = async (slug, oldData, updateData) => {
   try {
     // Exclude imageData from updateData payload
     const { imageData, ...newData } = updateData;
@@ -106,7 +107,7 @@ const updateDivisionBySlug = async (slug, oldData, updateData) => {
  * @param {*} slug
  * @returns
  */
-const deleteDivisionBySlug = async (slug) => {
+exports.deleteDivisionBySlug = async (slug) => {
   try {
     return deleteDivisionBySlug(slug);
   } catch (error) {
@@ -122,7 +123,7 @@ const deleteDivisionBySlug = async (slug) => {
  * On each payload objects, this function will return the
  * appropriate string value back to the data payload.
  */
-const stageDataUpdateDivisionBySlug = async (req) => {
+exports.stageDataUpdateDivisionBySlug = async (req) => {
   // Data payload
   const updateData = {};
 
@@ -149,14 +150,4 @@ const stageDataUpdateDivisionBySlug = async (req) => {
     // Returns the data payload itself
     updateData,
   ];
-};
-
-module.exports = {
-  checkSlugExistsInDb,
-  addDivision,
-  getAllDivisions,
-  getDivisionBySlug,
-  updateDivisionBySlug,
-  deleteDivisionBySlug,
-  stageDataUpdateDivisionBySlug,
 };
