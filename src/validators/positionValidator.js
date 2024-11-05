@@ -16,9 +16,9 @@ const updateValidationRules = () => {
   return [
     check('name')
       .isString()
+      .notEmpty()
+      .withMessage('Position name is required.')
       .trim()
-      .optional()
-      .withMessage('Position name must be a string.')
       .isLength({ max: 255 })
       .withMessage('Position name must be no more than 255 characters.'),
   ];
