@@ -14,8 +14,7 @@ const pool = new Pool({
 
 pool.on('connect', async (client) => {
   try {
-    const schema = process.env.DB_SCHEMA || 'myschema';
-    await client.query(`SET search_path TO ${schema}`);
+    await client.query('SET search_path TO myschema');
   } catch (error) {
     console.error('Error setting search path:', error);
   }

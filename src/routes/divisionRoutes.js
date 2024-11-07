@@ -5,7 +5,7 @@ const {
   validate,
 } = require('../validators/divisionValidator');
 const { authentication } = require('../middlewares/authMiddleware');
-const { checkFileDivision, checkUpdatedFileDivision } = require('../middlewares/divisionMiddlewareFile');
+const { checkFileDivision } = require('../middlewares/divisionMiddlewareFile');
 const divisionController = require('../controllers/divisionController');
 
 const router = express.Router();
@@ -29,7 +29,7 @@ router.post(
 router.patch(
   '/:slug',
   authentication(),
-  checkUpdatedFileDivision('image'),
+  checkFileDivision('image', false, 'update'),
   updateDivisionValidationRules(),
   validate,
   divisionController.updateDivisionBySlug,
