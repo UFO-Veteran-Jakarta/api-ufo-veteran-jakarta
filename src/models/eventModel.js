@@ -12,7 +12,7 @@ exports.addEvent = async function insertEvent(data) {
   });
 
   const query = `
-    INSERT INTO myschema.events (${fields.join(', ')})
+    INSERT INTO events (${fields.join(', ')})
     VALUES (${placeholders.join(', ')})
     RETURNING *;
   `;
@@ -26,7 +26,7 @@ exports.addEvent = async function insertEvent(data) {
 };
 
 exports.getAllEvents = async function getAllEvents() {
-  const query = 'SELECT * FROM myschema.events';
+  const query = 'SELECT * FROM events';
 
   try {
     const res = await pool.query(query);
@@ -38,7 +38,7 @@ exports.getAllEvents = async function getAllEvents() {
 };
 
 exports.getEventBySlug = async function getEventBySlug(slug) {
-  const query = 'SELECT * FROM myschema.events WHERE slug = $1';
+  const query = 'SELECT * FROM events WHERE slug = $1';
 
   try {
     const res = await pool.query(query, [slug]);
@@ -61,7 +61,7 @@ exports.updateEventInDb = async (slug, data) => {
   });
 
   const query = `
-    UPDATE myschema.events
+    UPDATE events
     SET ${fields.join(', ')}, updated_at = NOW()
     WHERE slug = $${index}
     RETURNING *;
@@ -78,7 +78,7 @@ exports.updateEventInDb = async (slug, data) => {
 
 exports.softDeleteEventBySlug = async function softDeleteEventBySlug(slug) {
   const query = `
-    UPDATE myschema.events
+    UPDATE events
     SET deleted_at = NOW()
     WHERE slug = $1
     RETURNING *;
