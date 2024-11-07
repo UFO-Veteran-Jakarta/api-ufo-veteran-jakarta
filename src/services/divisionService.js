@@ -32,9 +32,10 @@ exports.checkSlugExistsInDb = checkSlugExistsInDb;
  */
 exports.addDivision = async (data) => {
   try {
-    return addDivision(data);
+    const result = await addDivision(data);
+    return result;
   } catch (error) {
-    console.error('Error adding divisions:', error);
+    console.error('Error adding division:', error);
     throw error;
   }
 };
@@ -87,11 +88,7 @@ exports.updateDivisionBySlug = async (slug, oldData, updateData) => {
 
     // Update image file if propagated
     if (updateData?.image) {
-      await updateFileDivision(
-        oldData.image,
-        updateData.image,
-        imageData,
-      );
+      await updateFileDivision(oldData.image, updateData.image, imageData);
     }
 
     return result;
@@ -109,7 +106,8 @@ exports.updateDivisionBySlug = async (slug, oldData, updateData) => {
  */
 exports.deleteDivisionBySlug = async (slug) => {
   try {
-    return deleteDivisionBySlug(slug);
+    const result = await deleteDivisionBySlug(slug);
+    return result;
   } catch (error) {
     console.error('Error deleting division by slug:', error);
     throw error;
