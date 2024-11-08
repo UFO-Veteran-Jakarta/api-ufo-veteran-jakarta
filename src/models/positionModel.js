@@ -31,74 +31,60 @@ function createUpdateQuery(data, tableName, id) {
   return { query, values: [...values, id] };
 }
 
-async function addPosition(data) {
-  const { query, values } = createInsertQuery(data, 'myschema.positions');
-
+async function executeQuery(query, values) {
   try {
     const res = await pool.query(query, values);
-    return res.rows[0];
+    return res.rows.length > 0 ? res.rows[0] : null;
   } catch (error) {
-    console.error('Error inserting position:', error);
+    console.error('Database query error:', error);
+    throw error;
   }
+}
+
+async function addPosition(data) {
+  const { query, values } = createInsertQuery(data, 'myschema.positions');
+  return executeQuery(query, values);
 }
 
 async function getAllPositions() {
   const query = 'SELECT * FROM myschema.positions WHERE deleted_at IS NULL;';
-
   try {
     const res = await pool.query(query);
-    return res.rows.length > 0 ? res.rows : [];
+    return res.rows;
   } catch (error) {
     console.error('Error fetching positions:', error);
+    throw error;
   }
 }
 
 async function getPositionById(id) {
-  const query = 'SELECT * FROM myschema.positions WHERE id = $1 AND deleted_at IS NULL;';
-
-  try {
-    const res = await pool.query(query, [id]);
-    if (res.rows.length === 0) {
-      return null;
-    }
-    return res.rows[0];
-  } catch (error) {
-    console.error(`Error fetching position with id ${id}:`, error);
-    return null;
-  }
+  const query =
+    'SELECT * FROM myschema.positions WHERE id = $1 AND deleted_at IS NULL;';
+  const values = [id];
+  return executeQuery(query, values);
 }
 
 async function updatePositionById(id, data) {
   const { query, values } = createUpdateQuery(data, 'myschema.positions', id);
-
-  try {
-    const res = await pool.query(query, values);
-    return res.rows[0];
-  } catch (error) {
-    console.error(`Error updating position with id ${id}:`, error);
-  }
+  return executeQuery(query, values);
 }
 
 async function deleteAllPositions() {
   const query = 'UPDATE myschema.positions SET deleted_at = NOW()';
-
   try {
     const res = await pool.query(query);
     return res.rows;
   } catch (error) {
     console.error('Error deleting all positions:', error);
+    throw error;
   }
 }
 
 async function deletePositionById(id) {
-  const query = 'UPDATE myschema.positions SET deleted_at = NOW() WHERE id = $1 RETURNING *;';
-
-  try {
-    const res = await pool.query(query, [id]);
-    return res.rows[0];
-  } catch (error) {
-    console.error(`Error deleting position with id ${id}:`, error);
-  }
+  const query =
+    'UPDATE myschema.positions SET deleted_at = NOW() WHERE id = $1 RETURNING *;';
+  const values = [id];
+  return executeQuery(query, values);
 }
 
 module.exports = {
