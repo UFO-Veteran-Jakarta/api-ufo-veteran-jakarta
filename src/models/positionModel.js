@@ -1,35 +1,5 @@
 const pool = require('../config/database');
-
-function createInsertQuery(data, tableName) {
-  const fields = Object.keys(data);
-  const values = Object.values(data);
-  const placeholders = fields.map((_, index) => `$${index + 1}`);
-
-  const query = `
-        INSERT INTO ${tableName} (${fields.join(', ')})
-        VALUES (${placeholders.join(', ')})
-        RETURNING *;
-    `;
-
-  return { query, values };
-}
-
-function createUpdateQuery(data, tableName, id) {
-  const fields = Object.keys(data);
-  const values = Object.values(data);
-  const setClause = fields
-    .map((field, index) => `${field} = $${index + 1}`)
-    .join(', ');
-
-  const query = `
-        UPDATE ${tableName}
-        SET ${setClause}, updated_at = NOW()
-        WHERE id = $${fields.length + 1}
-        RETURNING *;
-    `;
-
-  return { query, values: [...values, id] };
-}
+const { doInsertQuery, doUpdateQueryById } = require('../utils/queryBuilder');
 
 async function executeQuery(query, values) {
   try {
@@ -42,8 +12,13 @@ async function executeQuery(query, values) {
 }
 
 async function addPosition(data) {
-  const { query, values } = createInsertQuery(data, 'myschema.positions');
-  return executeQuery(query, values);
+  try {
+    const res = await doInsertQuery(data, 'positions');
+    return res.rows[0];
+  } catch (error) {
+    console.error('Error inserting position:', error);
+    throw error;
+  }
 }
 
 async function getAllPositions() {
@@ -65,8 +40,13 @@ async function getPositionById(id) {
 }
 
 async function updatePositionById(id, data) {
-  const { query, values } = createUpdateQuery(data, 'myschema.positions', id);
-  return executeQuery(query, values);
+  try {
+    const res = await doUpdateQueryById(data, 'positions', id);
+    return res.rows[0];
+  } catch (error) {
+    console.error(`Error updating position with id ${id}:`, error);
+    throw error;
+  }
 }
 
 async function deleteAllPositions() {
