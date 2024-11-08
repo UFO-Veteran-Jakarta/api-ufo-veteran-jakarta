@@ -7,6 +7,7 @@ const achievementRoutes = require('./achievementRoutes');
 const workProgramRoutes = require('./workProgramRoutes');
 const latestActivityRoutes = require('./latestActivityRoutes');
 const divisionRoutes = require('./divisionRoutes');
+const positionRoutes = require('./positionRoutes');
 
 const router = express.Router();
 
@@ -18,5 +19,6 @@ router.use('/achievements', achievementRoutes);
 router.use('/work-programs', workProgramRoutes);
 router.use('/latest-activities', latestActivityRoutes);
 router.use('/divisions', divisionRoutes);
+router.use('/positions', positionRoutes);
 
 module.exports = router;
