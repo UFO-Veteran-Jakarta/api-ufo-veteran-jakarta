@@ -34,7 +34,7 @@ function createUpdateQuery(data, tableName, id) {
 async function addLatestActivity(data) {
   const { query, values } = createInsertQuery(
     data,
-    'myschema.latest_activities',
+    'latest_activities',
   );
 
   try {
@@ -47,7 +47,7 @@ async function addLatestActivity(data) {
 
 async function getAllLatestActivities() {
   const query =
-    'SELECT * FROM myschema.latest_activities WHERE deleted_at IS NULL';
+    'SELECT * FROM latest_activities WHERE deleted_at IS NULL';
 
   try {
     const res = await pool.query(query);
@@ -59,7 +59,7 @@ async function getAllLatestActivities() {
 
 async function getLatestActivityById(id) {
   const query = `
-    SELECT * FROM myschema.latest_activities
+    SELECT * FROM latest_activities
     WHERE id = $1 AND deleted_at IS NULL`;
 
   try {
@@ -79,7 +79,7 @@ async function getLatestActivityById(id) {
 async function updateLatestActivity(id, data) {
   const { query, values } = createUpdateQuery(
     data,
-    'myschema.latest_activities',
+    'latest_activities',
     id,
   );
 
@@ -94,7 +94,7 @@ async function updateLatestActivity(id, data) {
 }
 
 async function deleteAllLatestActivities() {
-  const query = 'UPDATE myschema.latest_activities SET deleted_at = NOW()';
+  const query = 'UPDATE latest_activities SET deleted_at = NOW()';
 
   try {
     const res = await pool.query(query);
@@ -107,7 +107,7 @@ async function deleteAllLatestActivities() {
 
 async function deleteLatestActivity(id) {
   const query = `
-    UPDATE myschema.latest_activities 
+    UPDATE latest_activities 
     SET deleted_at = NOW() 
     WHERE id = $1 
     RETURNING *;

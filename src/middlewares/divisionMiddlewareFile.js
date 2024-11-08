@@ -2,11 +2,13 @@ const path = require('path');
 const fs = require('fs');
 const { sendResponse } = require('../helpers/response');
 
-const checkFileDivision = (fieldName) => {
+exports.checkFileDivision = (fieldName, isRequired = true, action = 'upload') => {
   return (req, res, next) => {
     try {
       if (!req.files?.[fieldName]) {
-        return sendResponse(res, 400, `${fieldName} is required.`);
+        return isRequired
+          ? sendResponse(res, 400, `${fieldName} is required.`)
+          : next();
       }
 
       const file = req.files[fieldName];
@@ -31,50 +33,7 @@ const checkFileDivision = (fieldName) => {
 
       next();
     } catch (error) {
-      return sendResponse(res, 500, 'Error processing file upload.');
+      return sendResponse(res, 500, `Error processing file ${action}.`);
     }
   };
-};
-
-const checkUpdatedFileDivision = (fieldName) => {
-  return (req, res, next) => {
-    try {
-      if (!req.files?.[fieldName]) {
-        return next();
-      }
-
-      const file = req.files[fieldName];
-
-      // Validasi ukuran file
-      const maxSize = 500 * 1024;
-      if (file.size > maxSize) {
-        return sendResponse(
-          res,
-          413,
-          `${fieldName} size is more than ${maxSize / 1024} KB.`,
-        );
-      }
-
-      // Validasi format file
-      const ext = path.extname(file.name).toLowerCase();
-      if (ext !== '.webp') {
-        return sendResponse(res, 415, 'Image must be in WEBP Format.');
-      }
-
-      // Buat direktori jika belum ada
-      const uploadDir = './public/images/divisions/';
-      if (!fs.existsSync(uploadDir)) {
-        fs.mkdirSync(uploadDir, { recursive: true });
-      }
-
-      next();
-    } catch (error) {
-      return sendResponse(res, 500, 'Error processing file update.');
-    }
-  };
-};
-
-module.exports = {
-  checkFileDivision,
-  checkUpdatedFileDivision,
 };
