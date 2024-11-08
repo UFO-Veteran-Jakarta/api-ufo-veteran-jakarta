@@ -68,8 +68,9 @@ exports.doSelectQuery = async (tableName, comparator = [], useCache = true) => {
       if (condition.length !== 3) {
         throw new Error(
           'Each condition should be an array with 3 elements ' +
-          `[column, operator, value], but received: ${
-            JSON.stringify(condition)}`,
+            `[column, operator, value], but received: ${JSON.stringify(
+              condition,
+            )}`,
         );
       }
 
@@ -79,9 +80,9 @@ exports.doSelectQuery = async (tableName, comparator = [], useCache = true) => {
     });
   }
 
-  const whereClause = `WHERE ${whereConditions.length
-    ? `${whereConditions.join(' AND ')} AND `
-    : ''}deleted_at IS NULL`;
+  const whereClause = `WHERE ${
+    whereConditions.length ? `${whereConditions.join(' AND ')} AND ` : ''
+  }deleted_at IS NULL`;
   const query = `SELECT * FROM ${tableName} ${whereClause};`;
 
   // Query logging
@@ -94,7 +95,7 @@ exports.doSelectQuery = async (tableName, comparator = [], useCache = true) => {
 
     // Check if the query result is cached and is still valid
     const cached = queryCache[cacheKey];
-    if (cached && (Date.now() - cached.timestamp < CACHE_TTL)) {
+    if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
       console.log('Returning cached data for query: ', cacheKey);
       return { rows: cached.data }; // Return cached result
     }
@@ -140,6 +141,35 @@ exports.doUpdateQuery = async (data, tableName, slug) => {
   console.log(query);
 
   const result = await pool.runTransaction(query, [...values, slug]);
+  return result;
+};
+
+/**
+ * Query builder for UPDATE by ID
+ *
+ * @param {Object} data - The data to update
+ * @param {string} tableName - The name of the table
+ * @param {number|string} id - The ID of the record to update
+ * @returns {Promise<Object>} - Returns the updated record
+ */
+exports.doUpdateQueryById = async (data, tableName, id) => {
+  const fields = Object.keys(data);
+  const values = Object.values(data);
+  const setClause = fields
+    .map((field, index) => `${field} = $${index + 1}`)
+    .join(', ');
+
+  const query = `
+      UPDATE ${tableName}
+      SET ${setClause}, updated_at = NOW()
+      WHERE id = $${fields.length + 1}
+      RETURNING *;
+  `;
+
+  // Query logging
+  console.log(query);
+
+  const result = await pool.runTransaction(query, [...values, id]);
   return result;
 };
 
