@@ -127,7 +127,27 @@ exports.createTable = async () => {
     )
     `,
   );
+
+  await pool.query(
+    `
+    CREATE TABLE IF NOT EXISTS myschema.members(
+      id SERIAL PRIMARY KEY,
+      division_id INT NOT NULL,
+      position_id INT NOT NULL,
+      name VARCHAR(255) NOT NULL,
+      image TEXT NOT NULL,
+      angkatan VARCHAR(255),
+      instagram VARCHAR(255),
+      linkedin VARCHAR(255),
+      whatsapp VARCHAR(255),
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
+      updated_at TIMESTAMP,
+      deleted_at TIMESTAMP
+    )
+  `,
+  );
 };
+
 exports.dropTable = async () => {
   await pool.query('DROP TABLE IF EXISTS myschema.users;');
   await pool.query('DROP TABLE IF EXISTS myschema.contents;');
@@ -138,4 +158,5 @@ exports.dropTable = async () => {
   await pool.query('DROP TABLE IF EXISTS myschema.latest_activities;');
   await pool.query('DROP TABLE IF EXISTS myschema.divisions;');
   await pool.query('DROP TABLE IF EXISTS myschema.positions;');
+  await pool.query('DROP TABLE IF EXISTS myschema.members;');
 };
