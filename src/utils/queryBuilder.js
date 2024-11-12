@@ -116,14 +116,14 @@ exports.doSelectQuery = async (tableName, comparator = [], useCache = true) => {
 };
 
 /**
- * Query builder for UPDATE
+ * Query builder for UPDATE by slug
  *
  * @param {*} data
  * @param {*} tableName
  * @param {*} slug
  * @returns
  */
-exports.doUpdateQuery = async (data, tableName, slug) => {
+exports.doUpdateQueryBySlug = async (data, tableName, slug) => {
   const fields = Object.keys(data);
   const values = Object.values(data);
   const setClause = fields
@@ -174,13 +174,13 @@ exports.doUpdateQueryById = async (data, tableName, id) => {
 };
 
 /**
- * Query builder for DELETE (soft delete)
+ * Query builder for DELETE (soft delete) by slug
  *
  * @param {*} tableName
  * @param {*} slug
  * @returns
  */
-exports.doSoftDeleteQuery = async (tableName, slug = '') => {
+exports.doSoftDeleteQueryBySlug = async (tableName, slug = '') => {
   let query = `
     UPDATE ${tableName} SET deleted_at = NOW() 
   `;
