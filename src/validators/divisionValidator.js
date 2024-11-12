@@ -26,17 +26,15 @@ exports.postDivisionValidationRules = () => {
  *
  * @returns {Object[]} Array of Express-validator middleware
  */
-exports.updateDivisionValidationRules = () => {
+exports.postDivisionValidationRules = () => {
   return [
     stringValidator({
       field: 'name',
-      required: false,
       maxLength: 255,
+      customMessage:
+        'Division name is required and must be no more than 255 characters.',
     }),
-    filePathValidator({
-      field: 'image',
-      required: false,
-    }),
+    filePathValidator({ field: 'image', required: false }),
   ];
 };
 

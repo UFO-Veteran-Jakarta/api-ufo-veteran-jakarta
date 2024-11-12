@@ -12,7 +12,7 @@ exports.addDivision = async (req, res) => {
     return sendResponse(res, 201, 'Successfully insert division data', result);
   } catch (error) {
     logger.error('Add Error: Failed Add Division', error);
-    return sendResponse(res, 500, error.message);
+    return sendResponse(res, error.statusCode || 500, error.message);
   }
 };
 
