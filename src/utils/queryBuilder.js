@@ -200,3 +200,24 @@ exports.doSoftDeleteQueryBySlug = async (tableName, slug = '') => {
 
   return result;
 };
+
+exports.doSoftDeleteQueryById = async (tableName, id = '') => {
+  let query = `
+    UPDATE ${tableName} SET deleted_at = NOW() 
+  `;
+
+  if (id) {
+    query += ' WHERE ID = $1 ';
+  }
+
+  query += ' RETURNING *;';
+
+  // Query logging
+  console.log(query);
+
+  const result = id
+    ? await pool.runTransaction(query, [id])
+    : await pool.runTransaction(query);
+
+  return result;
+};
