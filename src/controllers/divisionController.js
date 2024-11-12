@@ -1,34 +1,13 @@
-const {
-  addDivision,
-  getAllDivisions,
-  getDivisionBySlug,
-  updateDivisionBySlug,
-  deleteDivisionBySlug,
-  checkSlugExistsInDb,
-  stageDataUpdateDivisionBySlug,
-} = require('../services/divisionService');
-const { buildResponse } = require('../utils/buildResponseDivision');
-const logger = require('../utils/logger');
+const divisionService = require('../services/divisionService');
 const { sendResponse } = require('../helpers/response');
-const { createSlugDivision } = require('../helpers/slug');
-const { uploadFileDivision } = require('../utils/uploadFileDivision');
+const logger = require('../utils/logger');
 
 exports.addDivision = async (req, res) => {
   try {
-    req.body.slug = await createSlugDivision(
-      req.body.name,
-      checkSlugExistsInDb,
+    const result = await divisionService.addDivision(
+      req.body,
+      req.files?.image,
     );
-
-    if (req.files?.image) {
-      const imagePath = await uploadFileDivision(req.files.image);
-      if (imagePath) {
-        req.body.image = imagePath;
-      }
-    }
-
-    const result = await addDivision(req.body);
-
     logger.info('Add Success: Success Add Division');
     return sendResponse(res, 201, 'Successfully insert division data', result);
   } catch (error) {
@@ -39,13 +18,11 @@ exports.addDivision = async (req, res) => {
 
 exports.getAllDivisions = async (req, res) => {
   try {
-    const divisions = await getAllDivisions();
-
+    const divisions = await divisionService.getAllDivisions();
     if (divisions.length === 0) {
       logger.info('No divisions data available.');
       return sendResponse(res, 204, 'No divisions data are available.', []);
     }
-
     logger.info('Successfully retrieved all divisions data');
     return sendResponse(
       res,
@@ -62,13 +39,11 @@ exports.getAllDivisions = async (req, res) => {
 exports.getDivisionBySlug = async (req, res) => {
   try {
     const { slug } = req.params;
-    const division = await getDivisionBySlug(slug);
-
+    const division = await divisionService.getDivisionBySlug(slug);
     if (!division) {
       logger.error('Division not found');
       return sendResponse(res, 404, 'Division not found');
     }
-
     logger.info(`Successfully Get Division with slug '${slug}'`);
     return sendResponse(res, 200, 'Successfully Get Division', division);
   } catch (error) {
@@ -80,57 +55,27 @@ exports.getDivisionBySlug = async (req, res) => {
 exports.updateDivisionBySlug = async (req, res) => {
   try {
     const { slug } = req.params;
-    const oldData = await getDivisionBySlug(slug);
-
-    // Checks the old data existence
-    if (!oldData) {
-      return sendResponse(res, 404, 'Division not found');
-    }
-
-    // Stage the update data payload before inserted into database
-    const [isUpdateData, updateData] = await stageDataUpdateDivisionBySlug(req);
-    if (!isUpdateData) {
-      return sendResponse(res, 400, 'No update data provided');
-    }
-
-    // Update the data
-    const updatedDivision = await updateDivisionBySlug(slug, oldData, updateData);
-
-    // Build the response
-    const [responseMessage, responseData] = await buildResponse(
-      oldData,
-      updateData,
-      updatedDivision,
+    const result = await divisionService.updateDivisionBySlug(
+      slug,
+      req.body,
+      req.files?.image,
     );
-
-    return sendResponse(res, 200, responseMessage, responseData);
+    logger.info(`Successfully updated Division with slug '${slug}'`);
+    return sendResponse(res, 200, 'Successfully updated division data', result);
   } catch (error) {
-    console.error('Error updating division:', error);
-    return sendResponse(res, 500, 'Internal server error');
+    logger.error('Failed to update Division', error);
+    return sendResponse(res, error.statusCode || 500, error.message);
   }
 };
 
 exports.deleteDivisionBySlug = async (req, res) => {
   try {
     const { slug } = req.params;
-    const division = await getDivisionBySlug(slug);
-
-    if (!division) {
-      logger.error('Division not found.');
-      return sendResponse(res, 404, 'Division not found.');
-    }
-
-    const deletedDivision = await deleteDivisionBySlug(slug);
-
+    const result = await divisionService.deleteDivisionBySlug(slug);
     logger.info(`Successfully Delete Division with slug ${slug}`);
-    return sendResponse(
-      res,
-      200,
-      'Successfully delete division data',
-      deletedDivision,
-    );
+    return sendResponse(res, 200, 'Successfully delete division data', result);
   } catch (error) {
-    logger.error('Failed to Delete Division');
-    return sendResponse(res, 500, error.message);
+    logger.error('Failed to Delete Division', error);
+    return sendResponse(res, error.statusCode || 500, error.message);
   }
 };

@@ -4,7 +4,7 @@
     "commonjs": true,
     "es2021": true
   },
-  "extends": ["airbnb-base"],
+  "extends": ["airbnb-base", "prettier"],
   "ignorePatterns": ["node_modules/", "dist/", "tests/**/*"],
   "overrides": [],
   "parserOptions": {
