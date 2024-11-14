@@ -50,7 +50,7 @@ exports.deleteAllCategories = async () => {
   }
 };
 
-exports.updateCategoriesById = async (id, data) =>{
+exports.updateCategoriesById = async (id, data) => {
   try {
     const res = await doUpdateQueryById(data, 'categories', id);
     return res.rows[0];

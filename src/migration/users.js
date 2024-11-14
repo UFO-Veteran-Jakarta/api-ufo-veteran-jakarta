@@ -151,4 +151,3 @@ exports.dropTable = async () => {
   await pool.query('DROP TABLE IF EXISTS myschema.positions;');
   await pool.query('DROP TABLE IF EXISTS myschema.categories');
 };
-
