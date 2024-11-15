@@ -63,15 +63,12 @@ exports.getMemberById = async (id) => {
  */
 exports.updateMemberById = async (id, oldData, updateData) => {
   try {
-    // Exclude imageData from updateData payload
     const { imageData, ...newData } = updateData;
 
-    // Update data in the database
     const result = await updateMemberById(id, newData);
 
-    // Update image file if propagated
-    if (updateData?.image) {
-      await updateFile(oldData.image, updateData.image, imageData);
+    if (updateData?.image && oldData?.member_image) {
+      await updateFile(oldData.member_image, updateData.image, imageData);
     }
 
     return result;
