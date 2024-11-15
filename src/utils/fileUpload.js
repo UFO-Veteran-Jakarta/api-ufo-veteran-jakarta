@@ -62,7 +62,6 @@ const getUploadFilepath = async (file, directory) => {
   return filepath.replace(/\\/g, '/');
 };
 
-
 /**
  *
  * @param {*} filePath
@@ -146,7 +145,6 @@ const uploadFile = async (file, directory) => {
   const publicFilePath = path.join('/images', directory, randomFilename);
   return publicFilePath.replace(/\\/g, '/');
 };
-
 
 /**
  *
