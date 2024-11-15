@@ -109,7 +109,7 @@ describe('Category Article Controller', () => {
             const res = await request(app)
                 .get(`/api/v1/category-article/${id}`)
                 .set(headers);
-            validateSuccessResponse(res, 200, 200, 'Successfully Get Category Article');
+            validateSuccessResponse(res, 200, 200, 'Successfully retrieved category articles data');
             validateCategory(res);
         });
     });
