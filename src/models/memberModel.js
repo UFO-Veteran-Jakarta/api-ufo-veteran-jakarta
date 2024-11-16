@@ -138,10 +138,22 @@ const deleteMemberById = async (id) => {
   }
 };
 
+const deleteAllMembers = async () => {
+  const query = 'UPDATE members SET deleted_at = NOW()';
+  try {
+    const res = await pool.query(query);
+    return res.rows;
+  } catch (error) {
+    console.error('Error deleting all members:', error);
+    throw error;
+  }
+};
+
 module.exports = {
   addMember,
   getAllMembers,
   getMemberById,
   updateMemberById,
   deleteMemberById,
+  deleteAllMembers,
 };
