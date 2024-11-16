@@ -52,29 +52,51 @@ const updateMemberQuery = (data, id) => {
   return { query, values: [...values, id] };
 };
 
-const selectMemberQuery = (conditions = []) => {
-  const whereClause = conditions.length
-    ? `WHERE ${
-      conditions
-        .map(
-          ([field, operator], index) => `${field} ${operator} $${index + 1}`,
-        )
-        .join(' AND ')}`
-    : '';
+const getAllMembersQuery = `
+  SELECT 
+    members.id AS member_id, 
+    members.name AS member_name, 
+    members.image AS member_image,
+    members.angkatan, 
+    members.instagram, 
+    members.linkedin, 
+    members.whatsapp,
+    members.created_at, 
+    members.updated_at, 
+    members.deleted_at,
+    divisions.id AS division_id, 
+    divisions.name AS division_name, 
+    divisions.image AS division_image,
+    positions.id AS position_id, 
+    positions.name AS position_name
+  FROM members
+  JOIN divisions ON members.division_id = divisions.id
+  JOIN positions ON members.position_id = positions.id
+  WHERE members.deleted_at IS NULL;
+`;
 
-  return `
-    SELECT 
-      members.id AS member_id, members.name AS member_name, members.image AS member_image,
-      members.angkatan, members.instagram, members.linkedin, members.whatsapp,
-      members.created_at, members.updated_at, members.deleted_at,
-      divisions.id AS division_id, divisions.name AS division_name, divisions.image AS division_image,
-      positions.id AS position_id, positions.name AS position_name
-    FROM members
-    JOIN divisions ON members.division_id = divisions.id
-    JOIN positions ON members.position_id = positions.id
-    ${whereClause} AND members.deleted_at IS NULL;
-  `;
-};
+const getMemberByIdQuery = `
+  SELECT 
+    members.id AS member_id, 
+    members.name AS member_name, 
+    members.image AS member_image,
+    members.angkatan, 
+    members.instagram, 
+    members.linkedin, 
+    members.whatsapp,
+    members.created_at, 
+    members.updated_at, 
+    members.deleted_at,
+    divisions.id AS division_id, 
+    divisions.name AS division_name, 
+    divisions.image AS division_image,
+    positions.id AS position_id, 
+    positions.name AS position_name
+  FROM members
+  JOIN divisions ON members.division_id = divisions.id
+  JOIN positions ON members.position_id = positions.id
+  WHERE members.id = $1 AND members.deleted_at IS NULL;
+`;
 
 const addMember = async (data) => {
   const { query, values } = createInsertQuery(data, 'members');
@@ -88,9 +110,8 @@ const addMember = async (data) => {
 };
 
 const getAllMembers = async () => {
-  const query = selectMemberQuery();
   try {
-    const res = await pool.query(query);
+    const res = await pool.query(getAllMembersQuery);
     return res.rows;
   } catch (error) {
     console.error('Error fetching members:', error);
@@ -99,9 +120,8 @@ const getAllMembers = async () => {
 };
 
 const getMemberById = async (id) => {
-  const query = selectMemberQuery([['members.id', '=', id]]);
   try {
-    const res = await pool.query(query, [id]);
+    const res = await pool.query(getMemberByIdQuery, [id]);
     return res.rows[0];
   } catch (error) {
     console.error('Error fetching member by id:', error);
