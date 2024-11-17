@@ -29,7 +29,7 @@ exports.addMember = async (req, res) => {
     const formattedMember = await addFormattedMember(req.body);
 
     logger.info('Add Success: Successfully added member');
-    return sendResponse(res, 201, 'Successfully inserted member data', [
+    return sendResponse(res, 201, 'Successfully insert member data', [
       formattedMember,
     ]);
   } catch (error) {
