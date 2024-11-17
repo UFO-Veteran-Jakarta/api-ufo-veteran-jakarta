@@ -198,6 +198,8 @@ describe('Member Controller', () => {
         data: invalidData,
       });
 
+      console.log(res.body);
+
       expect(res.statusCode).toEqual(400);
       expect(
         res.body.errors.some(
@@ -214,6 +216,8 @@ describe('Member Controller', () => {
         headers,
         data: invalidData,
       });
+
+      console.log(res.body.errors);
       expect(res.statusCode).toEqual(400);
       expect(
         res.body.errors.some(
@@ -300,11 +304,13 @@ describe('Member Controller', () => {
         headers,
         data: invalidData,
       });
+
+      console.log(res.body.errors);
       expect(res.statusCode).toEqual(400);
       expect(
         res.body.errors.some(
           (error) =>
-            error.msg === 'LinkedIn must be no more than 255 characters.',
+            error.msg === 'Linkedin must be no more than 255 characters.',
         ),
       ).toBeTruthy();
     });
@@ -321,7 +327,7 @@ describe('Member Controller', () => {
       expect(
         res.body.errors.some(
           (error) =>
-            error.msg === 'WhatsApp must be no more than 255 characters.',
+            error.msg === 'Whatsapp must be no more than 255 characters.',
         ),
       ).toBeTruthy();
     });
@@ -436,7 +442,7 @@ describe('Member Controller', () => {
       expect(
         res.body.errors.some(
           (error) =>
-            error.msg === 'LinkedIn must be no more than 255 characters.',
+            error.msg === 'Linkedin must be no more than 255 characters.',
         ),
       ).toBeTruthy();
     });
@@ -454,7 +460,7 @@ describe('Member Controller', () => {
       expect(
         res.body.errors.some(
           (error) =>
-            error.msg === 'WhatsApp must be no more than 255 characters.',
+            error.msg === 'Whatsapp must be no more than 255 characters.',
         ),
       ).toBeTruthy();
     });

@@ -1,87 +1,79 @@
 const { check, validationResult, matchedData } = require('express-validator');
 
-const postMemberValidationRules = () => {
-  return [
-    check('division_id')
+// Shared validation configurations
+const sharedValidations = {
+  divisionId: (isRequired = true) => {
+    const validator = check('division_id')
       .isInt({ min: 1 })
-      .withMessage('Division ID is required and must be a positive integer.'),
-    check('position_id')
+      .withMessage('Division ID is required and must be a positive integer.');
+    return isRequired ? validator : validator.optional();
+  },
+
+  positionId: (isRequired = true) => {
+    const validator = check('position_id')
       .isInt({ min: 1 })
-      .withMessage('Position ID is required and must be a positive integer.'),
-    check('name')
+      .withMessage('Position ID is required and must be a positive integer.');
+    return isRequired ? validator : validator.optional();
+  },
+
+  name: (isRequired = true) => {
+    let validator = check('name')
       .isString()
       .trim()
-      .notEmpty()
-      .withMessage('Name is required. No data provided.')
       .isLength({ max: 255 })
-      .withMessage('Name must be no more than 255 characters.'),
-    check('image')
-      .optional()
-      .isString()
-      .withMessage('Image must be a string (file path)'),
-    check('angkatan')
-      .optional()
-      .isString()
-      .isLength({ max: 255 })
-      .withMessage('Angkatan must be no more than 255 characters.'),
-    check('instagram')
-      .optional()
-      .isString()
-      .isLength({ max: 255 })
-      .withMessage('Instagram must be no more than 255 characters.'),
-    check('linkedin')
+      .withMessage('Name must be no more than 255 characters.');
+
+    if (isRequired) {
+      validator = validator
+        .notEmpty()
+        .withMessage('Name is required. No data provided.');
+    } else {
+      validator = validator.optional();
+    }
+    return validator;
+  },
+
+  optionalString: (field) => {
+    return check(field)
       .optional()
       .isString()
       .isLength({ max: 255 })
-      .withMessage('LinkedIn must be no more than 255 characters.'),
-    check('whatsapp')
+      .withMessage(
+        `${field.charAt(0).toUpperCase() + field.slice(1)} must be no more than 255 characters.`,
+      );
+  },
+
+  optionalImage: () => {
+    return check('image')
       .optional()
       .isString()
-      .isLength({ max: 255 })
-      .withMessage('WhatsApp must be no more than 255 characters.'),
+      .withMessage('Image must be a string (file path)');
+  },
+};
+
+const postMemberValidationRules = () => {
+  return [
+    sharedValidations.divisionId(true),
+    sharedValidations.positionId(true),
+    sharedValidations.name(true),
+    sharedValidations.optionalImage(),
+    sharedValidations.optionalString('angkatan'),
+    sharedValidations.optionalString('instagram'),
+    sharedValidations.optionalString('linkedin'),
+    sharedValidations.optionalString('whatsapp'),
   ];
 };
 
 const updateMemberValidationRules = () => {
   return [
-    check('division_id')
-      .optional()
-      .isInt({ min: 1 })
-      .withMessage('Division ID must be a positive integer.'),
-    check('position_id')
-      .optional()
-      .isInt({ min: 1 })
-      .withMessage('Position ID must be a positive integer.'),
-    check('name')
-      .optional()
-      .isString()
-      .trim()
-      .isLength({ max: 255 })
-      .withMessage('Name must be no more than 255 characters.'),
-    check('image')
-      .optional()
-      .isString()
-      .withMessage('Image must be a string (file path)'),
-    check('angkatan')
-      .optional()
-      .isString()
-      .isLength({ max: 255 })
-      .withMessage('Angkatan must be no more than 255 characters.'),
-    check('instagram')
-      .optional()
-      .isString()
-      .isLength({ max: 255 })
-      .withMessage('Instagram must be no more than 255 characters.'),
-    check('linkedin')
-      .optional()
-      .isString()
-      .isLength({ max: 255 })
-      .withMessage('LinkedIn must be no more than 255 characters.'),
-    check('whatsapp')
-      .optional()
-      .isString()
-      .isLength({ max: 255 })
-      .withMessage('WhatsApp must be no more than 255 characters.'),
+    sharedValidations.divisionId(false),
+    sharedValidations.positionId(false),
+    sharedValidations.name(false),
+    sharedValidations.optionalImage(),
+    sharedValidations.optionalString('angkatan'),
+    sharedValidations.optionalString('instagram'),
+    sharedValidations.optionalString('linkedin'),
+    sharedValidations.optionalString('whatsapp'),
   ];
 };
 
