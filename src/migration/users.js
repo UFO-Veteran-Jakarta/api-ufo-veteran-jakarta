@@ -119,7 +119,6 @@ exports.createTable = async () => {
     )
     `,
   );
-
   await pool.query(
     `
     CREATE TABLE IF NOT EXISTS myschema.members(
@@ -137,8 +136,18 @@ exports.createTable = async () => {
       deleted_at TIMESTAMP
     )
   `,
+ };
+  await pool.query(
+    `
+    CREATE TABLE IF NOT EXISTS myschema.categories(
+      id SERIAL PRIMARY KEY,
+      name varchar(100) NOT NULL,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP ,
+      deleted_at TIMESTAMP
+    )
+    `,
   );
-};
 
 exports.dropTable = async () => {
   await pool.query('DROP TABLE IF EXISTS myschema.users;');
@@ -151,4 +160,5 @@ exports.dropTable = async () => {
   await pool.query('DROP TABLE IF EXISTS myschema.divisions;');
   await pool.query('DROP TABLE IF EXISTS myschema.positions;');
   await pool.query('DROP TABLE IF EXISTS myschema.members;');
+  await pool.query('DROP TABLE IF EXISTS myschema.categories');
 };

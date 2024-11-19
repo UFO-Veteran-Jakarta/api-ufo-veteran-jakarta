@@ -9,6 +9,7 @@ const latestActivityRoutes = require('./latestActivityRoutes');
 const divisionRoutes = require('./divisionRoutes');
 const positionRoutes = require('./positionRoutes');
 const memberRoutes = require('./memberRoutes');
+const categoriesRoutes = require('./categoriesRoutes');
 
 const router = express.Router();
 
@@ -22,5 +23,6 @@ router.use('/latest-activities', latestActivityRoutes);
 router.use('/divisions', divisionRoutes);
 router.use('/positions', positionRoutes);
 router.use('/members', memberRoutes);
+router.use('/category-article', categoriesRoutes);
 
 module.exports = router;
