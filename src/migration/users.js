@@ -136,7 +136,7 @@ exports.createTable = async () => {
       deleted_at TIMESTAMP
     )
   `,
- };
+  );
   await pool.query(
     `
     CREATE TABLE IF NOT EXISTS myschema.categories(
@@ -148,6 +148,7 @@ exports.createTable = async () => {
     )
     `,
   );
+};
 
 exports.dropTable = async () => {
   await pool.query('DROP TABLE IF EXISTS myschema.users;');
