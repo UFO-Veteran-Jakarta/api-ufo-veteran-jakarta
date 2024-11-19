@@ -1,8 +1,8 @@
 const {
   doInsertQuery,
   doSelectQuery,
-  doUpdateQuery,
-  doSoftDeleteQuery,
+  doUpdateQueryBySlug,
+  doSoftDeleteQueryBySlug,
 } = require('../utils/queryBuilder');
 
 async function addDivision(data) {
@@ -40,7 +40,7 @@ async function getDivisionBySlug(slug, useCache = true) {
 
 async function updateDivisionBySlug(slug, data) {
   try {
-    const res = await doUpdateQuery(data, 'divisions', slug);
+    const res = await doUpdateQueryBySlug(data, 'divisions', slug);
     return res.rows[0];
   } catch (error) {
     console.error(`Error updating division with slug ${slug}:`, error);
@@ -50,7 +50,7 @@ async function updateDivisionBySlug(slug, data) {
 
 async function deleteAllDivisions() {
   try {
-    const res = await doSoftDeleteQuery('divisions');
+    const res = await doSoftDeleteQueryBySlug('divisions');
     return res.rows;
   } catch (error) {
     console.error('Error deleting all divisions:', error);
@@ -60,7 +60,7 @@ async function deleteAllDivisions() {
 
 async function deleteDivisionBySlug(slug) {
   try {
-    const res = await doSoftDeleteQuery('divisions', slug);
+    const res = await doSoftDeleteQueryBySlug('divisions', slug);
     return res.rows[0];
   } catch (error) {
     console.error(`Error deleting division with slug ${slug}:`, error);
