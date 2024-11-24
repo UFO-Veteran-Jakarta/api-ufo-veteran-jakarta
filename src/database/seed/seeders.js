@@ -65,7 +65,7 @@ exports.seed = async () => {
       'Connect with investors and fellow entrepreneurs',
       'Networking and pitching sessions', 'https://example.com/register/summit',
       'Business District Center'
-    )
+    );
   `);
 
   // Partners seeder
@@ -76,7 +76,7 @@ exports.seed = async () => {
     ('Microsoft Indonesia', '/images/partners/microsoft.png', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
     ('AWS Indonesia', '/images/partners/aws.png', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
     ('Telkom Indonesia', '/images/partners/telkom.png', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
-    ('Gojek', '/images/partners/gojek.png', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL)
+    ('Gojek', '/images/partners/gojek.png', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL);
   `);
 
   // Achievements seeder
@@ -87,7 +87,7 @@ exports.seed = async () => {
     ('/images/achievements/award2.png', 'Technology Excellence Award', '2022', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
     ('/images/achievements/award3.png', 'Community Impact Award', '2023', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
     ('/images/achievements/award4.png', 'Best Tech Community', '2021', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
-    ('/images/achievements/award5.png', 'Innovation Leadership Award', '2022', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL)
+    ('/images/achievements/award5.png', 'Innovation Leadership Award', '2022', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL);
   `);
 
   // Work Programs seeder
@@ -98,7 +98,7 @@ exports.seed = async () => {
     ('/images/programs/workshop.png', 'Monthly Tech Workshops', 'Regular hands-on workshops covering various technology topics', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
     ('/images/programs/community.png', 'Community Building', 'Building strong tech communities through regular meetups and events', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
     ('/images/programs/research.png', 'Technology Research', 'Conducting research in emerging technologies and sharing findings', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
-    ('/images/programs/education.png', 'Tech Education Outreach', 'Bringing technology education to underprivileged communities', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL)
+    ('/images/programs/education.png', 'Tech Education Outreach', 'Bringing technology education to underprivileged communities', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL);
   `);
 
   // Latest Activities seeder
@@ -109,18 +109,14 @@ exports.seed = async () => {
     ('/images/activities/hackathon1.jpg', 'Annual Hackathon Success', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
     ('/images/activities/meetup1.jpg', 'Tech Community Meetup', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
     ('/images/activities/conference1.jpg', 'Technology Conference 2024', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
-    ('/images/activities/training1.jpg', 'Web Development Training', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL)
+    ('/images/activities/training1.jpg', 'Web Development Training', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL);
   `);
 
   // Divisions seeder
   await pool.query(`
     INSERT INTO myschema.divisions (slug, name, image, created_at, updated_at, deleted_at)
     VALUES 
-    ('software-development', 'Software Development', '/images/divisions/software.png', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
-    ('data-science', 'Data Science', '/images/divisions/data.png', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
-    ('cybersecurity', 'Cybersecurity', '/images/divisions/security.png', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
-    ('ui-ux', 'UI/UX Design', '/images/divisions/design.png', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
-    ('cloud-computing', 'Cloud Computing', '/images/divisions/cloud.png', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL)
+    ('ufo-veteran-jakarta', 'UFO Veteran Jakarta', '/images/Ufo-Logo.png', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL);
   `);
 
   // Positions seeder
@@ -144,6 +140,31 @@ exports.seed = async () => {
     ('Finance', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
     ('Secretary 2', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
     ('Secretary 1', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
-    ('Chief Executive Officer', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL)
+    ('Chief Executive Officer', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL);
+  `);
+
+  // Members seeder
+  await pool.query(`
+    INSERT INTO myschema.members (division_id, position_id, name, image, angkatan, instagram, linkedin, whatsapp, created_at, updated_at, deleted_at) VALUES 
+    (1, 17, 'Yuwsuf Muhammad Amien', '/images/members/Yuwsuf-Muhammad-Amien.png', 'UFO.022.IX.022', 'yuwsufamien', 'yuwsufamien', '0812-1234-5678', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    (1, 17, 'Ananda Divana', '/images/members/Ananda-Divana.png', 'UFO.023.X.001', 'yuwsufamien', 'yuwsufamien', '0812-1234-5678', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    (1, 17, 'Ananda Ryo Bastian Harefa', '/images/members/RYO.png', 'UFO.023.X.002', 'yuwsufamien', 'yuwsufamien', '0812-1234-5678', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    (1, 17, 'Ananda Triaji Pamungkas', '/images/members/AJI.png', 'UFO.023.X.003', 'yuwsufamien', 'yuwsufamien', '0812-1234-5678', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    (1, 17, 'Arvino Qiyamullail Ramli', '/images/members/VINO.png', 'UFO.023.X.004', 'yuwsufamien', 'yuwsufamien', '0812-1234-5678', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    (1, 17, 'Catherine Esther Nauli Siagian', '/images/members/CATHERINE.png', 'UFO.023.X.005', 'yuwsufamien', 'yuwsufamien', '0812-1234-5678', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    (1, 17, 'Danendra Helmy Pratama', '/images/members/DANEN.png', 'UFO.023.X.006', 'yuwsufamien', 'yuwsufamien', '0812-1234-5678', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    (1, 17, 'Fahda Putri', '/images/members/FAHDA.png', 'UFO.023.X.007', 'yuwsufamien', 'yuwsufamien', '0812-1234-5678', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    (1, 17, 'Farhan Hardiansyah', '/images/members/FARHAN.png', 'UFO.023.X.008', 'yuwsufamien', 'yuwsufamien', '0812-1234-5678', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    (1, 17, 'Fikri Suprobo Putra', '/images/members/FIKRI.png', 'UFO.023.X.009', 'yuwsufamien', 'yuwsufamien', '0812-1234-5678', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    (1, 17, 'Meira Zaskya', '/images/members/MEIRA.png', 'UFO.023.X.010', 'yuwsufamien', 'yuwsufamien', '0812-1234-5678', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    (1, 17, 'Muhammad Kevin Rasendriya', '/images/members/KEVIN.png', 'UFO.023.X.011', 'yuwsufamien', 'yuwsufamien', '0812-1234-5678', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    (1, 17, 'Muhammad Rayhan Satria Aji', '/images/members/RAYHAN.png', 'UFO.023.X.013', 'yuwsufamien', 'yuwsufamien', '0812-1234-5678', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    (1, 17, 'Muhammad Rifqi Wiryawan', '/images/members/RIFQI.png', 'UFO.023.X.014', 'yuwsufamien', 'yuwsufamien', '0812-1234-5678', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    (1, 17, 'Nicky Felix Amanusa', '/images/members/NICKY.png', 'UFO.023.X.015', 'yuwsufamien', 'yuwsufamien', '0812-1234-5678', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    (1, 17, 'Nur Farah Afifah', '/images/members/AFIFAH.png', 'UFO.023.X.016', 'yuwsufamien', 'yuwsufamien', '0812-1234-5678', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    (1, 17, 'Nurul Fikriah Saniah', '/images/members/SANIAH.png', 'UFO.023.X.017', 'yuwsufamien', 'yuwsufamien', '0812-1234-5678', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    (1, 17, 'Rafif Firmansyah', '/images/members/RAFIF.png', 'UFO.023.X.018', 'yuwsufamien', 'yuwsufamien', '0812-1234-5678', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    (1, 17, 'Rahma Aprilia', '/images/members/RAHMA.png', 'UFO.023.X.019', 'yuwsufamien', 'yuwsufamien', '0812-1234-5678', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    (1, 17, 'Seno Oktariadi', '/images/members/SENO.png', 'UFO.023.X.020', 'yuwsufamien', 'yuwsufamien', '0812-1234-5678', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL);
   `);
 };
