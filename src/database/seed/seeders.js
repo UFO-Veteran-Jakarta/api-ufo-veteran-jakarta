@@ -127,10 +127,23 @@ exports.seed = async () => {
   await pool.query(`
     INSERT INTO myschema.positions (name, created_at, updated_at, deleted_at)
     VALUES 
-    ('Software Engineer', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
-    ('Data Scientist', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
-    ('Security Analyst', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
-    ('UI/UX Designer', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
-    ('Cloud Architect', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL)
+    ('Staff of Creative Production', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    ('Event Planner', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    ('Equipment', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    ('External Public Relation', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    ('Internal Public Relation', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    ('Creative Production', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    ('Social Media Admin', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    ('Recruitment', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    ('Achievement', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    ('Development', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    ('Manager Operational', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    ('Manager Marketing Communication', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    ('Manager Human Resources Development', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    ('Finance', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    ('Finance', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    ('Secretary 2', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    ('Secretary 1', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    ('Chief Executive Officer', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL)
   `);
 };
