@@ -72,11 +72,18 @@ exports.seed = async () => {
   await pool.query(`
     INSERT INTO myschema.partners (name, logo, created_at, updated_at, deleted_at)
     VALUES 
-    ('Google Indonesia', '/images/partners/google.png', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
-    ('Microsoft Indonesia', '/images/partners/microsoft.png', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
-    ('AWS Indonesia', '/images/partners/aws.png', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
-    ('Telkom Indonesia', '/images/partners/telkom.png', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
-    ('Gojek', '/images/partners/gojek.png', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL);
+    ('Boya Mic', '/images/partners/boya.png', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    ('Zhiyun Tech', '/images/partners/Zhiyun-tech.png', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    ('Great Video Maker', '/images/partners/GVM.jpg', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    ('Nanlite', '/images/partners/Nanlite.png', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    ('Realme', '/images/partners/realme.png', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    ('Emina', '/images/partners/Emina.png', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    ('Moratelindo', '/images/partners/Moratelindo.png', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    ('Pandaboo', '/images/partners/Pandaboo.png', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    ('SKALA', '/images/partners/SKALA.png', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    ('Molecool', '/images/partners/Molecool.png', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    ('PT Aneka Warna', '/images/partners/PT-Aneka-Warna.png', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    ('SIGMA', '/images/partners/SIGMA.png', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL);
   `);
 
   // Achievements seeder
