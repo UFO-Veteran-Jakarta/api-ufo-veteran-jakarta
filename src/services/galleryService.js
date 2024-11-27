@@ -48,7 +48,24 @@ exports.addGallery = async (data) => {
 exports.getAllGalleries = async () => {
   try {
     const galleries = await getAllGalleries();
-    return galleries;
+
+    const formattedResult = galleries.map(row => ({
+      id: row.id,
+      slug: row.slug,
+      category_galleries: {
+        id: row.category_galleries_id,
+        name: row.name,
+      },
+      title: row.title,
+      image: row.image,
+      snippet: row.snippet,
+      author: row.author,
+      created_at: row.created_at,
+      updated_at: row.updated_at,
+      deleted_at: row.deleted_at,
+    }));
+
+    return formattedResult;
   } catch (error) {
     console.error('Error fetching galleries:', error);
     throw error;

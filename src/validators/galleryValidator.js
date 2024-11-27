@@ -5,13 +5,27 @@ const postGalleryValidationRules = () => {
     check('category_galleries_id')
       .isInt({ min: 1 })
       .withMessage('Category Galleries ID is required and must be a positive integer.'),
-    check('name')
+    check('title')
       .isString()
       .trim()
       .notEmpty()
-      .withMessage('Gallery name is required. No data provided.')
+      .withMessage('Gallery title is required. No data provided.')
       .isLength({ max: 255 })
-      .withMessage('Gallery name must be no more than 255 characters.'),
+      .withMessage('Gallery title must be no more than 255 characters.'),
+    check('snippet')
+      .optional()
+      .isString()
+      .trim()
+      .notEmpty()
+      .isLength({ max: 255 })
+      .withMessage('Gallery title must be no more than 255 characters.'),
+    check('author')
+      .optional()
+      .isString()
+      .trim()
+      .notEmpty()
+      .isLength({ max: 255 })
+      .withMessage('Gallery title must be no more than 255 characters.'),
     check('image')
       .optional()
       .isString()

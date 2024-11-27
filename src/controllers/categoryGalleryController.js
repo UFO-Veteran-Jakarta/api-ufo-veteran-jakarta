@@ -4,9 +4,8 @@ const {
   getCategoryGalleryById,
   updateCategoryGalleryById,
   deleteCategoryGalleryById,
-  stageDataUpdateCategoryGalleryById,
 } = require('../services/categoryGalleryService');
-const { buildResponse } = require('../utils/buildResponseGallery');
+// const { buildResponse } = require('../utils/buildResponseCategoryGallery');
 const logger = require('../utils/logger');
 const { sendResponse } = require('../helpers/response');
 
@@ -72,23 +71,16 @@ exports.updateCategoryGalleryById = async (req, res) => {
       return sendResponse(res, 404, 'Category gallery not found');
     }
 
-    // Stage the update data payload before inserted into database
-    const [isUpdateData, updateData] = await stageDataUpdateCategoryGalleryById(id);
-    if (!isUpdateData) {
-      return sendResponse(res, 400, 'No update data provided');
-    }
-
     // Update the data
-    const updatedGallery = await updateCategoryGalleryById(slug, oldData, updateData);
+    const updatedGallery = await updateCategoryGalleryById(id, req.body);
 
-    // Build the response
-    const [responseMessage, responseData] = await buildResponse(
-      oldData,
-      updateData,
-      updatedGallery,
-    );
+    // // Build the response
+    // const [responseMessage, responseData] = await buildResponse(
+    //   oldData,
+    //   updatedGallery,
+    // );
 
-    return sendResponse(res, 200, responseMessage, responseData);
+    return sendResponse(res, 201, 'Successfully update category gallery name', updatedGallery);
   } catch (error) {
     console.error('Error updating category gallery:', error);
     return sendResponse(res, 500, 'Internal server error');

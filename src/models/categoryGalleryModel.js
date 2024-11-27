@@ -7,7 +7,7 @@ const {
 
 async function addCategoryGallery(data) {
   try {
-    const res = await doInsertQuery(data, 'galleries');
+    const res = await doInsertQuery(data, 'category_galleries');
     return res.rows[0];
   } catch (error) {
     console.error('Error inserting category gallery:', error);

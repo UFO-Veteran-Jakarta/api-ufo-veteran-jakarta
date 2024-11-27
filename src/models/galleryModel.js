@@ -4,6 +4,7 @@ const {
   doUpdateQueryBySlug,
   doSoftDeleteQueryBySlug,
 } = require('../utils/queryBuilder');
+const pool = require('../config/database');
 
 async function addGallery(data) {
   try {
@@ -17,7 +18,13 @@ async function addGallery(data) {
 
 async function getAllGalleries() {
   try {
-    const res = await doSelectQuery('galleries');
+    // const res = await doSelectQuery('galleries');
+    const res = await pool.query(`
+      SELECT * FROM galleries g
+      JOIN category_galleries cg
+      ON g.category_galleries_id = cg.id
+    `);
+    
     return res.rows.length > 0 ? res.rows : [];
   } catch (error) {
     console.error('Error fetching galleries:', error);

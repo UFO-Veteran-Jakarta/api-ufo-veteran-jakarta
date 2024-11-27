@@ -60,13 +60,10 @@ exports.getCategoryGalleryById = async (id) => {
  * @param {*} updateData
  * @returns
  */
-exports.updateCategoryGalleryById = async (id, oldData, updateData) => {
+exports.updateCategoryGalleryById = async (id, updateData) => {
   try {
-    // Exclude imageData from updateData payload
-    const { imageData, ...newData } = updateData;
-
     // Update data in the database
-    const result = await updateCategoryGalleryById(id, newData);
+    const result = await updateCategoryGalleryById(id, updateData);
 
     return result;
   } catch (error) {
@@ -89,28 +86,4 @@ exports.deleteCategoryGalleryById = async (id) => {
     console.error('Error deleting category gallery by id:', error);
     throw error;
   }
-};
-
-/*
- * @returns Array[boolean, Object]
- *
- * Stages the payload data before executing the next action.
- * On each payload objects, this function will return the
- * appropriate string value back to the data payload.
- */
-exports.stageDataUpdateGalleryById = async (req) => {
-  // Data payload
-  const updateData = {};
-
-  if (req.body.name) {
-    updateData.name = req.body.name;
-  }
-
-  return [
-    // Checks if there is a data update payload
-    Object.keys(updateData).length !== 0,
-
-    // Returns the data payload itself
-    updateData,
-  ];
 };

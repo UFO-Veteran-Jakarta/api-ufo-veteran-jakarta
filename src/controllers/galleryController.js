@@ -16,7 +16,7 @@ const { uploadFileGallery } = require('../utils/uploadFileGallery');
 exports.addGallery = async (req, res) => {
   try {
     req.body.slug = await createSlugDivision(
-      req.body.name,
+      req.body.title,
       checkSlugExistsInDb,
     );
 
