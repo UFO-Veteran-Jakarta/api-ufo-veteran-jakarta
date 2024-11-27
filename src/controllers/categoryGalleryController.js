@@ -5,7 +5,7 @@ const {
   updateCategoryGalleryById,
   deleteCategoryGalleryById,
   stageDataUpdateCategoryGalleryById,
-} = require('../services/galleryService');
+} = require('../services/categoryGalleryService');
 const { buildResponse } = require('../utils/buildResponseGallery');
 const logger = require('../utils/logger');
 const { sendResponse } = require('../helpers/response');
