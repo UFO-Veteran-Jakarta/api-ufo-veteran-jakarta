@@ -72,11 +72,18 @@ exports.seed = async () => {
   await pool.query(`
     INSERT INTO myschema.partners (name, logo, created_at, updated_at, deleted_at)
     VALUES 
-    ('Google Indonesia', '/images/partners/google.png', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
-    ('Microsoft Indonesia', '/images/partners/microsoft.png', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
-    ('AWS Indonesia', '/images/partners/aws.png', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
-    ('Telkom Indonesia', '/images/partners/telkom.png', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
-    ('Gojek', '/images/partners/gojek.png', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL);
+    ('Boya Mic', '/images/partners/boya.png', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    ('Zhiyun Tech', '/images/partners/Zhiyun-tech.png', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    ('Great Video Maker', '/images/partners/GVM.jpg', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    ('Nanlite', '/images/partners/Nanlite.png', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    ('Realme', '/images/partners/realme.png', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    ('Emina', '/images/partners/Emina.png', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    ('Moratelindo', '/images/partners/Moratelindo.png', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    ('Pandaboo', '/images/partners/Pandaboo.png', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    ('SKALA', '/images/partners/SKALA.png', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    ('Molecool', '/images/partners/Molecool.png', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    ('PT Aneka Warna', '/images/partners/PT-Aneka-Warna.png', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    ('SIGMA', '/images/partners/SIGMA.png', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL);
   `);
 
   // Achievements seeder
@@ -166,5 +173,24 @@ exports.seed = async () => {
     (1, 17, 'Rafif Firmansyah', '/images/members/RAFIF.png', 'UFO.023.X.018', 'yuwsufamien', 'yuwsufamien', '0812-1234-5678', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
     (1, 17, 'Rahma Aprilia', '/images/members/RAHMA.png', 'UFO.023.X.019', 'yuwsufamien', 'yuwsufamien', '0812-1234-5678', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
     (1, 17, 'Seno Oktariadi', '/images/members/SENO.png', 'UFO.023.X.020', 'yuwsufamien', 'yuwsufamien', '0812-1234-5678', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL);
+  `);
+
+  // Category Gallery seeder
+  await pool.query(`
+    INSERT INTO myschema.category_galleries (name, created_at, updated_at, deleted_at)
+    VALUES
+    ('Fotografi', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    ('Desain Grafis', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL);
+  `);
+
+  await pool.query(`
+    INSERT INTO myschema.galleries (category_galleries_id, slug, title, image, snippet, author, created_at, updated_at, deleted_at)
+    VALUES
+    ('3', 'lihat-lebih-dalam', 'Lihat Lebih Dalam', '/images/galleries/lihat-lebih-dalam.png', 'Bukan mereka, kaulah Monsternya. Buka matamu, lihat lebih dalam, kesadaran itu menyelamatkanmu.', 'Ananda Triaji Pamungkas', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    ('3', 'sahabat-kecil', 'Sahabat Kecil', '/images/galleries/Giras Agung Jagratara_Sahabat Kecil.JPG', 'Sahabat kecil mempunyai arti yang sangat penting dalam kehidupan kita. Kita tumbuh bersama-sama dengan melewati berbagai fase, saling bertukar cerita dan tentu saja moment itulah yang akan dirindukan ketika kita sama-sama tumbuh dewasa.', 'Giras Agung Jagratara', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    ('3', 'teman-seperjuangan', 'Teman Seperjuangan', '/images/galleriees/Girad Agung_Teman Seperjuangan - Giras Agung.JPG', 'Mereka sama-sama berjuang untuk mendapatkan kejuaraan, apalagi mereka merupakan teman seperjuangan yang memang dari kecil sudah sama-sama, jadi saling memahami dan menjaga kekompakan.', 'Giras Agung Jagratara', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    ('3', 'langkah-menuju-puncak', 'Langkah Menuju Puncak', '/images/galleries/Moh. Alfariz_Langkah Menuju Puncak.png', 'Seorang ayah, meskipun terkadang perjuangannya tak disadari, setiap tindakannya dijalani dengan cinta yang mendalam dan tekad yang kuat untuk melihat anak-anaknya tumbuh bahagia dan berhasil mencapai puncak kesuksesan.', 'Moh. Alfariz', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    ('3', 'hati-hati', 'Hati-Hati', '/images/galleries/Salina dan Ucup_Hati-Hati - sal.jpg', 'Sebelum berbicara, tanyakan pada diri sendiri: Apakah kata-kataku ini membangun, atau malah menghancurkan? Marilah kita jaga lisan kita, sebarkan kebaikan dan saling menguatkan melalui kata-kata yang indah. Jadilah pahlawan kata-kata, gunakan kekuatanmu untuk menyebarkan kedamaian dan cinta di dunia.', 'Salina Siti Hanifa & Yuwsuf Muhammad Amien', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    ('3', 'unseent-part-1', 'UNSEeN/T Part 1', '/images/galleries/HENOSEP_UNSEeN_T PART 1.jpg', '"""Kaka, Sudah mau pulang kah? Kau sering-sering datang lihat kita di siniee biar kau bisa bantu-bantu kita bersekolah. Kau lihat temanku baju putih, semangat sekali toh hehe"""', 'Herlina Septiani', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL);
   `);
 };
