@@ -123,10 +123,10 @@ exports.seed = async () => {
   await pool.query(`
     INSERT INTO myschema.divisions (slug, name, image, created_at, updated_at, deleted_at)
     VALUES 
-    ('ufo-veteran-jakarta', 'UFO Veteran Jakarta', '/images/Ufo-Logo.png', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
-    ('human-resources-development', 'Human Resources Development', '/images/Ufo-Logo.png', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
-    ('marketing-communication', 'Marketing Communication', '/images/Ufo-Logo.png', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
-    ('operational', 'Operational', '/images/Ufo-Logo.png', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL);
+    ('ufo-veteran-jakarta', 'UFO Veteran Jakarta', '/images/divisions/Ufo-Logo.png', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    ('human-resources-development', 'Human Resources Development', '/images/divisions/hrd-icon.svg', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    ('marketing-communication', 'Marketing Communication', '/images/divisions/marcomm-icon.svg', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    ('operational', 'Operational', '/images/divisions/operational-icon.svg', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL);
   `);
 
   // Positions seeder
