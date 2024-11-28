@@ -1,0 +1,100 @@
+name: Deploy to Production Server
+
+on:
+  push:
+    branches:
+      - deployment
+  pull_request:
+    branches:
+      - deployment
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set Up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '22'
+
+      - name: Deploy to Production Server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.DEPLOYMENT_HOST }}
+          username: ${{ secrets.DEPLOYMENT_USER }}
+          key: |
+            ${{ secrets.DEPLOYMENT_KEY }}
+          port: ${{ secrets.DEPLOYMENT_PORT }}
+          script: |
+            # Navigate to the production path on the VPS
+            cd ${{ secrets.DEPLOYMENT_PATH }} || { echo "Production path not found!"; exit 1; }
+
+            # Initiate variables
+            APP_NAME="api-ufo-veteran-jakarta"
+            ENV_EXIST=false
+            ENV_LOCK="/tmp/.env.lock-$((RANDOM))"
+
+            # Backup existing .env file if it exists
+            if [ -f .env ]; then
+              echo "Backing up original .env file..."
+              mv .env $ENV_LOCK
+              ENV_EXIST=true
+            fi
+
+            # Check if the app state is fresh or already exists
+            if [ -d ".git" ]; then
+              echo "Applying changes..."
+              git fetch origin
+              git reset --hard origin/deployment
+            else
+              if [ "$(ls -A .)" ]; then
+                echo "No git repository detected and the production path is not empty!"
+                exit 1
+              else
+                echo "No git repository detected. Cloning remote repository..."
+                git clone ${{ secrets.GIT_REPO_URL }} .
+              fi
+            fi
+
+            # Delete incoming .env file
+            if [ -f .env ]; then
+              echo "Incoming .env file detected, removing..."
+              rm -rf .env
+            fi
+
+            # Restore existing .env file
+            if [ "$ENV_EXIST" = true ]; then
+              echo "Restoring original .env file..."
+              mv $ENV_LOCK .env
+            fi
+
+            # Create new .env file if not exist
+            if [ "$_ENV_EXIST" = false && -f .env.example ]; then
+              echo "Generating new .env file..."
+              cp .env.example .env
+            fi
+
+            # Install dependencies
+            echo "Installing dependencies..."
+            npm install
+
+            # Build app
+            echo "Building app..."
+            npm run build
+
+            # Manage app with pm2
+            if pm2 list | grep -q "$APP_NAME"; then
+              echo "App is already registered, restarting app..."
+              pm2 restart "$APP_NAME"
+            else
+              echo "App is not registered, starting for the first time..."
+              pm2 start npm --name "$APP_NAME" -- start
+              pm2 save
+            fi
+
+            echo "App is up and running!"
