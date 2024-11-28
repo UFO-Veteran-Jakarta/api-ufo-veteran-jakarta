@@ -10,6 +10,8 @@ const divisionRoutes = require('./divisionRoutes');
 const positionRoutes = require('./positionRoutes');
 const memberRoutes = require('./memberRoutes');
 const categoriesRoutes = require('./categoriesRoutes');
+const galleryRoutes = require('./galleryRoutes');
+const categoryGalleryRoutes = require('./categoryGalleryRoutes');
 
 const router = express.Router();
 
@@ -24,5 +26,7 @@ router.use('/divisions', divisionRoutes);
 router.use('/positions', positionRoutes);
 router.use('/members', memberRoutes);
 router.use('/category-article', categoriesRoutes);
+router.use('/galleries', galleryRoutes);
+router.use('/category-gallery', categoryGalleryRoutes);
 
 module.exports = router;
