@@ -126,7 +126,9 @@ exports.seed = async () => {
     ('ufo-veteran-jakarta', 'UFO Veteran Jakarta', '/images/divisions/Ufo-Logo.png', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
     ('human-resources-development', 'Human Resources Development', '/images/divisions/hrd-icon.svg', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
     ('marketing-communication', 'Marketing Communication', '/images/divisions/marcomm-icon.svg', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
-    ('operational', 'Operational', '/images/divisions/operational-icon.svg', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL);
+    ('operational', 'Operational', '/images/divisions/operational-icon.svg', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    ('secretary', 'Secretary', '/images/divisions/secretary-icon.svg', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    ('finance', 'Finance', '/images/divisions/finance-icon.svg', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL);
   `);
 
   // Positions seeder
@@ -148,8 +150,7 @@ exports.seed = async () => {
     ('Manager Human Resources Development', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
     ('Finance', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
     ('Finance', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
-    ('Secretary 2', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
-    ('Secretary 1', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    ('Secretary', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
     ('Chief Executive Officer', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL);
   `);
 
@@ -171,9 +172,9 @@ exports.seed = async () => {
     (3, 6, 'Muhammad Rayhan Satria Aji', '/images/members/RAYHAN.png', 'UFO.023.X.013', 'yuwsufamien', 'yuwsufamien', '0812-1234-5678', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
     (4, 3, 'Muhammad Rifqi Wiryawan', '/images/members/RIFQI.png', 'UFO.023.X.014', 'yuwsufamien', 'yuwsufamien', '0812-1234-5678', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
     (2, 9, 'Nicky Felix Amanusa', '/images/members/NICKY.png', 'UFO.023.X.015', 'yuwsufamien', 'yuwsufamien', '0812-1234-5678', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
-    (1, 17, 'Nur Farah Afifah', '/images/members/AFIFAH.png', 'UFO.023.X.016', 'yuwsufamien', 'yuwsufamien', '0812-1234-5678', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
-    (1, 17, 'Nurul Fikriah Saniah', '/images/members/SANIAH.png', 'UFO.023.X.017', 'yuwsufamien', 'yuwsufamien', '0812-1234-5678', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
-    (1, 17, 'Rafif Firmansyah', '/images/members/RAFIF.png', 'UFO.023.X.018', 'yuwsufamien', 'yuwsufamien', '0812-1234-5678', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    (5, 16, 'Nur Farah Afifah', '/images/members/AFIFAH.png', 'UFO.023.X.016', 'yuwsufamien', 'yuwsufamien', '0812-1234-5678', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    (5, 16, 'Nurul Fikriah Saniah', '/images/members/SANIAH.png', 'UFO.023.X.017', 'yuwsufamien', 'yuwsufamien', '0812-1234-5678', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    (6, 15, 'Rafif Firmansyah', '/images/members/RAFIF.png', 'UFO.023.X.018', 'yuwsufamien', 'yuwsufamien', '0812-1234-5678', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
     (2, 8, 'Rahma Aprilia', '/images/members/RAHMA.png', 'UFO.023.X.019', 'yuwsufamien', 'yuwsufamien', '0812-1234-5678', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
     (3, 1, 'Seno Oktariadi', '/images/members/SENO.png', 'UFO.023.X.020', 'yuwsufamien', 'yuwsufamien', '0812-1234-5678', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL);
   `);
