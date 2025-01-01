@@ -71,7 +71,7 @@ exports.updateWorkProgramById = async (req, res) => {
       return sendResponse(res, 404, 'Work Program not found');
     }
 
-    if (req.file?.image) {
+    if (req.files?.image) {
       const imageUpload = await uploadSingle(req.files.image, 'image');
       req.body.image = imageUpload.secure_url;
     }
