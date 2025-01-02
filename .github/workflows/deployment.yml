@@ -1,9 +1,9 @@
-name: Deploy to Staging Server
+name: Deploy to Production Server
 
 on:
   push:
     branches:
-      - staging
+      - deployment
   workflow_dispatch:
 
 jobs:
@@ -19,7 +19,7 @@ jobs:
         with:
           node-version: '22'
 
-      - name: Deploy to Staging Server
+      - name: Deploy to production Server
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.DEPLOYMENT_HOST }}
@@ -28,11 +28,11 @@ jobs:
             ${{ secrets.DEPLOYMENT_KEY }}
           port: ${{ secrets.DEPLOYMENT_PORT }}
           script: |
-            # Navigate to the staging path on the VPS
-            cd ${{ secrets.STAGING_PATH }} || { echo "Staging path not found!"; exit 1; }
+            # Navigate to the deployment path on the VPS
+            cd ${{ secrets.DEPLOYMENT_PATH }} || { echo "Deployment path not found!"; exit 1; }
 
             # Initiate variables
-            APP_NAME="${{ APP_NAME_STAGING }}"
+            APP_NAME="${{ APP_NAME }}"
             ENV_EXIST=false
             ENV_LOCK="/tmp/.env.lock-$((RANDOM))"
 
@@ -47,10 +47,10 @@ jobs:
             if [ -d ".git" ]; then
               echo "Applying changes..."
               git fetch origin
-              git reset --hard origin/staging
+              git reset --hard origin/deployment
             else
               if [ "$(ls -A .)" ]; then
-                echo "No git repository detected and the staging path is not empty!"
+                echo "No git repository detected and the deployment path is not empty!"
                 exit 1
               else
                 echo "No git repository detected. Cloning remote repository..."

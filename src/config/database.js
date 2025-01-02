@@ -5,16 +5,14 @@ require('dotenv').config({
 });
 
 const pool = new Pool({
-  user: process.env.DB_USER,
-  host: process.env.DB_HOST,
-  database: process.env.DB_NAME,
-  password: process.env.DB_PASSWORD,
-  port: process.env.DB_PORT,
+  connectionString: process.env.DATABASE_URL,
+  ssl: process.env.DATABASE_SSL == 'true' ? { rejectUnauthorized: false } : false,
 });
 
 pool.on('connect', async (client) => {
   try {
-    await client.query('SET search_path TO myschema');
+    const searchPath = 'SET search_path TO ' + process.env.DATABASE_SCHEMA;
+    await client.query(searchPath);
   } catch (error) {
     console.error('Error setting search path:', error);
   }
