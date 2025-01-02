@@ -32,7 +32,7 @@ jobs:
             cd ${{ secrets.DEPLOYMENT_PATH }} || { echo "Deployment path not found!"; exit 1; }
 
             # Initiate variables
-            APP_NAME="${{ APP_NAME }}"
+            APP_NAME="${{ secrets.APP_NAME }}"
             ENV_EXIST=false
             ENV_LOCK="/tmp/.env.lock-$((RANDOM))"
 

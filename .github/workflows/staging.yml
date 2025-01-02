@@ -32,7 +32,7 @@ jobs:
             cd ${{ secrets.STAGING_PATH }} || { echo "Staging path not found!"; exit 1; }
 
             # Initiate variables
-            APP_NAME="${{ APP_NAME_STAGING }}"
+            APP_NAME="${{ secrets.APP_NAME_STAGING }}"
             ENV_EXIST=false
             ENV_LOCK="/tmp/.env.lock-$((RANDOM))"
 
