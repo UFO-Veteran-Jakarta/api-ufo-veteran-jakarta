@@ -148,6 +148,26 @@ exports.createTable = async () => {
     )
     `,
   );
+
+  await pool.query(
+    `
+    CREATE TABLE IF NOT EXISTS articles(
+      id serial PRIMARY KEY,
+      category_id int NOT NULL,
+      slug varchar(255) NOT NULL UNIQUE,
+      title varchar(255) NOT NULL,
+      author varchar(255) NOT NULL,
+      cover varchar(255),
+      cover_landscape varchar(255),
+      snippets text,
+      body text NOT NULL,
+      created_at timestamp DEFAULT CURRENT_TIMESTAMP,
+      updated_at timestamp DEFAULT CURRENT_TIMESTAMP,
+      deleted_at timestamp,
+      FOREIGN KEY (category_id) REFERENCES categories (id)
+    )
+    `,
+  );
 };
 
 exports.dropTable = async () => {
@@ -162,4 +182,5 @@ exports.dropTable = async () => {
   await pool.query('DROP TABLE IF EXISTS myschema.positions;');
   await pool.query('DROP TABLE IF EXISTS myschema.members;');
   await pool.query('DROP TABLE IF EXISTS myschema.categories');
+  await pool.query('DROP TABLE IF EXISTS articles');
 };
