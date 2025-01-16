@@ -19,7 +19,7 @@ jobs:
         with:
           node-version: '22'
 
-      - name: Deploy to production Server
+      - name: Deploy to Production Server
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.DEPLOYMENT_HOST }}
@@ -83,7 +83,7 @@ jobs:
 
             # # Build app
             # echo "Building app..."
-            # npm run build
+            # npm run buil
 
             # Manage app with pm2
             if pm2 list | grep -q "$APP_NAME"; then
