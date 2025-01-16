@@ -4,6 +4,7 @@ const {
   getAllPartners,
   updatePartner,
   getPartnerById,
+  deletePartner,
 } = require('../models/partnerModel');
 
 exports.addPartner = async (data) => {
@@ -28,5 +29,5 @@ exports.updatePartner = async (id, data) => {
 };
 
 exports.deletePartner = async (id) => {
-  return updatePartnerById(id);
+  return deletePartner(id);
 };

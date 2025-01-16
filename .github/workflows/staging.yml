@@ -32,7 +32,7 @@ jobs:
             cd ${{ secrets.STAGING_PATH }} || { echo "Staging path not found!"; exit 1; }
 
             # Initiate variables
-            APP_NAME="staging-api-ufo-veteran-jakarta"
+            APP_NAME="${{ secrets.APP_NAME_STAGING }}"
             ENV_EXIST=false
             ENV_LOCK="/tmp/.env.lock-$((RANDOM))"
 
@@ -78,11 +78,12 @@ jobs:
 
             # Install dependencies
             echo "Installing dependencies..."
+            # npm ci
             npm install
 
-            # Build app
-            echo "Building app..."
-            npm run build
+            # # Build app
+            # echo "Building app..."
+            # npm run build
 
             # Manage app with pm2
             if pm2 list | grep -q "$APP_NAME"; then
