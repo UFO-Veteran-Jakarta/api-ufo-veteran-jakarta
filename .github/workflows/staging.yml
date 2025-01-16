@@ -78,7 +78,8 @@ jobs:
 
             # Install dependencies
             echo "Installing dependencies..."
-            npm ci
+            # npm ci
+            npm install
 
             # # Build app
             # echo "Building app..."
