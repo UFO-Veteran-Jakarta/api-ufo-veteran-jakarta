@@ -22,7 +22,7 @@ async function addPosition(data) {
 }
 
 async function getAllPositions() {
-  const query = 'SELECT * FROM myschema.positions WHERE deleted_at IS NULL;';
+  const query = 'SELECT * FROM positions WHERE deleted_at IS NULL;';
   try {
     const res = await pool.query(query);
     return res.rows;
@@ -34,7 +34,7 @@ async function getAllPositions() {
 
 async function getPositionById(id) {
   const query =
-    'SELECT * FROM myschema.positions WHERE id = $1 AND deleted_at IS NULL;';
+    'SELECT * FROM positions WHERE id = $1 AND deleted_at IS NULL;';
   const values = [id];
   return executeQuery(query, values);
 }
@@ -50,7 +50,7 @@ async function updatePositionById(id, data) {
 }
 
 async function deleteAllPositions() {
-  const query = 'UPDATE myschema.positions SET deleted_at = NOW()';
+  const query = 'UPDATE positions SET deleted_at = NOW()';
   try {
     const res = await pool.query(query);
     return res.rows;
@@ -62,7 +62,7 @@ async function deleteAllPositions() {
 
 async function deletePositionById(id) {
   const query =
-    'UPDATE myschema.positions SET deleted_at = NOW() WHERE id = $1 RETURNING *;';
+    'UPDATE positions SET deleted_at = NOW() WHERE id = $1 RETURNING *;';
   const values = [id];
   return executeQuery(query, values);
 }
