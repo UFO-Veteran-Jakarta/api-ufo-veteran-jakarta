@@ -88,10 +88,11 @@ exports.updateGalleryBySlug = async (req, res) => {
     }
 
     // Stage the update data payload before inserted into database
-    const [isUpdateData, updateData] = await stageDataUpdateGalleryBySlug(req);
+    let [isUpdateData, updateData] = await stageDataUpdateGalleryBySlug(req);
     /*if (!isUpdateData) {
       return sendResponse(res, 400, 'No update data provided');
     }*/
+    updateData = { ...updateData, ...req.body };
 
     // Update the data
     const updatedGallery = await updateGalleryBySlug(slug, oldData, updateData);
