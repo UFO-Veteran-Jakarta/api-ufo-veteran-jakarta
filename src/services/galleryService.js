@@ -5,6 +5,10 @@ const {
   updateGalleryBySlug,
   deleteGalleryBySlug,
 } = require('../models/galleryModel');
+const {
+  formatGallery,
+  formatGalleries
+} = require('../collections/galleryCollection');
 const { createSlugDivision } = require('../helpers/slug');
 const {
   getUploadFilepath,
@@ -33,7 +37,10 @@ exports.checkSlugExistsInDb = checkSlugExistsInDb;
 exports.addGallery = async (data) => {
   try {
     const result = await addGallery(data);
-    return result;
+
+    const formattedResult = formatGallery(result);
+
+    return formattedResult;
   } catch (error) {
     console.error('Error adding gallery:', error);
     throw error;
@@ -49,21 +56,7 @@ exports.getAllGalleries = async () => {
   try {
     const galleries = await getAllGalleries();
 
-    const formattedResult = galleries.map(row => ({
-      id: row.id,
-      slug: row.slug,
-      category_galleries: {
-        id: row.category_galleries_id,
-        name: row.name,
-      },
-      title: row.title,
-      image: row.image,
-      snippet: row.snippet,
-      author: row.author,
-      created_at: row.created_at,
-      updated_at: row.updated_at,
-      deleted_at: row.deleted_at,
-    }));
+    const formattedResult = formatGalleries(galleries);
 
     return formattedResult;
   } catch (error) {
@@ -80,7 +73,11 @@ exports.getAllGalleries = async () => {
  */
 exports.getGalleryBySlug = async (slug) => {
   try {
-    return await getGalleryBySlug(slug);
+    const gallery = await getGalleryBySlug(slug);
+
+    const formattedResult = formatGallery(gallery);
+
+    return formattedResult;
   } catch (error) {
     console.error('Error fetching gallery by slug: ', error);
     throw error;
@@ -142,10 +139,10 @@ exports.stageDataUpdateGalleryBySlug = async (req) => {
   // Data payload
   const updateData = {};
 
-  if (req.body.name) {
-    updateData.name = req.body.name;
+  if (req.body.title) {
+    updateData.title = req.body.title;
     updateData.slug = await createSlugDivision(
-      req.body.name,
+      req.body.title,
       checkSlugExistsInDb,
     );
   }
@@ -158,11 +155,5 @@ exports.stageDataUpdateGalleryBySlug = async (req) => {
     }
   }
 
-  return [
-    // Checks if there is a data update payload
-    Object.keys(updateData).length !== 0,
-
-    // Returns the data payload itself
-    updateData,
-  ];
+  return updateData;
 };

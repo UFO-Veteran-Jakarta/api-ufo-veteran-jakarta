@@ -19,22 +19,33 @@ function generateCacheKey(query, values) {
 }
 
 /**
+ * Query generator for INSERT
+ * 
+ */
+const generateInsertQuery = (data, tableName) => {
+  const fields = Object.keys(data);
+  const placeholders = fields.map((_, index) => `$${index + 1}`);
+
+  const query = `
+    INSERT INTO ${tableName} (${fields.join(', ')})
+    VALUES(${placeholders.join(', ')})
+    RETURNING *
+  `;
+
+  return query;
+};
+
+/**
  * Query builder for INSERT
  *
  * @param {*} data
  * @param {*} tableName
  * @returns
  */
-exports.doInsertQuery = async (data, tableName) => {
-  const fields = Object.keys(data);
+const doInsertQuery = async (data, tableName) => {
   const values = Object.values(data);
-  const placeholders = fields.map((_, index) => `$${index + 1}`);
 
-  const query = `
-    INSERT INTO ${tableName} (${fields.join(', ')})
-    VALUES(${placeholders.join(', ')})
-    RETURNING *;
-  `;
+  const query = generateInsertQuery(data, tableName);
 
   // Query logging
   console.log(query);
@@ -54,7 +65,7 @@ exports.doInsertQuery = async (data, tableName) => {
  * @returns {Promise<Array>} - Returns the rows from the cached result or from
  *                             the database
  */
-exports.doSelectQuery = async (tableName, comparator = [], useCache = true) => {
+const doSelectQuery = async (tableName, comparator = [], useCache = true) => {
   if (typeof tableName !== 'string' || tableName.trim() === '') {
     throw new Error('Table name must be a non-empty string');
   }
@@ -123,7 +134,7 @@ exports.doSelectQuery = async (tableName, comparator = [], useCache = true) => {
  * @param {*} slug
  * @returns
  */
-exports.doUpdateQueryBySlug = async (data, tableName, slug) => {
+const doUpdateQueryBySlug = async (data, tableName, slug) => {
   const fields = Object.keys(data);
   const values = Object.values(data);
   const setClause = fields
@@ -152,7 +163,7 @@ exports.doUpdateQueryBySlug = async (data, tableName, slug) => {
  * @param {number|string} id - The ID of the record to update
  * @returns {Promise<Object>} - Returns the updated record
  */
-exports.doUpdateQueryById = async (data, tableName, id) => {
+const doUpdateQueryById = async (data, tableName, id) => {
   const fields = Object.keys(data);
   const values = Object.values(data);
   const setClause = fields
@@ -180,7 +191,7 @@ exports.doUpdateQueryById = async (data, tableName, id) => {
  * @param {*} slug
  * @returns
  */
-exports.doSoftDeleteQueryBySlug = async (tableName, slug = '') => {
+const doSoftDeleteQueryBySlug = async (tableName, slug = '') => {
   let query = `
     UPDATE ${tableName} SET deleted_at = NOW() 
   `;
@@ -201,7 +212,7 @@ exports.doSoftDeleteQueryBySlug = async (tableName, slug = '') => {
   return result;
 };
 
-exports.doSoftDeleteQueryById = async (tableName, id = '') => {
+const doSoftDeleteQueryById = async (tableName, id = '') => {
   let query = `
     UPDATE ${tableName} SET deleted_at = NOW() 
   `;
@@ -220,4 +231,14 @@ exports.doSoftDeleteQueryById = async (tableName, id = '') => {
     : await pool.runTransaction(query);
 
   return result;
+};
+
+module.exports = {
+  generateInsertQuery,
+  doInsertQuery,
+  doSelectQuery,
+  doUpdateQueryBySlug,
+  doUpdateQueryById,
+  doSoftDeleteQueryBySlug,
+  doSoftDeleteQueryById,
 };
