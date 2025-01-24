@@ -1,6 +1,7 @@
 const {
-  doInsertQuery,
-  doSelectQuery,
+  generateInsertQuery,
+  // doInsertQuery,
+  // doSelectQuery,
   doUpdateQueryBySlug,
   doSoftDeleteQueryBySlug,
 } = require('../utils/queryBuilder');
@@ -8,7 +9,22 @@ const pool = require('../config/database');
 
 async function addGallery(data) {
   try {
-    const res = await doInsertQuery(data, 'galleries');
+    // const res = await doInsertQuery(data, 'galleries');
+    const query = `
+      WITH inserted AS (
+        ${generateInsertQuery(data, 'galleries')}
+      )
+      SELECT
+        g.*,
+        cg.id AS category_galleries_id,
+        cg.name AS category_galleries_name
+       FROM inserted g
+       JOIN category_galleries cg
+       ON cg.id = g.category_galleries_id
+    `;
+
+    const res = await pool.query(query, Object.values(data));
+
     return res.rows[0];
   } catch (error) {
     console.error('Error inserting gallery:', error);
@@ -20,12 +36,14 @@ async function getAllGalleries() {
   try {
     // const res = await doSelectQuery('galleries');
     const res = await pool.query(`
-      SELECT g.*,
-      cg.id as category_galleries_id,
-      cg.name
+      SELECT
+        g.*,
+        cg.id AS category_galleries_id,
+        cg.name AS category_galleries_name
       FROM galleries g
       JOIN category_galleries cg
       ON g.category_galleries_id = cg.id
+      WHERE g.deleted_at IS NULL
     `);
     
     return res.rows.length > 0 ? res.rows : [];
@@ -37,9 +55,19 @@ async function getAllGalleries() {
 
 async function getGalleryBySlug(slug, useCache = true) {
   try {
-    const res = await doSelectQuery('galleries', [
-      ['slug', '=', slug],
-    ], useCache);
+    // const res = await doSelectQuery('galleries', [
+    //   ['slug', '=', slug],
+    // ], useCache);
+    const res = await pool.query(`
+      SELECT
+        g.*,
+        cg.id AS category_galleries_id,
+        cg.name AS category_galleries_name
+      FROM galleries g
+      JOIN category_galleries cg
+      ON g.category_galleries_id = cg.id
+      WHERE g.slug = $1 AND g.deleted_at IS NULL
+    `, [slug]);
 
     return res.rows.length === 0 ? null : res.rows[0];
   } catch (error) {

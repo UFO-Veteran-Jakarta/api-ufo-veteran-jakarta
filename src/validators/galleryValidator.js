@@ -41,7 +41,7 @@ const checkRequiredFields = (req, res, next) => {
   if (!name && !image) {
     return res.status(400).json({
       status: 400,
-      message: 'Division name and image are required',
+      message: 'Gallery title and image are required',
     });
   }
 
