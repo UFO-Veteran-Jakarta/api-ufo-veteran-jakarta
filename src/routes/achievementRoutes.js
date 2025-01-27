@@ -26,6 +26,10 @@ router.post(
 router.get(
   '/',
   achievementController.getAllAchievements,
+);
+
+router.get(
+  '/:id',
   achievementController.getAchievementById,
 );
 

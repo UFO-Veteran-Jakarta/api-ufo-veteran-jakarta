@@ -58,7 +58,7 @@ exports.getAllAchievements = async (req, res, next) => {
 
 exports.getAchievementById = async (req, res) => {
   try {
-    const { id } = req.query;
+    const { id } = req.params;
     const achievement = await getAchievementById(id);
 
     if (!achievement) {
@@ -76,7 +76,7 @@ exports.getAchievementById = async (req, res) => {
 
 exports.updateAchievementById = async (req, res) => {
   try {
-    const { id } = req.query;
+    const { id } = req.params;
     const achievement = await getAchievementById(id);
 
     if (!achievement) {
