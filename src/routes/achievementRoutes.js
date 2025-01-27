@@ -27,11 +27,21 @@ router.post(
 router.get(
   '/',
   achievementController.getAllAchievements,
+  achievementController.getAchievementById,
 );
 
 router.get(
   '/:id',
-  achievementController.getAchievementById,
+  achievementController.getAchievementByIdParams,
+);
+
+router.put(
+  '/',
+  authentication(),
+  checkUpdateFile('logo'),
+  postAchievementValidationRules(),
+  validate,
+  achievementController.updateAchievementById,
 );
 
 router.patch(
@@ -40,7 +50,7 @@ router.patch(
   checkUpdateFile('logo'),
   updateAchievementValidationRules(),
   validate,
-  achievementController.updateAchievementById,
+  achievementController.updateAchievementByIdParams,
 );
 
 router.delete(
