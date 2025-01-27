@@ -39,7 +39,7 @@ const updateAchievementValidationRules = () => {
       .withMessage('Achievement year is required')
       .isLength({ max: 4 })
       .withMessage('Achievement year must be no more than 4 characters'),
-  ]
+  ];
 };
 
 const validate = (req, res, next) => {
