@@ -1,12 +1,14 @@
 const logger = require('../utils/logger');
 const { sendResponse } = require('../helpers/response');
+const { buildResponse } = require('../utils/buildResponseAchievement');
 const { uploadSingle } = require('../utils/uploadFile');
 const {
   addAchievemnt,
   getAllAchievements,
   getAchievementById,
-  updateAchievement,
+  updateAchievementById,
   deleteAchievement,
+  StageDataUpdateAchievementById,
 } = require('../services/achievementService');
 
 exports.addAchievement = async (req, res) => {
@@ -77,29 +79,37 @@ exports.getAchievementById = async (req, res) => {
 exports.updateAchievementById = async (req, res) => {
   try {
     const { id } = req.params;
-    const achievement = await getAchievementById(id);
+    const oldData = await getAchievementById(id);
 
-    if (!achievement) {
-      logger.error(`Achievement with id ${id} not found`);
+    // Check if achievement exists
+    if (!oldData) {
       return sendResponse(res, 404, 'Achievement not found');
     }
 
-    if (req.files?.logo) {
-      const logoUpload = await uploadSingle(req.files.logo, 'logo');
-      req.body.logo = logoUpload.secure_url;
+    // Stage the update data
+    const [isUpdateData, updateData] =
+      await StageDataUpdateAchievementById(req);
+    if (!isUpdateData) {
+      return sendResponse(res, 400, 'No update data provided');
     }
 
-    const updatedAchievement = await updateAchievement(id, req.body);
+    // Update the achievement
+    const updatedAchievement = await updateAchievementById(
+      id,
+      oldData,
+      updateData,
+    );
 
-    logger.info(`Successfully Update Achievement with id ${id}`);
-    return sendResponse(
-      res,
-      200,
-      'Successfully Update Achievement',
+    // Build response
+    const [responseMessage, responseData] = buildResponse(
+      oldData,
+      updateData,
       updatedAchievement,
     );
+
+    return sendResponse(res, 200, responseMessage, responseData);
   } catch (error) {
-    logger.error('Failed to Update Achievement');
+    logger.error('Failed to Update Achievement:', error);
     return sendResponse(res, 500, error.message);
   }
 };
