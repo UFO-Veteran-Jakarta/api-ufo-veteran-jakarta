@@ -21,6 +21,19 @@ exports.getAll = async (req, res) => {
   }
 };
 
+exports.getContentById = async (req, res) => {
+  try{
+    const {id} = req.params;
+    const result = await contentService.getContentById(id);
+
+    logger.info('Get Success: Success Get Content');
+    return sendResponse(res, 200, 'Successfully Get Content', result);
+  } catch (error) {
+    logger.error('Get Error: Failed Get Content');
+    return sendResponse(res, 500, error.message);
+  }
+};
+
 exports.addContent = async (req, res) => {
   try {
     const result = await contentService.addContent(req.body);

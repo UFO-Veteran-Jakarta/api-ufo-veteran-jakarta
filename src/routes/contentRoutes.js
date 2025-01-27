@@ -19,6 +19,10 @@ router.post(
 
 router.get('/', contentController.getAll);
 
+router.get(
+  '/:id',
+  contentController.getContentById);
+
 router.put(
   '/',
   authentication(),
