@@ -6,7 +6,7 @@ const {
   deleteAchievement,
 } = require('../models/achievementsModel');
 
-const { uploadSingle, updateFile } = require('../utils/uploadFile');
+const { updateFile } = require('../utils/uploadFile');
 
 exports.addAchievemnt = async (data) => {
   return addAchievement(data);
@@ -24,16 +24,15 @@ exports.getAllAchievements = async () => {
 exports.getAchievementById = async (id) => {
   return getAchievementById(id);
 };
- 
+
 exports.updateAchievement = async (id, data) => {
   return updateAchievement(id, data);
 };
 
 exports.updateAchievementById = async (id, oldData, updateData) => {
   try {
-    let finalUpdateData = { ...updateData };
+    const finalUpdateData = { ...updateData };
 
-    // Handle file upload if there's a new logo
     if (updateData.logo) {
       const newLogoUrl = await updateFile(oldData.logo, updateData.logo);
       finalUpdateData.logo = newLogoUrl;
@@ -55,7 +54,7 @@ exports.StageDataUpdateAchievementById = async (req) => {
   try {
     const updateData = {};
 
-    // Handle text fields
+
     if (req.body.name) {
       updateData.name = req.body.name;
     }
@@ -64,9 +63,8 @@ exports.StageDataUpdateAchievementById = async (req) => {
       updateData.year = req.body.year;
     }
 
-    // Handle logo file
-    if (req.files && req.files.logo) {
-      updateData.logo = req.files.logo; // Pass the raw file object
+    if (req.files?.logo) {
+      updateData.logo = req.files.logo;
     }
 
     const hasUpdates = Object.keys(updateData).length > 0;
