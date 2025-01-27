@@ -6,6 +6,7 @@ const {
   addAchievemnt,
   getAllAchievements,
   getAchievementById,
+  updateAchievement,
   updateAchievementById,
   deleteAchievement,
   StageDataUpdateAchievementById,
@@ -60,6 +61,24 @@ exports.getAllAchievements = async (req, res, next) => {
 
 exports.getAchievementById = async (req, res) => {
   try {
+    const { id } = req.query;
+    const achievement = await getAchievementById(id);
+
+    if (!achievement) {
+      logger.error(`Achievement with id ${id} not found`);
+      return sendResponse(res, 404, 'Achievement not found');
+    }
+
+    logger.info(`Successfully Get Achievement with id ${id}`);
+    return sendResponse(res, 200, 'Successfully Get Achievement', achievement);
+  } catch (error) {
+    logger.error('Failed to Get Achievement');
+    return sendResponse(res, 500, error.message);
+  }
+};
+
+exports.getAchievementByIdParams = async (req, res) => {
+  try {
     const { id } = req.params;
     const achievement = await getAchievementById(id);
 
@@ -77,6 +96,36 @@ exports.getAchievementById = async (req, res) => {
 };
 
 exports.updateAchievementById = async (req, res) => {
+  try {
+    const { id } = req.query;
+    const achievement = await getAchievementById(id);
+
+    if (!achievement) {
+      logger.error(`Achievement with id ${id} not found`);
+      return sendResponse(res, 404, 'Achievement not found');
+    }
+
+    if (req.files?.logo) {
+      const logoUpload = await uploadSingle(req.files.logo, 'logo');
+      req.body.logo = logoUpload.secure_url;
+    }
+
+    const updatedAchievement = await updateAchievement(id, req.body);
+
+    logger.info(`Successfully Update Achievement with id ${id}`);
+    return sendResponse(
+      res,
+      200,
+      'Successfully Update Achievement',
+      updatedAchievement,
+    );
+  } catch (error) {
+    logger.error('Failed to Update Achievement');
+    return sendResponse(res, 500, error.message);
+  }
+};
+
+exports.updateAchievementByIdParams = async (req, res) => {
   try {
     const { id } = req.params;
     const oldData = await getAchievementById(id);
