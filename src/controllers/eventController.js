@@ -6,9 +6,12 @@ const {
   getEventBySlug,
   updateEvent,
   deleteEvent,
+  updateEventBySlug,
+  stageUpdateEventBySlug,
 } = require('../services/eventService');
 const { generateUniqueSlug } = require('../helpers/slug');
 const { uploadSingle } = require('../utils/uploadFile');
+const { buildResponse } = require('../utils/buildResponseEvent');
 
 exports.uploadEvent = async (req, res) => {
   try {
@@ -99,6 +102,47 @@ exports.updateEvent = async (req, res) => {
     return sendResponse(res, 200, 'Successfully Edit This Event', updatedEvent);
   } catch (error) {
     logger.error(`Failed to update event with slug ${slug}: ${error.message}`);
+    return sendResponse(res, 500, error.message);
+  }
+};
+
+exports.updateEventBySlug = async (req, res) => {
+  try {
+    
+    console.log('Full Request:', {
+      body: req.body,
+      files: req.files,
+      params: req.params,
+      query: req.query
+    }
+    );
+
+    const { slug } = req.params;
+    const oldData = await getEventBySlug(slug);
+
+    if (!oldData) {
+      logger.error(`Event with slug ${slug} not found`);
+      return sendResponse(res, 404, 'Event not found');
+    }
+
+    const [hasUpdates, updateData] = await stageUpdateEventBySlug(req);
+
+    if (!hasUpdates) {
+      return sendResponse(res, 400, 'No update data provided');
+    }
+
+    const updatedEvent = await updateEventBySlug(slug, oldData, updateData);
+
+    const [responseMessage, responseData] = await buildResponse(
+      oldData,
+      updateData,
+      updatedEvent,
+    );
+
+    logger.info(`Successfully updated event with slug ${slug}`);
+    return sendResponse(res, 200, responseMessage, responseData);
+  } catch (error) {
+    logger.error(`Failed to update event with slug`);
     return sendResponse(res, 500, error.message);
   }
 };
