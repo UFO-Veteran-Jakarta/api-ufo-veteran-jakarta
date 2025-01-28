@@ -45,7 +45,15 @@ exports.getAllWorkPrograms = async (req, res, next) => {
 
 exports.getWorkProgramById = async (req, res) => {
   try {
-    const { id } = req.query;
+    let id;
+    if (req.query?.id) {
+      id = req.query.id;
+    }
+
+    if (req.params?.id) {
+      id = req.params.id;
+    }
+
     const workProgram = await getWorkProgramById(id);
 
     if (!workProgram) {
