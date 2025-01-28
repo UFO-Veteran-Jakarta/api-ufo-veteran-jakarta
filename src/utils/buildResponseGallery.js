@@ -4,26 +4,31 @@ exports.buildResponse = async (oldData, updateData, updatedGallery) => {
     id: updatedGallery.id,
   };
 
-  let responseMessage = 'Successfully update gallery';
+  const updates = [];
 
-  if (updateData.name) {
-    responseData.old_name = oldData.name;
-    responseData.new_name = updatedGallery.name;
-    responseData.old_slug = oldData.slug;
-    responseData.new_slug = updatedGallery.slug;
-    responseMessage += ' name';
-  }
+  const fieldsToUpdate = [
+    'title', 'category_galleries_id',
+    'image', 'snippet', 'author',
+  ];
 
-  if (updateData.image) {
-    responseData.old_image = oldData.image;
-    responseData.new_image = updatedGallery.image;
-    responseMessage += updateData.name ? ' and' : '';
-    responseMessage += ' image';
-  }
+  fieldsToUpdate.forEach((field) => {
+    if (updateData[field]) {
+      responseData[`old_${field}`] = oldData[field];
+      responseData[`new_${field}`] = updatedGallery[field];
+      updates.push(field);
+
+      if (field === 'title') {
+        responseData.old_slug = oldData.slug;
+        responseData.new_slug = updatedGallery.slug;
+      }
+    }
+  });
 
   responseData.created_at = updatedGallery.created_at;
   responseData.updated_at = updatedGallery.updated_at;
   responseData.deleted_at = updatedGallery.deleted_at;
+
+  const responseMessage = `Successfully updated gallery ${updates.join(' and ')}.`;
 
   return [responseMessage, responseData];
 };
