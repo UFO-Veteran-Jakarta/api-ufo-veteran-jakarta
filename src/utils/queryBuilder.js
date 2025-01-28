@@ -233,7 +233,7 @@ const doSoftDeleteQueryById = async (tableName, id = '') => {
   return result;
 };
 
-const executeQuery = async function (query, values) {
+const executeQuery = async (query, values) => {
   try {
     const res = await pool.query(query, values);
     return res.rows.length > 0 ? res.rows[0] : null;
@@ -241,6 +241,7 @@ const executeQuery = async function (query, values) {
     console.error('Database query error:', error);
     throw error;
   }
+};
 
 module.exports = {
   generateInsertQuery,
