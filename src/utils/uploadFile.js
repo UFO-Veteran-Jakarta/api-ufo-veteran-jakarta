@@ -72,7 +72,7 @@ const uploadMultiple = async (req, folder) => {
   });
 };
 
-const updateFile = async (oldPath, newFile, folder = 'logo') => {
+const updateFile = async (oldPath, newFile, folder) => {
   try {
     if (oldPath) {
       // Delete old file if it exists
