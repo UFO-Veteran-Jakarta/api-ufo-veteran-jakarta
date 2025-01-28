@@ -38,7 +38,7 @@ router.patch(
   postValidationRules(),
   validate,
   contentController.updateContentById,
-)
+);
 
 router.delete('/', authentication(), contentController.deleteContent);
 

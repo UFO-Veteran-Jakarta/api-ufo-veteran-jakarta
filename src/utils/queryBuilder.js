@@ -230,4 +230,4 @@ exports.executeQuery = async function (query, values) {
     console.error('Database query error:', error);
     throw error;
   }
-}
+};

@@ -25,7 +25,7 @@ exports.getContentByIdParam = async function (id) {
     'SELECT * FROM contents WHERE id = $1 AND deleted_at IS NULL;';
   const values = [id];
   return executeQuery(query, values);
-}
+};
 
 exports.addContent = async (data) => {
   const res =
@@ -60,7 +60,7 @@ exports.updateContentById = async function (id, data) {
     console.error(`Error updating position with id ${id}:`, error);
     throw error;
   }
-}
+};
 
 exports.deleteContentAll = async () => {
   const res = await pool.query(

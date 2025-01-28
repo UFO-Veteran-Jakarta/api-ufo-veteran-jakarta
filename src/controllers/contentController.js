@@ -22,8 +22,8 @@ exports.getAll = async (req, res) => {
 };
 
 exports.getContentById = async (req, res) => {
-  try{
-    const {id} = req.params;
+  try {
+    const { id } = req.params;
     const result = await contentService.getContentById(id);
 
     logger.info('Get Success: Success Get Content');
@@ -79,7 +79,7 @@ exports.updateContentById = async (req, res) => {
     }
 
     const oldLink = existingContent.link;
-    
+
     const updatedContent = await contentService.updateContentById(id, req.body);
 
     const response = {
@@ -91,7 +91,6 @@ exports.updateContentById = async (req, res) => {
       deleted_at: updatedContent.deleted_at,
     };
 
-
     logger.info('Update Success: Successfully updated content');
     return sendResponse(res, 200, 'Successfully Updated Content', response);
   } catch (error) {
@@ -99,7 +98,6 @@ exports.updateContentById = async (req, res) => {
     return sendResponse(res, 500, error.message);
   }
 };
-
 
 exports.deleteContent = async (req, res) => {
   try {
