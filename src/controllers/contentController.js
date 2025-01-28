@@ -69,6 +69,38 @@ exports.updateContent = async (req, res) => {
   }
 };
 
+exports.updateContentById = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const existingContent = await contentService.getContentByIdParams(id);
+    if (!existingContent) {
+      return sendResponse(res, 404, 'Content not found');
+    }
+
+    const oldLink = existingContent.link;
+    
+    const updatedContent = await contentService.updateContentById(id, req.body);
+
+    const response = {
+      id: updatedContent.id,
+      old_link: oldLink,
+      new_link: updatedContent.link,
+      created_at: updatedContent.created_at,
+      updated_at: updatedContent.updated_at,
+      deleted_at: updatedContent.deleted_at,
+    };
+
+
+    logger.info('Update Success: Successfully updated content');
+    return sendResponse(res, 200, 'Successfully Updated Content', response);
+  } catch (error) {
+    logger.error('Update Error: Failed to update content');
+    return sendResponse(res, 500, error.message);
+  }
+};
+
+
 exports.deleteContent = async (req, res) => {
   try {
     if (!req.query?.id) {
