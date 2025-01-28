@@ -27,7 +27,21 @@ router.get(
   latestActivityController.getLatestActivityById,
 );
 
+router.get(
+  '/:id',
+  latestActivityController.getLatestActivityById,
+);
+
 router.put(
+  '/',
+  authentication(),
+  checkFileForUpdate('image'),
+  postLatestActivityValidationRules(),
+  validate,
+  latestActivityController.updateLatestActivityById,
+);
+
+router.patch(
   '/',
   authentication(),
   checkFileForUpdate('image'),
