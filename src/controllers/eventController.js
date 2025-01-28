@@ -108,15 +108,6 @@ exports.updateEvent = async (req, res) => {
 
 exports.updateEventBySlug = async (req, res) => {
   try {
-    
-    console.log('Full Request:', {
-      body: req.body,
-      files: req.files,
-      params: req.params,
-      query: req.query
-    }
-    );
-
     const { slug } = req.params;
     const oldData = await getEventBySlug(slug);
 
@@ -142,7 +133,7 @@ exports.updateEventBySlug = async (req, res) => {
     logger.info(`Successfully updated event with slug ${slug}`);
     return sendResponse(res, 200, responseMessage, responseData);
   } catch (error) {
-    logger.error(`Failed to update event with slug`);
+    logger.error('Failed to update event with slug');
     return sendResponse(res, 500, error.message);
   }
 };
