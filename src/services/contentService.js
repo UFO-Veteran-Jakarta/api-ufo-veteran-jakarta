@@ -3,7 +3,9 @@ const {
   addContent,
   getContentById,
   updateContent,
+  updateContentById,
   deleteContent,
+  getContentByIdParam,
 } = require('../models/contentModel');
 
 exports.getAll = async () => {
@@ -17,6 +19,19 @@ exports.addContent = async (data) => {
 };
 exports.updateContent = async (id, link) => {
   return updateContent(id, link);
+};
+
+exports.getContentByIdParams = async (id) => {
+  return getContentByIdParam(id);
+};
+
+exports.updateContentById = async (id, data) => {
+  try {
+    return await updateContentById(id, data);
+  } catch (error) {
+    console.error(`Error updating content with id ${id}:`, error);
+    throw error;
+  }
 };
 
 exports.deleteContent = async (id) => {
