@@ -237,5 +237,5 @@ module.exports = {
   postValidationRules,
   validate,
   updateValidationRules,
-  validateDateConsistency
+  validateDateConsistency,
 };

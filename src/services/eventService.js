@@ -34,7 +34,6 @@ exports.updateEvent = async (slug, data) => {
   return updateEventInDb(slug, data);
 };
 
-
 exports.updateEventBySlug = async (slug, oldData, updateData) => {
   try {
     const finalUpdateData = { ...updateData };
@@ -64,7 +63,6 @@ exports.updateEventBySlug = async (slug, oldData, updateData) => {
     throw error;
   }
 };
-
 
 exports.deleteEvent = async (slug) => {
   return softDeleteEventBySlug(slug);
