@@ -4,6 +4,8 @@ const eventController = require('../controllers/eventController');
 const {
   postValidationRules,
   validate,
+  updateValidationRules,
+  validateDateConsistency,
 } = require('../validators/eventValidator');
 const { authentication } = require('../middlewares/authMiddleware');
 const {
@@ -34,6 +36,17 @@ router.put(
   postValidationRules(),
   validate,
   eventController.updateEvent,
+);
+
+router.patch(
+  '/:slug',
+  authentication(),
+  checkFileForUpdate('cover'),
+  checkFileForUpdate('cover_landscape'),
+  updateValidationRules(),
+  validateDateConsistency,
+  validate,
+  eventController.updateEventBySlug,
 );
 
 router.delete('/:slug', authentication(), eventController.deleteEventBySlug);

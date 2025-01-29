@@ -72,8 +72,24 @@ const uploadMultiple = async (req, folder) => {
   });
 };
 
+const updateFile = async (oldPath, newFile, folder) => {
+  try {
+    if (oldPath) {
+      const arr = oldPath.split('/');
+      const fi = arr.slice(arr.length - 2).join('/');
+      await cloudinary.uploader.destroy(fi, { resource_type: 'raw' });
+    }
+
+    const uploadedFile = await uploadSingle(newFile, folder);
+    return uploadedFile.secure_url;
+  } catch (error) {
+    throw new Error(`Error updating file: ${error.message}`);
+  }
+};
+
 module.exports = {
   uploadSingle,
   deleteFiles,
   uploadMultiple,
+  updateFile,
 };
