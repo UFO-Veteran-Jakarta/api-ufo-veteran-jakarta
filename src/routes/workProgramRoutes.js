@@ -28,7 +28,21 @@ router.get(
   workProgramController.getWorkProgramById,
 );
 
+router.get(
+  '/:id',
+  workProgramController.getWorkProgramById,
+);
+
 router.put(
+  '/',
+  authentication(),
+  checkFileForUpdate('image'),
+  postWorkProgramValidationRules(),
+  validate,
+  workProgramController.updateWorkProgramById,
+);
+
+router.patch(
   '/',
   authentication(),
   checkFileForUpdate('image'),
