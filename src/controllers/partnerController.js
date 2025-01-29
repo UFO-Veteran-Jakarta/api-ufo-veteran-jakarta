@@ -41,7 +41,15 @@ exports.getAllPartners = async (req, res, next) => {
 
 exports.getPartnerById = async (req, res) => {
   try {
-    const { id } = req.query;
+    let id;
+    if (req.query?.id) {
+      id = req.query.id;
+    }
+
+    if (req.params?.id) {
+      id = req.params.id;
+    }
+
     const partner = await getPartnerById(id);
 
     if (!partner) {
