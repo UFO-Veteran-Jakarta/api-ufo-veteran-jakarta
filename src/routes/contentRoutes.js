@@ -19,6 +19,11 @@ router.post(
 
 router.get('/', contentController.getAll);
 
+router.get(
+  '/:id',
+  contentController.getContentById,
+);
+
 router.put(
   '/',
   authentication(),
@@ -26,6 +31,15 @@ router.put(
   validate,
   contentController.updateContent,
 );
+
+router.patch(
+  '/:id',
+  authentication(),
+  postValidationRules(),
+  validate,
+  contentController.updateContentById,
+);
+
 router.delete('/', authentication(), contentController.deleteContent);
 
 router.use((err, req, res, next) => {

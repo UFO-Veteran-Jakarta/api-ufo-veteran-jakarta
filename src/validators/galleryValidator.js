@@ -41,7 +41,7 @@ const checkRequiredFields = (req, res, next) => {
   if (!name && !image) {
     return res.status(400).json({
       status: 400,
-      message: 'Division name and image are required',
+      message: 'Gallery title and image are required',
     });
   }
 
@@ -49,18 +49,9 @@ const checkRequiredFields = (req, res, next) => {
 };
 
 const updateGalleryValidationRules = () => {
-  return [
-    check('name')
-      .optional()
-      .isString()
-      .trim()
-      .isLength({ max: 255 })
-      .withMessage('Division name must be no more than 255 characters'),
-    check('image')
-      .optional()
-      .isString()
-      .withMessage('Image must be a string (file path)'),
-  ];
+  return postGalleryValidationRules().map(
+    (validator) => {return validator.optional()}
+  );
 };
 
 const validate = (req, res, next) => {

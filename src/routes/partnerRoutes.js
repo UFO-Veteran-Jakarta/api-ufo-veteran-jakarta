@@ -28,7 +28,21 @@ router.get(
   partnerController.getPartnerById,
 );
 
+router.get(
+  '/:id',
+  partnerController.getPartnerById,
+);
+
 router.put(
+  '/',
+  authentication(),
+  checkUpdateFile('logo'),
+  postPartnerValidationRules(),
+  validate,
+  partnerController.updatePartnerById,
+);
+
+router.patch(
   '/',
   authentication(),
   checkUpdateFile('logo'),

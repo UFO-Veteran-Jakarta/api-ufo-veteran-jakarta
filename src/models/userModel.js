@@ -3,7 +3,7 @@ const { hash } = require('../helpers/bcrypt');
 
 exports.getAllUser = async () => {
   const res = await pool.query(
-    'SELECT * FROM users WHERE deleted_at IS NULL',
+    'SELECT username, created_at, updated_at FROM users WHERE deleted_at IS NULL',
   );
   return res.rows;
 };

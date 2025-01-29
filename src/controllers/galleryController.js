@@ -7,6 +7,7 @@ const {
   checkSlugExistsInDb,
   stageDataUpdateGalleryBySlug,
 } = require('../services/galleryService');
+const { getCategoryGalleryById } = require('../services/categoryGalleryService');
 const { buildResponse } = require('../utils/buildResponseGallery');
 const logger = require('../utils/logger');
 const { sendResponse } = require('../helpers/response');
@@ -19,6 +20,13 @@ exports.addGallery = async (req, res) => {
       req.body.title,
       checkSlugExistsInDb,
     );
+
+    const { category_galleries_id } = req.body;
+
+    const categoryGallery = await getCategoryGalleryById(category_galleries_id);
+    if (!categoryGallery) {
+      return sendResponse(res, 404, 'Category gallery not found');
+    }
 
     if (req.files?.image) {
       const imagePath = await uploadFileGallery(req.files.image);
@@ -87,11 +95,18 @@ exports.updateGalleryBySlug = async (req, res) => {
       return sendResponse(res, 404, 'Gallery not found');
     }
 
-    // Stage the update data payload before inserted into database
-    const [isUpdateData, updateData] = await stageDataUpdateGalleryBySlug(req);
-    if (!isUpdateData) {
-      return sendResponse(res, 400, 'No update data provided');
+    const { category_galleries_id } = req.body;
+    if (category_galleries_id) {
+      const categoryGallery = await getCategoryGalleryById(category_galleries_id);
+      
+      if (!categoryGallery) {
+        return sendResponse(res, 404, 'Category gallery not found');
+      }
     }
+
+    // Stage the update data payload before inserted into database
+    let updateData = await stageDataUpdateGalleryBySlug(req);
+    updateData = { ...updateData, ...req.body };
 
     // Update the data
     const updatedGallery = await updateGalleryBySlug(slug, oldData, updateData);

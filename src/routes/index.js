@@ -13,10 +13,12 @@ const categoriesRoutes = require('./categoriesRoutes');
 const galleryRoutes = require('./galleryRoutes');
 const categoryGalleryRoutes = require('./categoryGalleryRoutes');
 const articleRoutes = require('./articleRoutes');
+const userRoutes = require('./userRoutes');
 
 const router = express.Router();
 
 router.use('/', authRoutes);
+router.use('/users', userRoutes);
 router.use('/contents', contentRoutes);
 router.use('/events', eventRoutes);
 router.use('/partners', partnerRoutes);

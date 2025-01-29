@@ -1,4 +1,5 @@
 const pool = require('../config/database');
+const { doUpdateQueryById, executeQuery } = require('../utils/queryBuilder');
 
 exports.getAllContent = async () => {
   const res = await pool.query(
@@ -17,6 +18,13 @@ exports.getContentById = async (id) => {
   } catch (err) {
     return [];
   }
+};
+
+exports.getContentByIdParam = async function (id) {
+  const query =
+    'SELECT * FROM contents WHERE id = $1 AND deleted_at IS NULL;';
+  const values = [id];
+  return executeQuery(query, values);
 };
 
 exports.addContent = async (data) => {
@@ -42,6 +50,16 @@ exports.updateContent = async (id, link) => {
   );
 
   return res.rows;
+};
+
+exports.updateContentById = async function (id, data) {
+  try {
+    const res = await doUpdateQueryById(data, 'contents', id);
+    return res.rows[0];
+  } catch (error) {
+    console.error(`Error updating position with id ${id}:`, error);
+    throw error;
+  }
 };
 
 exports.deleteContentAll = async () => {
