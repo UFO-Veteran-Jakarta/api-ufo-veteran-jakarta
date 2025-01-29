@@ -6,6 +6,8 @@ const {
   deleteAchievement,
 } = require('../models/achievementsModel');
 
+const { updateFile } = require('../utils/uploadFile');
+
 exports.addAchievemnt = async (data) => {
   return addAchievement(data);
 };
@@ -27,6 +29,47 @@ exports.updateAchievement = async (id, data) => {
   return updateAchievement(id, data);
 };
 
+exports.updateAchievementById = async (id, oldData, updateData) => {
+  try {
+    const finalUpdateData = { ...updateData };
+
+    if (updateData.logo) {
+      const newLogoUrl = await updateFile(oldData.logo, updateData.logo);
+      finalUpdateData.logo = newLogoUrl;
+    }
+
+    const result = await updateAchievement(id, finalUpdateData);
+    return result;
+  } catch (error) {
+    console.error('Error updating achievement by ID:', error);
+    throw error;
+  }
+};
+
 exports.deleteAchievement = async (id) => {
   return deleteAchievement(id);
+};
+
+exports.StageDataUpdateAchievementById = async (req) => {
+  try {
+    const updateData = {};
+
+
+    if (req.body.name) {
+      updateData.name = req.body.name;
+    }
+
+    if (req.body.year) {
+      updateData.year = req.body.year;
+    }
+
+    if (req.files?.logo) {
+      updateData.logo = req.files.logo;
+    }
+
+    const hasUpdates = Object.keys(updateData).length > 0;
+    return [hasUpdates, updateData];
+  } catch (error) {
+    throw new Error(`Error staging update data: ${error.message}`);
+  }
 };

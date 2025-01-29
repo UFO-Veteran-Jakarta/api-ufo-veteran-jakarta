@@ -230,10 +230,10 @@ describe('Achievement Controller', () => {
     }, 7000);
   });
 
-  describe('GET /api/v1/achievements?id=id_achievement', () => {
+  describe('GET /api/v1/achievements/:id', () => {
 
     it('Should return 404 if achievement not found', async () => {
-      const res = await request(app).get('/api/v1/achievements?id=1');
+      const res = await request(app).get('/api/v1/achievements/2');
 
       validateErrorResponse(
         res,
@@ -256,7 +256,7 @@ describe('Achievement Controller', () => {
       const achievement = await createAchievement(token, achievementData);
 
       const res = await request(app).get(
-        `/api/v1/achievements?id=${achievement.body.data.id}`,
+        `/api/v1/achievements/${achievement.body.data.id}`,
       );
 
       expect(res.statusCode).toEqual(200);
@@ -269,7 +269,7 @@ describe('Achievement Controller', () => {
     }, 30000);
   });
 
-  describe('PUT /api/v1/achievements?id=id_achievement', () => {
+  describe('PATCH /api/v1/achievements/:id', () => {
     it('Should return 404 if achievement to update not found', async () => {
       const token = await authenticateUser();
 
@@ -302,7 +302,7 @@ describe('Achievement Controller', () => {
       const achievement = await createAchievement(token, achievementData);
 
       const res = await request(app)
-        .put(`/api/v1/achievements?id=${achievement.body.data.id}`)
+        .patch(`/api/v1/achievements/${achievement.body.data.id}`)
         .set('Cookie', `token=${token}`)
         .set('Authorization', `Bearer ${token}`)
         .field('name', achievementDataUpdated.name)
@@ -311,7 +311,9 @@ describe('Achievement Controller', () => {
 
       expect(res.statusCode).toEqual(200);
       expect(res.body.status).toEqual(200);
-      expect(res.body.message).toEqual('Successfully Update Achievement');
+      expect(res.body.message).toEqual(
+        'Successfully update achievement name and year and logo',
+      );
     }, 30000);
   });
 

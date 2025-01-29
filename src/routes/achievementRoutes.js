@@ -4,6 +4,7 @@ const achievementController = require('../controllers/achievementController');
 const {
   postAchievementValidationRules,
   validate,
+  updateAchievementValidationRules,
 } = require('../validators/achievementValidator');
 
 const { authentication } = require('../middlewares/authMiddleware');
@@ -29,6 +30,11 @@ router.get(
   achievementController.getAchievementById,
 );
 
+router.get(
+  '/:id',
+  achievementController.getAchievementByIdParams,
+);
+
 router.put(
   '/',
   authentication(),
@@ -36,6 +42,15 @@ router.put(
   postAchievementValidationRules(),
   validate,
   achievementController.updateAchievementById,
+);
+
+router.patch(
+  '/:id',
+  authentication(),
+  checkUpdateFile('logo'),
+  updateAchievementValidationRules(),
+  validate,
+  achievementController.updateAchievementByIdParams,
 );
 
 router.delete(
