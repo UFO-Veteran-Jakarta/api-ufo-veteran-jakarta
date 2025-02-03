@@ -8,6 +8,7 @@ const workProgramRoutes = require('./workProgramRoutes');
 const latestActivityRoutes = require('./latestActivityRoutes');
 const divisionRoutes = require('./divisionRoutes');
 const positionRoutes = require('./positionRoutes');
+const pageRoutes = require('./pageRoutes');
 
 const router = express.Router();
 
@@ -20,5 +21,6 @@ router.use('/work-programs', workProgramRoutes);
 router.use('/latest-activities', latestActivityRoutes);
 router.use('/divisions', divisionRoutes);
 router.use('/positions', positionRoutes);
+router.use('/pages', pageRoutes);
 
 module.exports = router;
