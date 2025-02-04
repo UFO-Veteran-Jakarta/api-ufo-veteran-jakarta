@@ -1,41 +1,5 @@
 const pool = require('../config/database');
 
-const {
-  doUpdateQueryBySlug,
-} = require('../utils/queryBuilder');
-
-function createInsertQuery(data, tableName) {
-  const fields = Object.keys(data);
-  const values = Object.values(data);
-  const placeholders = fields.map((_, index) => `$${index + 1}`);
-
-  const query = `
-    WITH inserted_article AS (
-      INSERT INTO ${tableName} (${fields.join(', ')})
-      VALUES (${placeholders.join(', ')})
-      RETURNING *
-    )
-    SELECT 
-      articles.id AS article_id, 
-      articles.slug, 
-      articles.title,
-      articles.author, 
-      articles.cover, 
-      articles.cover_landscape, 
-      articles.snippets,
-      articles.body,
-      articles.created_at, 
-      articles.updated_at, 
-      articles.deleted_at,
-      categories.id AS category_id, 
-      categories.name AS category_name 
-    FROM inserted_article AS articles
-    JOIN categories ON articles.category_id = categories.id;
-  `;
-
-  return { query, values };
-}
-
 async function getPageBySlug(slug) {
   try {
     const res = await pool.query(
@@ -92,7 +56,7 @@ async function updatePageSectionBySlug(slug, section) {
       `,
       [slug, section.section_key, section.content],
     );
-    
+
     return res.rows[0];
   } catch (error) {
     console.error(`Error updating article with slug ${slug}:`, error);

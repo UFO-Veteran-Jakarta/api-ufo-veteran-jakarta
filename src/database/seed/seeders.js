@@ -197,4 +197,17 @@ exports.seed = async () => {
     ('3', 'hati-hati', 'Hati-Hati', '/images/galleries/Salina dan Ucup_Hati-Hati - sal.jpg', 'Sebelum berbicara, tanyakan pada diri sendiri: Apakah kata-kataku ini membangun, atau malah menghancurkan? Marilah kita jaga lisan kita, sebarkan kebaikan dan saling menguatkan melalui kata-kata yang indah. Jadilah pahlawan kata-kata, gunakan kekuatanmu untuk menyebarkan kedamaian dan cinta di dunia.', 'Salina Siti Hanifa & Yuwsuf Muhammad Amien', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
     ('3', 'unseent-part-1', 'UNSEeN/T Part 1', '/images/galleries/HENOSEP_UNSEeN_T PART 1.jpg', '"""Kaka, Sudah mau pulang kah? Kau sering-sering datang lihat kita di siniee biar kau bisa bantu-bantu kita bersekolah. Kau lihat temanku baju putih, semangat sekali toh hehe"""', 'Herlina Septiani', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL);
   `);
+
+  await pool.query(`
+    INSERT INTO pages (slug, title, full_code, created_at, updated_at)
+    VALUES
+    ('home-page', 'Home Page', '<html><div id="some-key">Some Content</div><div id="another-key">Another Content</div></html>', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+  `);
+
+  await pool.query(`
+    INSERT INTO page_sections (page_id, section_key, content, created_at, updated_at)
+    VALUES
+    (1, 'some-key', 'Some Content', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    (1, 'another-key', 'Another Content', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+  `);
 };
