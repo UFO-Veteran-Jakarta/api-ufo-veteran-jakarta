@@ -61,3 +61,20 @@ exports.createSlugDivision = async (
     throw new Error(`Failed to generate slug: ${error.message}`);
   }
 };
+
+exports.slugToTitle = (slug) => {
+  // Decode any HTML entities
+  let decodedTitle = he.decode(slug);
+
+  // Replace hyphens with spaces & remove extra unwanted characters
+  decodedTitle = decodedTitle
+    .replace(/-/g, ' ') // Convert hyphens to spaces
+    .replace(/[^a-zA-Z0-9\s]/g, '') // Remove special characters
+    .trim();
+
+  // Capitalize each word
+  return decodedTitle
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+};

@@ -59,7 +59,7 @@ async function updatePageSectionBySlug(slug, section) {
 
     return res.rows[0];
   } catch (error) {
-    console.error(`Error updating article with slug ${slug}:`, error);
+    console.error(`Error upserting page with slug ${slug}:`, error);
     throw error;
   }
 }
