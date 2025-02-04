@@ -14,7 +14,8 @@ exports.getPageBySlug = async (slug) => {
       result = await scraper.webScrap(slug);
     } else {
       // decide cache hit or miss
-      result = await scraper.cacheLookup(result);
+      const cacheLookup = await scraper.cacheLookup(result);
+      result = cacheLookup.pages;
     }
 
     return result;
@@ -37,16 +38,17 @@ exports.getPageSectionBySlug = async (slug) => {
 
 exports.updatePageSectionBySlug = async (slug, data) => {
   try {
-    const results = [];
+    const htmlContent = await scraper.fetchPageContent(slug);
+    const sections = data.sections;
 
-    await scraper.updatePageContent(sections);
+    const updatedHtml = await scraper.htmlContentUpdate(
+      htmlContent, sections,
+    );
 
-    for (const section of data?.sections) {
-      const result = await updatePageSectionBySlug(slug, section);
-      results.push(result);
-    }
-
-    const formattedResult = formatPageSections(results)
+    const updatedPage = await scraper.updateScrapedData(
+      slug, updatedHtml, sections,
+    );
+    const formattedResult = formatPageSections(updatedPage.pageSections);
 
     return formattedResult;
   } catch (error) {

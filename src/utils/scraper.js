@@ -2,13 +2,9 @@ const fetch = require('node-fetch');
 const cheerio = require('cheerio');
 const pool = require('../config/database');
 const scraperConfig = require('../config/scraper');
-const pageModel = require('../models/pageModel');
 const { slugToTitle } = require('../helpers/slug');
 
-/**
- * Scrapes the web page content based on the given slug.
- */
-const webScrap = async (slug, postJobAction = 'store') => {
+const fetchPageContent = async (slug) => {
   try {
     let targetSlug = slug;
     if (slug === 'home') {
@@ -16,13 +12,29 @@ const webScrap = async (slug, postJobAction = 'store') => {
     }
 
     // web scrap
-    const response = await fetch(`${scraperConfig.baseUrl}/${targetSlug}`);
+    const targetUrl = `${scraperConfig.baseUrl}/${targetSlug}`;
+    console.log('FETCHING', targetUrl);
+    const response = await fetch(targetUrl);
     if (!response.ok) {
       console.error(`Failed to fetch ${slug}: ${response.status} ${response.statusText}`);
       return null;
     }
 
     const html = await response.text();
+
+    return html;
+  } catch (error) {
+    console.error();
+    return null;
+  }
+};
+
+/**
+ * Scrapes the web page content based on the given slug.
+ */
+const webScrap = async (slug, postJobAction = 'store') => {
+  try {
+    const html = await fetchPageContent(slug);
 
     // Extract page sections
     const sections = await pageSectionScrap(html);
@@ -96,7 +108,7 @@ const cacheLookup = async (result) => {
     }
     
     console.log('CACHE HIT');
-    return result;
+    return { pages: result };
   } catch (error) {
     console.error('Error while cache lookup:', error);
   }
@@ -164,20 +176,33 @@ const updateScrapedData = async (slug, htmlContent, sections) => {
     const pageId = updatedPage.rows[0].id;
 
     // Step 2: Update existing `page_sections`
+    const updatedPageSections = [];
     await Promise.all(
-      sections.map((section) =>
-        pool.query(`
-          UPDATE page_sections SET
+      sections.map(async (section) => {
+        const res = await pool.query(`
+          UPDATE page_sections ps SET
             content = $3,
             updated_at = $4
-          WHERE page_id = $1 AND section_key = $2
+          WHERE ps.page_id = $1 AND ps.section_key = $2
+          RETURNING 
+            ps.page_id AS page_id,
+            (SELECT slug FROM pages WHERE id = ps.page_id) AS page_slug,
+            (SELECT title FROM pages WHERE id = ps.page_id) AS page_title,
+            ps.section_key AS sections_section_key,
+            ps.content AS sections_content,
+            ps.created_at AS sections_created_at,
+            ps.updated_at AS sections_updated_at
         `, [pageId, section.section_key, section.content, NOW],
-        )
-      )
+        );
+        
+        if (res.rows.length > 0) {
+          updatedPageSections.push(...res.rows);
+        }
+      })
     );
 
     // Step 3: Insert new `page_sections` if they don’t exist
-    await pool.query(`
+    const newPageSections = await pool.query(`
       INSERT INTO page_sections (page_id, section_key, content, updated_at)
       SELECT $1, unnest($2::text[]), unnest($3::text[]), unnest($4::timestamp[])
       WHERE NOT EXISTS (
@@ -185,6 +210,14 @@ const updateScrapedData = async (slug, htmlContent, sections) => {
         WHERE page_sections.page_id = $1 
         AND page_sections.section_key = ANY($2)
       )
+      RETURNING 
+        page_sections.page_id AS page_id,
+        (SELECT slug FROM pages WHERE id = page_sections.page_id) AS page_slug,
+        (SELECT title FROM pages WHERE id = page_sections.page_id) AS page_title,
+        page_sections.section_key AS sections_section_key,
+        page_sections.content AS sections_content,
+        page_sections.created_at AS sections_created_at,
+        page_sections.updated_at AS sections_updated_at
     `, [
         pageId,
         sections.map((s) => s.section_key),
@@ -193,7 +226,14 @@ const updateScrapedData = async (slug, htmlContent, sections) => {
       ],
     );
 
-    return updatedPage.rows[0];
+    if (newPageSections.rows.length > 0) {
+      updatedPageSections.push(...newPageSections.rows);
+    }
+
+    return {
+      pages: updatedPage.rows[0],
+      pageSections: updatedPageSections,
+    };
   } catch (error) {
     console.error('Error while updating scraped data:', error);
     return null;
@@ -201,7 +241,10 @@ const updateScrapedData = async (slug, htmlContent, sections) => {
 };
 
 module.exports = {
+  fetchPageContent,
   webScrap,
   pageSectionScrap,
   cacheLookup,
+  updateScrapedData,
+  htmlContentUpdate,
 };
