@@ -1,13 +1,5 @@
 const pool = require('../config/database');
 
-exports.createUser = async () => {
-  await pool.query(`INSERT INTO myschema.users (username, password, created_at, updated_at, deleted_at)
-      VALUES ('john_doe', 'securepassword123', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL);`);
-};
-exports.deleteUser = async () => {
-  await pool.query('DELETE FROM myschema.users');
-};
-
 exports.createTable = async () => {
   await pool.query(`
       CREATE TABLE IF NOT EXISTS myschema.users (
@@ -127,7 +119,57 @@ exports.createTable = async () => {
     )
     `,
   );
+  await pool.query(
+    `
+    CREATE TABLE IF NOT EXISTS myschema.members(
+      id SERIAL PRIMARY KEY,
+      division_id INT NOT NULL,
+      position_id INT NOT NULL,
+      name VARCHAR(255) NOT NULL,
+      image TEXT NOT NULL,
+      angkatan VARCHAR(255),
+      instagram VARCHAR(255),
+      linkedin VARCHAR(255),
+      whatsapp VARCHAR(255),
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
+      updated_at TIMESTAMP,
+      deleted_at TIMESTAMP
+    )
+  `,
+  );
+  await pool.query(
+    `
+    CREATE TABLE IF NOT EXISTS myschema.categories(
+      id SERIAL PRIMARY KEY,
+      name varchar(100) NOT NULL,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP ,
+      deleted_at TIMESTAMP
+    )
+    `,
+  );
+
+  await pool.query(
+    `
+    CREATE TABLE IF NOT EXISTS articles(
+      id serial PRIMARY KEY,
+      category_id int NOT NULL,
+      slug varchar(255) NOT NULL UNIQUE,
+      title varchar(255) NOT NULL,
+      author varchar(255) NOT NULL,
+      cover varchar(255),
+      cover_landscape varchar(255),
+      snippets text,
+      body text NOT NULL,
+      created_at timestamp DEFAULT CURRENT_TIMESTAMP,
+      updated_at timestamp DEFAULT CURRENT_TIMESTAMP,
+      deleted_at timestamp,
+      FOREIGN KEY (category_id) REFERENCES categories (id)
+    )
+    `,
+  );
 };
+
 exports.dropTable = async () => {
   await pool.query('DROP TABLE IF EXISTS myschema.users;');
   await pool.query('DROP TABLE IF EXISTS myschema.contents;');
@@ -138,4 +180,7 @@ exports.dropTable = async () => {
   await pool.query('DROP TABLE IF EXISTS myschema.latest_activities;');
   await pool.query('DROP TABLE IF EXISTS myschema.divisions;');
   await pool.query('DROP TABLE IF EXISTS myschema.positions;');
+  await pool.query('DROP TABLE IF EXISTS myschema.members;');
+  await pool.query('DROP TABLE IF EXISTS myschema.categories');
+  await pool.query('DROP TABLE IF EXISTS articles');
 };

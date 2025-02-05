@@ -45,7 +45,15 @@ exports.getAllWorkPrograms = async (req, res, next) => {
 
 exports.getWorkProgramById = async (req, res) => {
   try {
-    const { id } = req.query;
+    let id;
+    if (req.query?.id) {
+      id = req.query.id;
+    }
+
+    if (req.params?.id) {
+      id = req.params.id;
+    }
+
     const workProgram = await getWorkProgramById(id);
 
     if (!workProgram) {
@@ -71,7 +79,7 @@ exports.updateWorkProgramById = async (req, res) => {
       return sendResponse(res, 404, 'Work Program not found');
     }
 
-    if (req.file?.image) {
+    if (req.files?.image) {
       const imageUpload = await uploadSingle(req.files.image, 'image');
       req.body.image = imageUpload.secure_url;
     }

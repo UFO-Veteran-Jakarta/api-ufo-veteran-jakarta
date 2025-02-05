@@ -65,7 +65,7 @@ exports.updatePartner = async (id, data) => {
   });
 
   const query = `
-    UPDATE events
+    UPDATE partners
     SET ${fields.join(', ')}, updated_at = NOW()
     WHERE id = $${index}
     RETURNING *;

@@ -5,6 +5,7 @@ const {
   getAllPartners,
   getPartnerById,
   updatePartner,
+  deletePartner,
 } = require('../services/partnerService');
 const { uploadSingle } = require('../utils/uploadFile');
 
@@ -40,7 +41,15 @@ exports.getAllPartners = async (req, res, next) => {
 
 exports.getPartnerById = async (req, res) => {
   try {
-    const { id } = req.query;
+    let id;
+    if (req.query?.id) {
+      id = req.query.id;
+    }
+
+    if (req.params?.id) {
+      id = req.params.id;
+    }
+
     const partner = await getPartnerById(id);
 
     if (!partner) {
@@ -97,6 +106,8 @@ exports.deletePartnerById = async (req, res) => {
       logger.error(`Partner with id ${id} not found`);
       return sendResponse(res, 404, 'Partner not found');
     }
+
+    await deletePartner(id);
 
     logger.info(`Successfully Delete Partner with id ${id}`);
     return sendResponse(res, 200, 'Successfully Delete Partner');

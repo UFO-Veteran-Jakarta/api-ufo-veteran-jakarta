@@ -54,7 +54,17 @@ exports.getAllLatestActivities = async (req, res, next) => {
 
 exports.getLatestActivityById = async (req, res) => {
   try {
-    const { id } = req.query;
+    let id;
+    if (req.query?.id) {
+      console.log('ini query');
+      id = req.query.id;
+    }
+
+    if (req.params?.id) {
+      console.log('ini params');
+      id = req.params.id;
+    }
+
     const latestActivity = await getLatestActivityById(id);
 
     if (!latestActivity) {
