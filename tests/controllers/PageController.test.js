@@ -51,12 +51,12 @@ const testUnauthorizedAccess = async (endpoint, method = 'post') => {
   expect(res.body.message).toBeDefined();
 };
 
-const slug = 'home-page';
-const title = 'Home Page';
+const slug = 'home';
+const title = 'Home';
 const updateData = {
   sections: [
     {
-      section_key: 'some-key',
+      section_key: 'hero_button_section',
       content: 'Test Content',
     },
   ],

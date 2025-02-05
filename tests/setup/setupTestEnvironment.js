@@ -1,5 +1,5 @@
 const pool = require('../../src/config/database');
-const migrate = require('../../src/migration/users');
+const migrate = require('../../src/database/init/script');
 
 beforeAll(async () => {
   await migrate.createTable();

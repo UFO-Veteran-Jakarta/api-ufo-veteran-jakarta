@@ -152,6 +152,31 @@ exports.createTable = async () => {
     )
   `);
   await pool.query(`
+    CREATE TABLE IF NOT EXISTS categories(
+      id SERIAL PRIMARY KEY,
+      name varchar(100) NOT NULL,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      deleted_at TIMESTAMP
+    )
+  `);
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS articles(
+      id SERIAL PRIMARY KEY,
+      category_id SERIAL NOT NULL,
+      slug varchar(255) NOT NULL,
+      title varchar(255) NOT NULL,
+      author varchar(255) NOT NULL,
+      cover varchar(255),
+      cover_landscape varchar(255),
+      snippets text,
+      body text NOT NULL,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      deleted_at TIMESTAMP
+    )
+  `);
+  await pool.query(`
     CREATE TABLE IF NOT EXISTS pages(
       id SERIAL PRIMARY KEY,
       slug text NOT NULL,
@@ -186,6 +211,8 @@ exports.dropTable = async () => {
   await pool.query('DROP TABLE IF EXISTS category_galleries');
   await pool.query('DROP TABLE IF EXISTS galleries');
   await pool.query('DROP TABLE IF EXISTS members');
+  await pool.query('DROP TABLE IF EXISTS articles');
+  await pool.query('DROP TABLE IF EXISTS categories');
   await pool.query('DROP TABLE IF EXISTS pages');
   await pool.query('DROP TABLE IF EXISTS page_sections');
 };
