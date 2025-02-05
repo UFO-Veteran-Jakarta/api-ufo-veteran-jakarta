@@ -14,6 +14,7 @@ const galleryRoutes = require('./galleryRoutes');
 const categoryGalleryRoutes = require('./categoryGalleryRoutes');
 const articleRoutes = require('./articleRoutes');
 const userRoutes = require('./userRoutes');
+const pageRoutes = require('./pageRoutes');
 
 const router = express.Router();
 
@@ -32,5 +33,6 @@ router.use('/category-article', categoriesRoutes);
 router.use('/galleries', galleryRoutes);
 router.use('/category-gallery', categoryGalleryRoutes);
 router.use('/articles', articleRoutes);
+router.use('/pages', pageRoutes);
 
 module.exports = router;

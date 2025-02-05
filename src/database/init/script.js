@@ -56,7 +56,7 @@ exports.createTable = async () => {
       name varchar(255) NOT NULL,
       logo text NOT NULL,
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-      updated_at TIMESTAMP,
+      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       deleted_at TIMESTAMP
     )
   `);
@@ -67,7 +67,7 @@ exports.createTable = async () => {
       name varchar(255) NOT NULL,
       year varchar(255) NOT NULL,
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-      updated_at TIMESTAMP,
+      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       deleted_at TIMESTAMP
     )
   `);
@@ -78,7 +78,7 @@ exports.createTable = async () => {
       title varchar(255) NOT NULL,
       description text NOT NULL,
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-      updated_at TIMESTAMP,
+      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       deleted_at TIMESTAMP
     )
   `);
@@ -88,7 +88,7 @@ exports.createTable = async () => {
       image text NOT NULL,
       title varchar(255) NOT NULL,
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-      updated_at TIMESTAMP,
+      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       deleted_at TIMESTAMP
     )
   `);
@@ -99,7 +99,7 @@ exports.createTable = async () => {
       name varchar(255) NOT NULL,
       image text NOT NULL,
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-      updated_at TIMESTAMP,
+      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       deleted_at TIMESTAMP
     )
   `);
@@ -108,8 +108,92 @@ exports.createTable = async () => {
       id SERIAL PRIMARY KEY,
       name varchar(255) NOT NULL,
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-      updated_at TIMESTAMP,
+      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       deleted_at TIMESTAMP
+    )
+  `);
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS category_galleries(
+      id SERIAL PRIMARY KEY,
+      name varchar(255),
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      deleted_at TIMESTAMP
+    )
+  `);
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS galleries(
+      id SERIAL PRIMARY KEY,
+      slug varchar(255) NOT NULL,
+      title varchar(255),
+      category_galleries_id SERIAL,
+      image varchar(255),
+      snippet text,
+      author varchar(255),
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      deleted_at TIMESTAMP
+    )
+  `);
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS members(
+      id SERIAL PRIMARY KEY,
+      division_id SERIAL,
+      position_id SERIAL,
+      name varchar(255) NOT NULL,
+      image text NOT NULL,
+      angkatan varchar(255),
+      instagram varchar(255),
+      linkedin varchar(255),
+      whatsapp varchar(255),
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      deleted_at TIMESTAMP
+    )
+  `);
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS categories(
+      id SERIAL PRIMARY KEY,
+      name varchar(100) NOT NULL,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      deleted_at TIMESTAMP
+    )
+  `);
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS articles(
+      id SERIAL PRIMARY KEY,
+      category_id SERIAL NOT NULL,
+      slug varchar(255) NOT NULL,
+      title varchar(255) NOT NULL,
+      author varchar(255) NOT NULL,
+      cover varchar(255),
+      cover_landscape varchar(255),
+      snippets text,
+      body text NOT NULL,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      deleted_at TIMESTAMP
+    )
+  `);
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS pages(
+      id SERIAL PRIMARY KEY,
+      slug text NOT NULL,
+      title text NOT NULL,
+      full_code text NOT NULL,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )
+  `);
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS page_sections(
+      id SERIAL PRIMARY KEY,
+      page_id SERIAL,
+      section_key text,
+      content text,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )
   `);
 };
@@ -124,4 +208,11 @@ exports.dropTable = async () => {
   await pool.query('DROP TABLE IF EXISTS latest_activities');
   await pool.query('DROP TABLE IF EXISTS divisions');
   await pool.query('DROP TABLE IF EXISTS positions');
+  await pool.query('DROP TABLE IF EXISTS category_galleries');
+  await pool.query('DROP TABLE IF EXISTS galleries');
+  await pool.query('DROP TABLE IF EXISTS members');
+  await pool.query('DROP TABLE IF EXISTS articles');
+  await pool.query('DROP TABLE IF EXISTS categories');
+  await pool.query('DROP TABLE IF EXISTS pages');
+  await pool.query('DROP TABLE IF EXISTS page_sections');
 };

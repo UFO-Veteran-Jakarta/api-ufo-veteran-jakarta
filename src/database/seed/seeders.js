@@ -3,13 +3,13 @@ const pool = require('../../config/database');
 exports.seed = async () => {
   // Users seeder
   await pool.query(`
-    INSERT INTO myschema.users (username, password, created_at, updated_at, deleted_at)
+    INSERT INTO users (username, password, created_at, updated_at, deleted_at)
     VALUES ('john_doe', 'securepassword123', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL)
   `);
 
   // Contents seeder
   await pool.query(`
-    INSERT INTO myschema.contents (link, created_at, updated_at, deleted_at)
+    INSERT INTO contents (link, created_at, updated_at, deleted_at)
     VALUES 
     ('https://example.com/content1', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
     ('https://example.com/content2', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
@@ -20,7 +20,7 @@ exports.seed = async () => {
 
   // Events seeder
   await pool.query(`
-    INSERT INTO myschema.events (
+    INSERT INTO events (
       slug, cover, cover_landscape, name, start_event_date, end_event_date,
       start_event_time, end_event_time, registration_start_date, registration_end_date,
       registration_start_time, registration_end_time, body, snippets, link_registration, location
@@ -70,7 +70,7 @@ exports.seed = async () => {
 
   // Partners seeder
   await pool.query(`
-    INSERT INTO myschema.partners (name, logo, created_at, updated_at, deleted_at)
+    INSERT INTO partners (name, logo, created_at, updated_at, deleted_at)
     VALUES 
     ('Boya Mic', '/images/partners/boya.png', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
     ('Zhiyun Tech', '/images/partners/Zhiyun-tech.png', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
@@ -88,7 +88,7 @@ exports.seed = async () => {
 
   // Achievements seeder
   await pool.query(`
-    INSERT INTO myschema.achievements (logo, name, year, created_at, updated_at, deleted_at)
+    INSERT INTO achievements (logo, name, year, created_at, updated_at, deleted_at)
     VALUES 
     ('/images/achievements/award1.png', 'Best Digital Innovation', '2023', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
     ('/images/achievements/award2.png', 'Technology Excellence Award', '2022', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
@@ -99,7 +99,7 @@ exports.seed = async () => {
 
   // Work Programs seeder
   await pool.query(`
-    INSERT INTO myschema.work_programs (image, title, description, created_at, updated_at, deleted_at)
+    INSERT INTO work_programs (image, title, description, created_at, updated_at, deleted_at)
     VALUES 
     ('/images/programs/mentorship.png', 'Tech Mentorship Program', 'Connect experienced developers with beginners for guided learning and growth', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
     ('/images/programs/workshop.png', 'Monthly Tech Workshops', 'Regular hands-on workshops covering various technology topics', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
@@ -110,7 +110,7 @@ exports.seed = async () => {
 
   // Latest Activities seeder
   await pool.query(`
-    INSERT INTO myschema.latest_activities (image, title, created_at, updated_at, deleted_at)
+    INSERT INTO latest_activities (image, title, created_at, updated_at, deleted_at)
     VALUES 
     ('/images/activities/workshop1.jpg', 'AI Workshop Series Completed', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
     ('/images/activities/hackathon1.jpg', 'Annual Hackathon Success', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
@@ -121,7 +121,7 @@ exports.seed = async () => {
 
   // Divisions seeder
   await pool.query(`
-    INSERT INTO myschema.divisions (slug, name, image, created_at, updated_at, deleted_at)
+    INSERT INTO divisions (slug, name, image, created_at, updated_at, deleted_at)
     VALUES 
     ('ufo-veteran-jakarta', 'UFO Veteran Jakarta', '/images/divisions/Ufo-Logo.png', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
     ('human-resources-development', 'Human Resources Development', '/images/divisions/hrd-icon.svg', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
@@ -133,7 +133,7 @@ exports.seed = async () => {
 
   // Positions seeder
   await pool.query(`
-    INSERT INTO myschema.positions (name, created_at, updated_at, deleted_at)
+    INSERT INTO positions (name, created_at, updated_at, deleted_at)
     VALUES 
     ('Staff of Creative Production', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
     ('Event Planner', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
@@ -156,7 +156,7 @@ exports.seed = async () => {
 
   // Members seeder
   await pool.query(`
-    INSERT INTO myschema.members (division_id, position_id, name, image, angkatan, instagram, linkedin, whatsapp, created_at, updated_at, deleted_at) VALUES 
+    INSERT INTO members (division_id, position_id, name, image, angkatan, instagram, linkedin, whatsapp, created_at, updated_at, deleted_at) VALUES 
     (3, 1, 'Yuwsuf Muhammad Amien', '/images/members/Yuwsuf-Muhammad-Amien.png', 'UFO.022.IX.022', 'yuwsufamien', 'yuwsufamien', '0812-1234-5678', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
     (3, 4, 'Ananda Divana', '/images/members/Ananda-Divana.png', 'UFO.023.X.001', 'yuwsufamien', 'yuwsufamien', '0812-1234-5678', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
     (3, 5, 'Ananda Ryo Bastian Harefa', '/images/members/RYO.png', 'UFO.023.X.002', 'yuwsufamien', 'yuwsufamien', '0812-1234-5678', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
@@ -181,14 +181,14 @@ exports.seed = async () => {
 
   // Category Gallery seeder
   await pool.query(`
-    INSERT INTO myschema.category_galleries (name, created_at, updated_at, deleted_at)
+    INSERT INTO category_galleries (name, created_at, updated_at, deleted_at)
     VALUES
     ('Fotografi', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
     ('Desain Grafis', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL);
   `);
 
   await pool.query(`
-    INSERT INTO myschema.galleries (category_galleries_id, slug, title, image, snippet, author, created_at, updated_at, deleted_at)
+    INSERT INTO galleries (category_galleries_id, slug, title, image, snippet, author, created_at, updated_at, deleted_at)
     VALUES
     ('3', 'lihat-lebih-dalam', 'Lihat Lebih Dalam', '/images/galleries/lihat-lebih-dalam.png', 'Bukan mereka, kaulah Monsternya. Buka matamu, lihat lebih dalam, kesadaran itu menyelamatkanmu.', 'Ananda Triaji Pamungkas', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
     ('3', 'sahabat-kecil', 'Sahabat Kecil', '/images/galleries/Giras Agung Jagratara_Sahabat Kecil.JPG', 'Sahabat kecil mempunyai arti yang sangat penting dalam kehidupan kita. Kita tumbuh bersama-sama dengan melewati berbagai fase, saling bertukar cerita dan tentu saja moment itulah yang akan dirindukan ketika kita sama-sama tumbuh dewasa.', 'Giras Agung Jagratara', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
@@ -196,5 +196,18 @@ exports.seed = async () => {
     ('3', 'langkah-menuju-puncak', 'Langkah Menuju Puncak', '/images/galleries/Moh. Alfariz_Langkah Menuju Puncak.png', 'Seorang ayah, meskipun terkadang perjuangannya tak disadari, setiap tindakannya dijalani dengan cinta yang mendalam dan tekad yang kuat untuk melihat anak-anaknya tumbuh bahagia dan berhasil mencapai puncak kesuksesan.', 'Moh. Alfariz', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
     ('3', 'hati-hati', 'Hati-Hati', '/images/galleries/Salina dan Ucup_Hati-Hati - sal.jpg', 'Sebelum berbicara, tanyakan pada diri sendiri: Apakah kata-kataku ini membangun, atau malah menghancurkan? Marilah kita jaga lisan kita, sebarkan kebaikan dan saling menguatkan melalui kata-kata yang indah. Jadilah pahlawan kata-kata, gunakan kekuatanmu untuk menyebarkan kedamaian dan cinta di dunia.', 'Salina Siti Hanifa & Yuwsuf Muhammad Amien', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
     ('3', 'unseent-part-1', 'UNSEeN/T Part 1', '/images/galleries/HENOSEP_UNSEeN_T PART 1.jpg', '"""Kaka, Sudah mau pulang kah? Kau sering-sering datang lihat kita di siniee biar kau bisa bantu-bantu kita bersekolah. Kau lihat temanku baju putih, semangat sekali toh hehe"""', 'Herlina Septiani', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL);
+  `);
+
+  await pool.query(`
+    INSERT INTO pages (slug, title, full_code, created_at, updated_at)
+    VALUES
+    ('home-page', 'Home Page', '<html><div id="some-key">Some Content</div><div id="another-key">Another Content</div></html>', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+  `);
+
+  await pool.query(`
+    INSERT INTO page_sections (page_id, section_key, content, created_at, updated_at)
+    VALUES
+    (1, 'some-key', 'Some Content', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    (1, 'another-key', 'Another Content', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
   `);
 };
