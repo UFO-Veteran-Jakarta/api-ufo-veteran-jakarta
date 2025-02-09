@@ -1,30 +1,54 @@
-const fetch = require('node-fetch');
 const cheerio = require('cheerio');
 const pool = require('../config/database');
 const scraperConfig = require('../config/scraper');
 const { slugToTitle } = require('../helpers/slug');
+const puppeteer = require('puppeteer-core');
 
 const fetchPageContent = async (slug) => {
+  let browser;
   try {
     let targetSlug = slug;
     if (slug === 'home') {
       targetSlug = '';
     }
 
-    // web scrap
-    const targetUrl = `${scraperConfig.baseUrl}/${targetSlug}`;
-    console.log('FETCHING', targetUrl);
-    const response = await fetch(targetUrl);
-    if (!response.ok) {
-      console.error(`Failed to fetch ${slug}: ${response.status} ${response.statusText}`);
-      return null;
-    }
+    browser = await puppeteer.launch({
+      headless: true,
+      executablePath: scraperConfig.browserExecutable,
+      args: [
+        '--no-sandbox', '--disable-setuid-sandbox', '--headless',
+        '--disable-gpu', '--disable-dev-shm-usage', '--single-process',
+        '--disable-background-networking', '--disable-background-timer-throttling',
+        '--disable-extensions', '--disable-software-rasterizer',
+      ],
+    });
 
-    const html = await response.text();
+    const page = await browser.newPage();
+
+    const baseUrl = scraperConfig.baseUrl;
+    await page.goto(`${baseUrl}/${targetSlug}`, {
+      waitUntil: 'networkidle0',
+    })
+    let html = await page.content();
+    html = html.replace(
+      '</head>',
+      `
+        <base href="${baseUrl}" target="_blank" />
+      </head>`,
+    );
+    html = html.replace(/href="\/_next\//g, `href="${baseUrl}/_next/`);
+
+    await browser.close();
 
     return html;
   } catch (error) {
-    console.error();
+    if (browser) {
+      console.log('Browser instance closed');
+      await browser.close();
+    } else {
+      console.log('No browser instance found');
+    }
+    console.error('Error while fetching page content:', error);
     return null;
   }
 };
@@ -36,7 +60,6 @@ const webScrap = async (slug, postJobAction = 'store') => {
   try {
     const html = await fetchPageContent(slug);
 
-    // Extract page sections
     const sections = await pageSectionScrap(html);
 
     // Upsert separation to prevent indexing exhaustion
