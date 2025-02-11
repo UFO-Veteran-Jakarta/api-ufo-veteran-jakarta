@@ -17,9 +17,10 @@ const fetchPageContent = async (slug) => {
       executablePath: scraperConfig.browserExecutable,
       args: [
         '--no-sandbox', '--disable-setuid-sandbox', '--headless',
-        '--disable-gpu', '--disable-dev-shm-usage', '--single-process',
+        '--disable-gpu', '--disable-dev-shm-usage',
         '--disable-background-networking', '--disable-background-timer-throttling',
         '--disable-extensions', '--disable-software-rasterizer',
+        '--disk-cache-dir=/tmp/chrome-cache', '--user-data-dir=/tmp/chrome-profile',
       ],
     });
 
@@ -30,6 +31,7 @@ const fetchPageContent = async (slug) => {
     
     await page.goto(`${baseUrl}/${targetSlug}`, {
       waitUntil: 'networkidle0',
+      timeout: 60_000,
     })
     let html = await page.content();
     html = html.replace(
