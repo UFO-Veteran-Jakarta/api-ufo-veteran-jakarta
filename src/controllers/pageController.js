@@ -66,6 +66,13 @@ exports.updatePageSectionBySlug = async (req, res) => {
     }
 
     const updatedPage = await updatePageSectionBySlug(slug, req.body);
+    if (!updatedPage) {
+      return sendResponse(
+        res,
+        500,
+        `Failed to update ${slug} page section`,
+      );
+    }
 
     logger.info(`Successfully update page section with slug ${slug}`);
     return sendResponse(

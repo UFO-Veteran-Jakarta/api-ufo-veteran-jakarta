@@ -17,17 +17,21 @@ const fetchPageContent = async (slug) => {
       executablePath: scraperConfig.browserExecutable,
       args: [
         '--no-sandbox', '--disable-setuid-sandbox', '--headless',
-        '--disable-gpu', '--disable-dev-shm-usage', '--single-process',
+        '--disable-gpu', '--disable-dev-shm-usage',
         '--disable-background-networking', '--disable-background-timer-throttling',
         '--disable-extensions', '--disable-software-rasterizer',
+        '--disk-cache-dir=/tmp/chrome-cache', '--user-data-dir=/tmp/chrome-profile',
       ],
     });
 
     const page = await browser.newPage();
 
     const baseUrl = scraperConfig.baseUrl;
+    console.log(`FETCHING: ${baseUrl}/${targetSlug}`);
+    
     await page.goto(`${baseUrl}/${targetSlug}`, {
       waitUntil: 'networkidle0',
+      timeout: 60_000,
     })
     let html = await page.content();
     html = html.replace(
@@ -58,7 +62,10 @@ const fetchPageContent = async (slug) => {
  */
 const webScrap = async (slug, postJobAction = 'store') => {
   try {
+    console.log('Executing web scraping job...');
+
     const html = await fetchPageContent(slug);
+    if (!html) return null;
 
     const sections = await pageSectionScrap(html);
 
@@ -187,7 +194,7 @@ const updateScrapedData = async (slug, htmlContent, sections) => {
   try {
     const NOW = new Date();
 
-    // Step 1: Update pages.full_code
+    // Update pages.full_code
     const updatedPage = await pool.query(`
       UPDATE pages SET
         full_code = $2,
@@ -198,8 +205,9 @@ const updateScrapedData = async (slug, htmlContent, sections) => {
 
     const pageId = updatedPage.rows[0].id;
 
-    // Step 2: Update existing `page_sections`
+    // Update existing `page_sections`
     const updatedPageSections = [];
+    const stagedPageSections = [];
     await Promise.all(
       sections.map(async (section) => {
         const res = await pool.query(`
@@ -220,37 +228,40 @@ const updateScrapedData = async (slug, htmlContent, sections) => {
         
         if (res.rows.length > 0) {
           updatedPageSections.push(...res.rows);
+        } else {
+          stagedPageSections.push({
+            page_id: pageId,
+            section_key: section.section_key,
+            content: section.content,
+            updated_at: NOW,
+          });
         }
       })
     );
 
-    // Step 3: Insert new `page_sections` if they don’t exist
-    const newPageSections = await pool.query(`
-      INSERT INTO page_sections (page_id, section_key, content, updated_at)
-      SELECT $1, unnest($2::text[]), unnest($3::text[]), unnest($4::timestamp[])
-      WHERE NOT EXISTS (
-        SELECT 1 FROM page_sections 
-        WHERE page_sections.page_id = $1 
-        AND page_sections.section_key = ANY($2)
-      )
-      RETURNING 
-        page_sections.page_id AS page_id,
-        (SELECT slug FROM pages WHERE id = page_sections.page_id) AS page_slug,
-        (SELECT title FROM pages WHERE id = page_sections.page_id) AS page_title,
-        page_sections.section_key AS sections_section_key,
-        page_sections.content AS sections_content,
-        page_sections.created_at AS sections_created_at,
-        page_sections.updated_at AS sections_updated_at
-    `, [
-        pageId,
-        sections.map((s) => s.section_key),
-        sections.map((s) => s.content),
-        sections.map(() => NOW),
-      ],
-    );
+    // Insert new `page_sections` values if exist
+    if (stagedPageSections.length > 0) {
+      const values = stagedPageSections.map((section) => [
+        section.page_id,
+        section.section_key,
+        section.content,
+        section.updated_at,
+      ]);
 
-    if (newPageSections.rows.length > 0) {
-      updatedPageSections.push(...newPageSections.rows);
+      const res = await pool.query(`
+        INSERT INTO page_sections (page_id, section_key, content, updated_at)
+        VALUES ${values.map(() => '(?, ?, ?, ?)').join(', ')}
+        RETURNING
+          page_sections.page_id AS page_id,
+          (SELECT slug FROM pages WHERE id = page_sections.page_id) AS page_slug,
+          (SELECT title FROM pages WHERE id = page_sections.page_id) AS page_title,
+          page_sections.section_key AS sections_section_key,
+          page_sections.content AS sections_content,
+          page_sections.created_at AS sections_created_at,
+          page_sections.updated_at AS sections_updated_at
+      `, values.flat());
+
+      updatedPageSections.push(...res.rows);
     }
 
     return {
