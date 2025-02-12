@@ -2,59 +2,72 @@ const cheerio = require('cheerio');
 const pool = require('../config/database');
 const scraperConfig = require('../config/scraper');
 const { slugToTitle } = require('../helpers/slug');
+const browserLock = require('./browserLock');
 const puppeteer = require('puppeteer-core');
 
 const fetchPageContent = async (slug) => {
-  let browser;
-  try {
-    let targetSlug = slug;
-    if (slug === 'home') {
-      targetSlug = '';
-    }
-
-    browser = await puppeteer.launch({
-      headless: true,
-      executablePath: scraperConfig.browserExecutable,
-      args: [
-        '--no-sandbox', '--disable-setuid-sandbox', '--headless',
-        '--disable-gpu', '--disable-dev-shm-usage',
-        '--disable-background-networking', '--disable-background-timer-throttling',
-        '--disable-extensions', '--disable-software-rasterizer',
-        '--disk-cache-dir=/tmp/chrome-cache', '--user-data-dir=/tmp/chrome-profile',
-      ],
-    });
-
-    const page = await browser.newPage();
-
-    const baseUrl = scraperConfig.baseUrl;
-    console.log(`FETCHING: ${baseUrl}/${targetSlug}`);
-    
-    await page.goto(`${baseUrl}/${targetSlug}`, {
-      waitUntil: 'networkidle0',
-      timeout: 60_000,
-    })
-    let html = await page.content();
-    html = html.replace(
-      '</head>',
-      `
-        <base href="${baseUrl}" target="_blank" />
-      </head>`,
-    );
-    html = html.replace(/href="\/_next\//g, `href="${baseUrl}/_next/`);
-
-    await browser.close();
-
-    return html;
-  } catch (error) {
-    if (browser) {
-      console.log('Browser instance closed');
-      await browser.close();
-    } else {
-      console.log('No browser instance found');
-    }
-    console.error('Error while fetching page content:', error);
-    return null;
+  // Returns promise, prevents simultaneous scraping
+  if (browserLock[slug]) {
+    console.log(`Browser for '${slug}' is already scraping. Waiting...`);
+    return browserLock[slug];
   }
+
+  const scrapingPromise = (async () => {
+    let browser;
+    try {
+      let targetSlug = slug;
+      if (slug === 'home') {
+        targetSlug = '';
+      }
+  
+      browser = await puppeteer.launch({
+        headless: true,
+        executablePath: scraperConfig.browserExecutable,
+        args: [
+          '--no-sandbox',
+          '--disable-setuid-sandbox',
+          '--disable-gpu',
+          '--disable-background-networking',
+          '--disable-software-rasterizer',
+        ],
+      });
+      console.log(`Browser '${slug}' locked`);
+      browserLock[slug] = scrapingPromise;
+  
+      const page = await browser.newPage();
+      const baseUrl = scraperConfig.baseUrl;
+      console.log(`FETCHING: ${baseUrl}/${targetSlug}`);
+      
+      await page.goto(`${baseUrl}/${targetSlug}`, {
+        waitUntil: 'networkidle0',
+        timeout: 60_000,
+      })
+
+      let html = await page.content();
+      html = html.replace(
+        '</head>',
+        `
+          <base href="${baseUrl}" target="_blank" />
+        </head>`,
+      );
+      html = html.replace(/href="\/_next\//g, `href="${baseUrl}/_next/`);
+  
+      return html;
+    } catch (error) {
+      console.error('Error while fetching page content:', error);
+      return null;
+    } finally {
+      delete browserLock[slug];
+      if (browser) {
+        console.log('Browser instance closed');
+        await browser.close();
+      } else {
+        console.log('No browser instance found');
+      }
+    }
+  })();
+
+  return scrapingPromise;
 };
 
 /**
@@ -205,39 +218,50 @@ const updateScrapedData = async (slug, htmlContent, sections) => {
 
     const pageId = updatedPage.rows[0].id;
 
-    // Update existing `page_sections`
+    // Update existing `page_sections` per batch
     const updatedPageSections = [];
     const stagedPageSections = [];
-    await Promise.all(
-      sections.map(async (section) => {
-        const res = await pool.query(`
-          UPDATE page_sections ps SET
-            content = $3,
-            updated_at = $4
-          WHERE ps.page_id = $1 AND ps.section_key = $2
-          RETURNING 
-            ps.page_id AS page_id,
-            (SELECT slug FROM pages WHERE id = ps.page_id) AS page_slug,
-            (SELECT title FROM pages WHERE id = ps.page_id) AS page_title,
-            ps.section_key AS sections_section_key,
-            ps.content AS sections_content,
-            ps.created_at AS sections_created_at,
-            ps.updated_at AS sections_updated_at
-        `, [pageId, section.section_key, section.content, NOW],
-        );
-        
-        if (res.rows.length > 0) {
-          updatedPageSections.push(...res.rows);
-        } else {
-          stagedPageSections.push({
-            page_id: pageId,
-            section_key: section.section_key,
-            content: section.content,
-            updated_at: NOW,
-          });
-        }
-      })
-    );
+    const batchSize = 5;
+    for (let i = 0; i < sections.length; i += batchSize) {
+      const batch = sections.slice(i, i + batchSize);
+      await Promise.all(
+        batch.map(async (section) => {
+          try {
+            const res = await pool.query(`
+              UPDATE page_sections ps
+              SET content = $3,
+                  updated_at = $4
+              FROM pages p
+              WHERE ps.page_id = p.id
+                AND ps.page_id = $1
+                AND ps.section_key = $2
+              RETURNING 
+                ps.page_id AS page_id,
+                p.slug AS page_slug,
+                p.title AS page_title,
+                ps.section_key AS sections_section_key,
+                ps.content AS sections_content,
+                ps.created_at AS sections_created_at,
+                ps.updated_at AS sections_updated_at
+            `, [pageId, section.section_key, section.content, NOW],
+            );
+            
+            if (res.rows.length > 0) {
+              updatedPageSections.push(...res.rows);
+            } else {
+              stagedPageSections.push({
+                page_id: pageId,
+                section_key: section.section_key,
+                content: section.content,
+                updated_at: NOW,
+              });
+            }
+          } catch (error) {
+            console.error(`Error updating section ${section.section_key}:`, error);
+          }
+        })
+      );
+    }
 
     // Insert new `page_sections` values if exist
     if (stagedPageSections.length > 0) {
