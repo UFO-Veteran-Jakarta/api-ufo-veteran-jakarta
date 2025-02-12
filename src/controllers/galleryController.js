@@ -12,7 +12,8 @@ const { buildResponse } = require('../utils/buildResponseGallery');
 const logger = require('../utils/logger');
 const { sendResponse } = require('../helpers/response');
 const { createSlugDivision } = require('../helpers/slug');
-const { uploadFileGallery } = require('../utils/uploadFileGallery');
+// const { uploadFileGallery } = require('../utils/uploadFileGallery');
+const { uploadImage } = require('../utils/uploadImage');
 
 exports.addGallery = async (req, res) => {
   try {
@@ -29,9 +30,11 @@ exports.addGallery = async (req, res) => {
     }
 
     if (req.files?.image) {
-      const imagePath = await uploadFileGallery(req.files.image);
+      // const imagePath = await uploadFileGallery(req.files.image);
+      const imagePath = await uploadImage(req.files.image, 'galleries');
       if (imagePath) {
-        req.body.image = imagePath;
+        console.log(imagePath);
+        req.body.image = imagePath.secure_url;
       }
     }
 

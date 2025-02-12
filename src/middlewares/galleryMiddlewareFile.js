@@ -12,7 +12,7 @@ exports.checkFileGallery = (fieldName, isRequired = true, action = 'upload') => 
       }
 
       const file = req.files[fieldName];
-      const maxSize = 500 * 1024;
+      const maxSize = 10_000 * 1024; // 10 MB
       if (file.size > maxSize) {
         return sendResponse(
           res,
@@ -21,15 +21,15 @@ exports.checkFileGallery = (fieldName, isRequired = true, action = 'upload') => 
         );
       }
 
-      const ext = path.extname(file.name).toLowerCase();
-      if (ext !== '.webp') {
-        return sendResponse(res, 415, 'Image must be in WEBP Format.');
-      }
+      // const ext = path.extname(file.name).toLowerCase();
+      // if (ext !== '.webp') {
+      //   return sendResponse(res, 415, 'Image must be in WEBP Format.');
+      // }
 
-      const uploadDir = './public/images/galleries/';
-      if (!fs.existsSync(uploadDir)) {
-        fs.mkdirSync(uploadDir, { recursive: true });
-      }
+      // const uploadDir = './public/images/galleries/';
+      // if (!fs.existsSync(uploadDir)) {
+      //   fs.mkdirSync(uploadDir, { recursive: true });
+      // }
 
       next();
     } catch (error) {
