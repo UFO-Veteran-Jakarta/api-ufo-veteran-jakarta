@@ -27,6 +27,13 @@ router.get(
   positionController.getPositionById,
 );
 
+router.put( // Backwards compatibility
+  '/:id',
+  authentication(),
+  updateValidationRules(),
+  validate,
+  positionController.updatePositionById,
+);
 router.patch(
   '/:id',
   authentication(),

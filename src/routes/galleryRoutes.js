@@ -20,6 +20,12 @@ router.post(
   fieldValidationRules({ fields }),
   galleryController.addGallery,
 );
+router.put( // Backwards compatibility
+  '/:slug',
+  authentication(),
+  fieldValidationRules({ fields, areRequired: false }),
+  galleryController.updateGalleryBySlug,
+);
 router.patch(
   '/:slug',
   authentication(),

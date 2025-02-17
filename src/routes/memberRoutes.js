@@ -31,6 +31,14 @@ router.post(
   memberController.addMember,
 );
 
+router.put( // Backwards compatibility
+  '/:id',
+  authentication(),
+  checkFileMember('image', false, 'update'),
+  updateMemberValidationRules(),
+  validate,
+  memberController.updateMemberById,
+);
 router.patch(
   '/:id',
   authentication(),
