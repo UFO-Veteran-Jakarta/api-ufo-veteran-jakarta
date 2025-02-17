@@ -25,6 +25,13 @@ router.get(
   categoriesController.getCategoriesById,
 );
 
+router.put( // Backwards compatibility
+  '/:id',
+  authentication(),
+  updateValidationRules(),
+  validate,
+  categoriesController.updateCategoriesById,
+);
 router.patch(
   '/:id',
   authentication(),

@@ -26,6 +26,14 @@ router.post(
   checkFileDivision('image'),
   divisionController.addDivision,
 );
+router.put( // Backwards compatibility
+  '/:slug',
+  authentication(),
+  checkFileDivision('image', false, 'update'),
+  updateDivisionValidationRules(),
+  validate,
+  divisionController.updateDivisionBySlug,
+);
 router.patch(
   '/:slug',
   authentication(),

@@ -1,11 +1,7 @@
 const express = require('express');
-const {
-  postGalleryValidationRules,
-  updateGalleryValidationRules,
-  validate,
-} = require('../validators/galleryValidator');
+const fieldValidationRules = require('../utils/fieldValidator');
+const fields = require('../validators/galleryValidator');
 const { authentication } = require('../middlewares/authMiddleware');
-const { checkFileGallery } = require('../middlewares/galleryMiddlewareFile');
 const galleryController = require('../controllers/galleryController');
 
 const router = express.Router();
@@ -21,17 +17,19 @@ router.get('/:slug', galleryController.getGalleryBySlug);
 router.post(
   '/',
   authentication(),
-  postGalleryValidationRules(),
-  validate,
-  checkFileGallery('image'),
+  fieldValidationRules({ fields }),
   galleryController.addGallery,
+);
+router.put( // Backwards compatibility
+  '/:slug',
+  authentication(),
+  fieldValidationRules({ fields, areRequired: false }),
+  galleryController.updateGalleryBySlug,
 );
 router.patch(
   '/:slug',
   authentication(),
-  checkFileGallery('image', false, 'update'),
-  updateGalleryValidationRules(),
-  validate,
+  fieldValidationRules({ fields, areRequired: false }),
   galleryController.updateGalleryBySlug,
 );
 router.delete('/:slug', authentication(), galleryController.deleteGalleryBySlug);

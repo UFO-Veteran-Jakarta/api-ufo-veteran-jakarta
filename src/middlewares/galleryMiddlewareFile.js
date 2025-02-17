@@ -1,5 +1,5 @@
-const path = require('path');
-const fs = require('fs');
+// const path = require('path');
+// const fs = require('fs');
 const { sendResponse } = require('../helpers/response');
 
 exports.checkFileGallery = (fieldName, isRequired = true, action = 'upload') => {

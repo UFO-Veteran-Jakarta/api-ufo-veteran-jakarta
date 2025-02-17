@@ -78,3 +78,40 @@ exports.slugToTitle = (slug) => {
     .map(word => word.charAt(0).toUpperCase() + word.slice(1))
     .join(' ');
 };
+
+/**
+ * Creates a unique slug in reference to data stored in database.
+ * 
+ * @param {*} title 
+ * @param {*} checkSlugExistsInDb 
+ * @param {*} options 
+ * @returns 
+ */
+exports.createUniqueSlug = async (
+  title,
+  checkSlugExistsInDb,
+  options = {},
+) => {
+  try {
+    // Generates a clean title string
+    const cleanedTitle = generateCleanTitle(title);
+
+    const baseSlug = slugify(cleanedTitle, {
+      lower: true,
+      strict: true,
+      trim: true,
+      ...options,
+    });
+
+    if (!await checkSlugExistsInDb(baseSlug)) {
+      // If slug does not exists in database, then
+      return baseSlug;
+    }
+
+    const uniqueCode = crypto.randomBytes(4).toString('hex').substring(0, 8);
+
+    return `${baseSlug}-${uniqueCode}`;
+  } catch (error) {
+    throw new Error(`Failed to generate unique slug: ${error.message}`);
+  }
+};

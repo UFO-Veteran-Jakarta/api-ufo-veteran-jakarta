@@ -4,24 +4,15 @@ const {
   getGalleryBySlug,
   updateGalleryBySlug,
   deleteGalleryBySlug,
-  checkSlugExistsInDb,
-  stageDataUpdateGalleryBySlug,
 } = require('../services/galleryService');
 const { getCategoryGalleryById } = require('../services/categoryGalleryService');
-const { buildResponse } = require('../utils/buildResponseGallery');
+const buildUpdateResponse = require('../utils/updateResponseBuilder');
 const logger = require('../utils/logger');
 const { sendResponse } = require('../helpers/response');
-const { createSlugDivision } = require('../helpers/slug');
-// const { uploadFileGallery } = require('../utils/uploadFileGallery');
-const { uploadImage } = require('../utils/uploadImage');
+const fields = require('../validators/galleryValidator');
 
 exports.addGallery = async (req, res) => {
   try {
-    req.body.slug = await createSlugDivision(
-      req.body.title,
-      checkSlugExistsInDb,
-    );
-
     const { category_galleries_id } = req.body;
 
     const categoryGallery = await getCategoryGalleryById(category_galleries_id);
@@ -29,16 +20,7 @@ exports.addGallery = async (req, res) => {
       return sendResponse(res, 404, 'Category gallery not found');
     }
 
-    if (req.files?.image) {
-      // const imagePath = await uploadFileGallery(req.files.image);
-      const imagePath = await uploadImage(req.files.image, 'galleries');
-      if (imagePath) {
-        console.log(imagePath);
-        req.body.image = imagePath.secure_url;
-      }
-    }
-
-    const result = await addGallery(req.body);
+    const result = await addGallery(req);
 
     logger.info('Add Success: Success Add Gallery');
     return sendResponse(res, 201, 'Successfully insert gallery data', result);
@@ -91,35 +73,33 @@ exports.getGalleryBySlug = async (req, res) => {
 exports.updateGalleryBySlug = async (req, res) => {
   try {
     const { slug } = req.params;
-    const oldData = await getGalleryBySlug(slug);
 
     // Checks the old data existence
+    const oldData = await getGalleryBySlug(slug);
     if (!oldData) {
       return sendResponse(res, 404, 'Gallery not found');
     }
 
     const { category_galleries_id } = req.body;
-    if (category_galleries_id) {
-      const categoryGallery = await getCategoryGalleryById(category_galleries_id);
-      
-      if (!categoryGallery) {
-        return sendResponse(res, 404, 'Category gallery not found');
-      }
+    
+    const categoryGallery = await getCategoryGalleryById(category_galleries_id);
+    
+    if (!categoryGallery) {
+      return sendResponse(res, 404, 'Category gallery not found');
     }
 
-    // Stage the update data payload before inserted into database
-    let updateData = await stageDataUpdateGalleryBySlug(req);
-    updateData = { ...updateData, ...req.body };
-
     // Update the data
-    const updatedGallery = await updateGalleryBySlug(slug, oldData, updateData);
-
-    // Build the response
-    const [responseMessage, responseData] = await buildResponse(
-      oldData,
-      updateData,
-      updatedGallery,
+    const [updatedFields, updatedData] = await updateGalleryBySlug(
+      slug, oldData, req,
     );
+
+    const [responseMessage, responseData] = await buildUpdateResponse({
+      fields,
+      resource: 'gallery',
+      oldData,
+      updatedFields,
+      updatedData,
+    });
 
     return sendResponse(res, 200, responseMessage, responseData);
   } catch (error) {

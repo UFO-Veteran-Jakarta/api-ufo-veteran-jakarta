@@ -9,11 +9,12 @@ const {
   formatGallery,
   formatGalleries
 } = require('../collections/galleryCollection');
-const { createSlugDivision } = require('../helpers/slug');
+const { createUniqueSlug } = require('../helpers/slug');
 const {
-  getUploadFilepath,
-  updateFileGallery,
-} = require('../utils/uploadFileGallery');
+  uploadImage,
+  updateImage,
+  deleteImage,
+} = require('../utils/cloudImage');
 
 /**
  * Checks if 'slug' index exists in the database.
@@ -26,7 +27,6 @@ const checkSlugExistsInDb = async (slug) => {
   const gallery = await getGalleryBySlug(slug, useCache);
   return !! gallery;
 };
-exports.checkSlugExistsInDb = checkSlugExistsInDb;
 
 /**
  * Add new gallery into the database.
@@ -34,9 +34,21 @@ exports.checkSlugExistsInDb = checkSlugExistsInDb;
  * @param {*} data
  * @returns
  */
-exports.addGallery = async (data) => {
+exports.addGallery = async (req) => {
   try {
-    const result = await addGallery(data);
+    req.body.slug = await createUniqueSlug(
+      req.body.title,
+      checkSlugExistsInDb,
+    );
+
+    if (req.files?.image) {
+      const imagePath = await uploadImage(req.files.image, 'galleries');
+      if (imagePath) {
+        req.body.image = imagePath.secure_url;
+      }
+    }
+
+    const result = await addGallery(req.body);
 
     const formattedResult = formatGallery(result);
 
@@ -92,20 +104,27 @@ exports.getGalleryBySlug = async (slug) => {
  * @param {*} updateData
  * @returns
  */
-exports.updateGalleryBySlug = async (slug, oldData, updateData) => {
+exports.updateGalleryBySlug = async (slug, oldData, req) => {
   try {
-    // Exclude imageData from updateData payload
-    const { imageData, ...newData } = updateData;
-
-    // Update data in the database
-    const result = await updateGalleryBySlug(slug, newData);
-
-    // Update image file if propagated
-    if (updateData?.image) {
-      await updateFileGallery(oldData.image, updateData.image, imageData);
+    if (req.body?.title) {
+      req.body.slug = await createUniqueSlug(
+        req.body.title,
+        checkSlugExistsInDb,
+      );
     }
 
-    return result;
+    // Update image file if propagated
+    if (req.files?.image) {
+      const imagePath = await updateImage(oldData.image, req.files.image, 'galleries');
+      if (imagePath) {
+        req.body.image = imagePath;
+      }
+    }
+
+    // Update data in the database
+    const result = await updateGalleryBySlug(slug, req.body);
+
+    return [req.body, result];
   } catch (error) {
     console.error('Error updating gallery by slug:', error);
     throw error;
@@ -121,39 +140,12 @@ exports.updateGalleryBySlug = async (slug, oldData, updateData) => {
 exports.deleteGalleryBySlug = async (slug) => {
   try {
     const result = await deleteGalleryBySlug(slug);
+
+    await deleteImage(result.image, 'galleries');
+
     return result;
   } catch (error) {
     console.error('Error deleting gallery by slug:', error);
     throw error;
   }
-};
-
-/*
- * @returns Array[boolean, Object]
- *
- * Stages the payload data before executing the next action.
- * On each payload objects, this function will return the
- * appropriate string value back to the data payload.
- */
-exports.stageDataUpdateGalleryBySlug = async (req) => {
-  // Data payload
-  const updateData = {};
-
-  if (req.body.title) {
-    updateData.title = req.body.title;
-    updateData.slug = await createSlugDivision(
-      req.body.title,
-      checkSlugExistsInDb,
-    );
-  }
-
-  if (req.files?.image) {
-    const imagePath = await getUploadFilepath(req.files.image);
-    if (imagePath) {
-      updateData.image = imagePath;
-      updateData.imageData = req.files.image?.data;
-    }
-  }
-
-  return updateData;
 };

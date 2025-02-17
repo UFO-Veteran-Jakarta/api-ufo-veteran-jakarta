@@ -23,6 +23,13 @@ router.post(
   // validate,
   categoryGalleryController.addCategoryGallery,
 );
+router.put( // Backwards compatibility
+  '/:id',
+  authentication(),
+  // updateDivisionValidationRules(),
+  // validate,
+  categoryGalleryController.updateCategoryGalleryById,
+);
 router.patch(
   '/:id',
   authentication(),
