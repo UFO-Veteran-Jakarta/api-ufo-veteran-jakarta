@@ -121,8 +121,9 @@ exports.updateGalleryBySlug = async (slug, oldData, req) => {
       }
     }
 
-    // Update data in the database
-    const result = await updateGalleryBySlug(slug, req.body);
+    // Update data in the database, only if payload is present
+    const result = Object.keys(req.body).length
+      && await updateGalleryBySlug(slug, req.body);
 
     return [req.body, result];
   } catch (error) {
@@ -143,7 +144,9 @@ exports.deleteGalleryBySlug = async (slug) => {
 
     await deleteImage(result.image, 'galleries');
 
-    return result;
+    const formattedResult = formatGallery(result);
+
+    return formattedResult;
   } catch (error) {
     console.error('Error deleting gallery by slug:', error);
     throw error;

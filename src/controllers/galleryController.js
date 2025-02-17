@@ -101,6 +101,7 @@ exports.updateGalleryBySlug = async (req, res) => {
       updatedData,
     });
 
+    logger.info(`Successfully Update Gallery with slug '${slug}'`);
     return sendResponse(res, 200, responseMessage, responseData);
   } catch (error) {
     console.error('Error updating gallery:', error);
