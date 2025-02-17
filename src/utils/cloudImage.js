@@ -1,3 +1,6 @@
+/**
+ * Cloud image storage management
+ */
 const cloudinary = require('../config/cloudinary');
 
 const uploadImage = async (file, folder) => {
@@ -31,10 +34,11 @@ const uploadImage = async (file, folder) => {
 
 const deleteImage = async (name) => {
   const arr = name.split('/');
-  const fi = arr.slice(arr.length - 2).join('/');
+  const publicId = arr.slice(-2).join('/').replace(/\.[^/.]+$/, '');
 
-  return cloudinary.uploader.destroy(fi, {
+  return cloudinary.uploader.destroy(publicId, {
     resource_type: 'image',
+    invalidate: true,
   });
 };
 
@@ -42,13 +46,11 @@ const updateImage = async (oldPath, newFile, folder) => {
   try {
     if (oldPath) {
       // Delete old file if it exists
-      const arr = oldPath.split('/');
-      const fi = arr.slice(arr.length - 2).join('/');
-      await cloudinary.uploader.destroy(fi, { resource_type: 'image' });
+      await deleteImage(oldPath);
     }
 
     // Upload new file
-    const uploadedFile = await uploadSingle(newFile, folder);
+    const uploadedFile = await uploadImage(newFile, folder);
     return uploadedFile.secure_url;
   } catch (error) {
     throw new Error(`Error updating file: ${error.message}`);
