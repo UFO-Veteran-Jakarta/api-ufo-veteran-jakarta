@@ -1,20 +1,21 @@
 const contentService = require('../services/contentService');
 const { sendResponse } = require('../helpers/response');
+const buildUpdateResponse = require('../utils/updateResponseBuilder');
+const fields = require('../validators/contentValidator');
 
 const logger = require('../utils/logger');
 
-exports.getAll = async (req, res) => {
+exports.getAllContents = async (req, res) => {
   try {
-    let result;
-
     if (req.query?.id) {
-      result = await contentService.getContentById(req.query.id);
+      logger.info('Get Success: Success Get Content by Id');
+      const result = await contentService.getContentById(req.query.id);
+      return sendResponse(res, 200, 'Successfully Get Content by Id', result);
     } else {
-      result = await contentService.getAll();
+      logger.info('Get Success: Success Get All Contents');
+      const result = await contentService.getAllContents();
+      return sendResponse(res, 200, 'Successfully Get All Contents', result);
     }
-
-    logger.info('Get Success: Success Get Content');
-    return sendResponse(res, 200, 'Successfully Get All Contents', result);
   } catch (error) {
     logger.error('Get Error: Failed Get Content');
     return sendResponse(res, 500, error.message);
@@ -26,8 +27,8 @@ exports.getContentById = async (req, res) => {
     const { id } = req.params;
     const result = await contentService.getContentById(id);
 
-    logger.info('Get Success: Success Get Content');
-    return sendResponse(res, 200, 'Successfully Get Content', result);
+    logger.info('Get Success: Success Get Content by Id');
+    return sendResponse(res, 200, 'Successfully Get Content by Id', result);
   } catch (error) {
     logger.error('Get Error: Failed Get Content');
     return sendResponse(res, 500, error.message);
@@ -36,7 +37,7 @@ exports.getContentById = async (req, res) => {
 
 exports.addContent = async (req, res) => {
   try {
-    const result = await contentService.addContent(req.body);
+    const result = await contentService.addContent(req);
 
     logger.info('Add Success: Success Add Content');
     return sendResponse(res, 200, 'Successfully Add New Content', result);
@@ -46,75 +47,56 @@ exports.addContent = async (req, res) => {
   }
 };
 
-exports.updateContent = async (req, res) => {
-  try {
-    if (!req.query?.id) {
-      return sendResponse(res, 404, 'Content Not Found');
-    }
-
-    const findContent = await contentService.getContentById(req.query.id);
-    if (!findContent.length) {
-      return sendResponse(res, 404, 'Content Not Found');
-    }
-    const result = await contentService.updateContent(
-      req.query.id,
-      req.body.link,
-    );
-
-    logger.info('Update Success: Success Updated Content');
-    return sendResponse(res, 200, 'Successfully Update Content', result);
-  } catch (error) {
-    logger.error('Update Error: Failed Update Content');
-    return sendResponse(res, 500, error.message);
-  }
-};
-
 exports.updateContentById = async (req, res) => {
   try {
-    const { id } = req.params;
+    const id = req.query?.id || req.params?.id;
 
-    const existingContent = await contentService.getContentByIdParams(id);
-    if (!existingContent) {
+    const oldData = await contentService.getContentById(id);
+    if (!oldData) {
       return sendResponse(res, 404, 'Content not found');
     }
 
-    const oldLink = existingContent.link;
+    const [updatedFields, updatedData] = await contentService.updateContentById(
+      id, oldData, req,
+    );
+    if (!updatedData) {
+      return sendResponse(res, 400, 'Invalid payload');
+    }
 
-    const updatedContent = await contentService.updateContentById(id, req.body);
-
-    const response = {
-      id: updatedContent.id,
-      old_link: oldLink,
-      new_link: updatedContent.link,
-      created_at: updatedContent.created_at,
-      updated_at: updatedContent.updated_at,
-      deleted_at: updatedContent.deleted_at,
-    };
+    const [responseMessage, responseData] = await buildUpdateResponse({
+      fields,
+      resource: 'content',
+      oldData,
+      updatedFields,
+      updatedData,
+    });
 
     logger.info('Update Success: Successfully updated content');
-    return sendResponse(res, 200, 'Successfully Updated Content', response);
+    return sendResponse(res, 200, responseMessage, responseData);
   } catch (error) {
     logger.error('Update Error: Failed to update content');
     return sendResponse(res, 500, error.message);
   }
 };
 
-exports.deleteContent = async (req, res) => {
+exports.deleteContentById = async (req, res) => {
   try {
-    if (!req.query?.id) {
+    const id = req.query?.id || req.params?.id;
+    if (!id) {
+      return sendResponse(res, 400, 'ID required');
+    }
+
+    const findContent = await contentService.getContentById(id);
+    if (!findContent) {
       return sendResponse(res, 404, 'Content Not Found');
     }
 
-    const findContent = await contentService.getContentById(req.query.id);
-    if (!findContent.length) {
-      return sendResponse(res, 404, 'Content Not Found');
-    }
+    const deletedContent = await contentService.deleteContentById(id);
 
-    await contentService.deleteContent(req.query.id);
     logger.info('Delete Success: Success Deleted Content');
-    return sendResponse(res, 200, 'Successfully Delete Content');
-  } catch (err) {
+    return sendResponse(res, 200, 'Successfully Delete Content', deletedContent);
+  } catch (error) {
     logger.error('Delete Error: Failed Delete Content');
-    return sendResponse(res, 500, err.message);
+    return sendResponse(res, 500, error.message);
   }
 };
