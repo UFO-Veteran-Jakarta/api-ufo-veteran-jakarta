@@ -4,7 +4,7 @@ exports.seed = async () => {
   // Users seeder
   await pool.query(`
     INSERT INTO users (username, password, created_at, updated_at, deleted_at)
-    VALUES ('john_doe', 'securepassword123', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL)
+    VALUES ('john_doe', 'securepassword123', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL);
   `);
 
   // Contents seeder
@@ -15,7 +15,7 @@ exports.seed = async () => {
     ('https://example.com/content2', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
     ('https://example.com/content3', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
     ('https://example.com/content4', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
-    ('https://example.com/content5', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL)
+    ('https://example.com/content5', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL);
   `);
 
   // Events seeder
@@ -201,13 +201,24 @@ exports.seed = async () => {
   await pool.query(`
     INSERT INTO pages (slug, title, full_code, created_at, updated_at)
     VALUES
-    ('home-page', 'Home Page', '<html><div id="some-key">Some Content</div><div id="another-key">Another Content</div></html>', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ('home-page', 'Home Page', '<html><div id="some-key">Some Content</div><div id="another-key">Another Content</div></html>', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
   `);
 
   await pool.query(`
     INSERT INTO page_sections (page_id, section_key, content, created_at, updated_at)
     VALUES
     (1, 'some-key', 'Some Content', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-    (1, 'another-key', 'Another Content', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    (1, 'another-key', 'Another Content', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+  `);
+
+  await pool.query(`
+    INSERT INTO founder_members (name, image, created_at, updated_at, deleted_at)
+    VALUES 
+    ('John Doe', '/images/founder-members/Adhi.png', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    ('Jane Smith', '/images/founder-members/Adhi.png', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    ('Alice Johnson', '/images/founder-members/Adhi.png', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    ('Bob Williams', '/images/founder-members/Adhi.png', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    ('Charlie Brown', '/images/founder-members/Adhi.png', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    ('Adhi Ramadhan', '/images/founder-members/Adhi.png',  CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL);
   `);
 };

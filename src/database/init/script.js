@@ -196,6 +196,18 @@ exports.createTable = async () => {
       updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )
   `);
+  await pool.query(
+    `
+        CREATE TABLE IF NOT EXISTS founder_members(
+          id SERIAL PRIMARY KEY,
+          name varchar(255) NOT NULL,
+          image text,
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          updated_at TIMESTAMP,
+          deleted_at TIMESTAMP
+        )
+        `,
+  );
 };
 
 exports.dropTable = async () => {
@@ -215,4 +227,5 @@ exports.dropTable = async () => {
   await pool.query('DROP TABLE IF EXISTS categories');
   await pool.query('DROP TABLE IF EXISTS pages');
   await pool.query('DROP TABLE IF EXISTS page_sections');
+  await pool.query('DROP TABLE IF EXISTS founder_members');
 };
