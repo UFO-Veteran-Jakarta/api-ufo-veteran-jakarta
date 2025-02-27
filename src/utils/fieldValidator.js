@@ -25,6 +25,9 @@ const fieldValidationRules = ({ fields, areRequired = true }) => {
     ...fields.map(field => {
       let validationChain = check(field.name);
 
+      // Flag to know that a field is optional
+      const isFieldOptional = field.optional || !areRequired;
+
       // Apply validation based on the type
       switch (field.type) {
         case 'integer':
@@ -60,13 +63,15 @@ const fieldValidationRules = ({ fields, areRequired = true }) => {
         case 'image':
           validationChain = validationChain
             .custom((value, { req }) => {
-              // If the field is optional and no file is provided, skip the validation
-              if (field.optional && (!req.files || !req.files[field.name])) {
+              const imageNotSpecified = !req.files || !req.files[field.name];
+
+              // Skip-optional and not specified image
+              if (isFieldOptional && imageNotSpecified) {
                 return true;
               }
 
               // Ensure the image exists in the request
-              if (!req.files || !req.files[field.name]) {
+              if (imageNotSpecified) {
                 throw new Error(`${field.name} is required.`);
               }
 
@@ -92,7 +97,7 @@ const fieldValidationRules = ({ fields, areRequired = true }) => {
       }
 
       // Handle optional fields
-      if (field.optional || !areRequired) {
+      if (isFieldOptional && field.type !== 'image') {
         validationChain = validationChain.optional();
       }
 
