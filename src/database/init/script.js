@@ -21,6 +21,8 @@ exports.createTable = async () => {
     CREATE TABLE IF NOT EXISTS contents (
       id SERIAL PRIMARY KEY,
       link VARCHAR(255) NOT NULL,
+      caption TEXT NOT NULL,
+      image VARCHAR(255) NOT NULL,
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       deleted_at TIMESTAMP

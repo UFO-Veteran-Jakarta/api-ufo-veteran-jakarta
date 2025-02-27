@@ -1,10 +1,8 @@
 const express = require('express');
 const contentController = require('../controllers/contentController');
 
-const {
-  postValidationRules,
-  validate,
-} = require('../validators/contentValidator');
+const fieldValidationRules = require('../utils/fieldValidator');
+const fields = require('../validators/contentValidator');
 const { authentication } = require('../middlewares/authMiddleware');
 
 const router = express.Router();
@@ -12,42 +10,39 @@ const router = express.Router();
 router.post(
   '/',
   authentication(),
-  postValidationRules(),
-  validate,
+  fieldValidationRules({ fields }),
   contentController.addContent,
 );
 
-router.get('/', contentController.getAll);
+router.get('/', contentController.getAllContents);
 
 router.get(
   '/:id',
   contentController.getContentById,
 );
 
-router.put(
+router.put( // Backwards compatibility
   '/',
   authentication(),
-  postValidationRules(),
-  validate,
-  contentController.updateContent,
+  fieldValidationRules({ fields, areRequired: false }),
+  contentController.updateContentById,
 );
-
 router.patch(
   '/:id',
   authentication(),
-  postValidationRules(),
-  validate,
+  fieldValidationRules({ fields, areRequired: false }),
   contentController.updateContentById,
 );
 
-router.delete('/', authentication(), contentController.deleteContent);
-
-router.use((err, req, res, next) => {
-  if (err.name === 'UnauthorizedError') {
-    res.status(401).send('Unauthorized');
-  } else {
-    next(err);
-  }
-});
+router.delete( // Backwards compatibility
+  '/',
+  authentication(),
+  contentController.deleteContentById,
+);
+router.delete(
+  '/:id',
+  authentication(),
+  contentController.deleteContentById,
+);
 
 module.exports = router;
