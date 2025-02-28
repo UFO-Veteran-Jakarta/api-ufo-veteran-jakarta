@@ -277,12 +277,14 @@ const updateScrapedData = async (slug, htmlContent, sections) => {
         VALUES ${values.map(() => '(?, ?, ?, ?)').join(', ')}
         RETURNING
           page_sections.page_id AS page_id,
-          (SELECT slug FROM pages WHERE id = page_sections.page_id) AS page_slug,
-          (SELECT title FROM pages WHERE id = page_sections.page_id) AS page_title,
+          pages.slug AS page_slug,
+          pages.title AS page_title,
           page_sections.section_key AS sections_section_key,
           page_sections.content AS sections_content,
           page_sections.created_at AS sections_created_at,
           page_sections.updated_at AS sections_updated_at
+        FROM pages
+        WHERE pages.id = page_sections.page_id
       `, values.flat());
 
       updatedPageSections.push(...res.rows);
