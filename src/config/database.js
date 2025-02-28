@@ -9,14 +9,16 @@ const pool = new Pool({
   ssl: process.env.DATABASE_SSL == 'true' ? { rejectUnauthorized: false } : false,
 });
 
-pool.on('connect', async (client) => {
+const setDefaultSchema = async (client) => {
   try {
     const searchPath = 'SET search_path TO ' + process.env.DATABASE_SCHEMA;
     await client.query(searchPath);
   } catch (error) {
     console.error('Error setting search path:', error);
   }
-});
+}
+
+pool.on('connect', async client => await setDefaultSchema(client));
 
 // Run a single query inside a transaction. Retries if failed
 pool.runTransaction = async (query, values = [], retries = 3, delay = 1000) => {
@@ -29,6 +31,9 @@ pool.runTransaction = async (query, values = [], retries = 3, delay = 1000) => {
     try {
       // Start a new transaction
       await client.query('BEGIN');
+
+      // Set default schema
+      await setDefaultSchema(client);
 
       let result;
 
