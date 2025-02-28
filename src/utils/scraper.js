@@ -125,7 +125,13 @@ const htmlContentUpdate = async (htmlContent, sections) => {
     const $ = cheerio.load(htmlContent);
 
     sections.forEach(({ section_key, content }) => {
-      $(`#${section_key}`).html(content);
+      // $(`#${section_key}`).html(content);
+      const element = $(`[id='${section_key}']`);
+
+      if (element.length) {
+
+        element.html(content);
+      }
     });
 
     return $.html();
@@ -208,7 +214,7 @@ const updateScrapedData = async (slug, htmlContent, sections) => {
     const NOW = new Date();
 
     // Update pages.full_code
-    const updatedPage = await pool.query(`
+    const updatedPage = await pool.runTransaction(`
       UPDATE pages SET
         full_code = $2,
         updated_at = $3
