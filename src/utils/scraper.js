@@ -125,7 +125,13 @@ const htmlContentUpdate = async (htmlContent, sections) => {
     const $ = cheerio.load(htmlContent);
 
     sections.forEach(({ section_key, content }) => {
-      $(`#${section_key}`).html(content);
+      // $(`#${section_key}`).html(content);
+      const element = $(`[id='${section_key}']`);
+
+      if (element.length) {
+
+        element.html(content);
+      }
     });
 
     return $.html();
@@ -166,7 +172,7 @@ const storeScrapedData = async (slug, htmlContent, sections) => {
     const title = slugToTitle(slug);
 
     // Step 1: Insert into `pages` and get the `id`
-    const pageResult = await pool.query(
+    const pageResult = await pool.runTransaction(
       `
       INSERT INTO pages (slug, title, full_code, updated_at)
       VALUES ($1, $2, $3, $4)
@@ -179,7 +185,7 @@ const storeScrapedData = async (slug, htmlContent, sections) => {
 
     // Step 2: Bulk insert into `page_sections` using `UNNEST`
     if (sections.length > 0) {
-      await pool.query(
+      await pool.runTransaction(
         `
         INSERT INTO page_sections (page_id, section_key, content, updated_at)
         SELECT $1, unnest($2::text[]), unnest($3::text[]), unnest($4::timestamp[])
@@ -208,7 +214,7 @@ const updateScrapedData = async (slug, htmlContent, sections) => {
     const NOW = new Date();
 
     // Update pages.full_code
-    const updatedPage = await pool.query(`
+    const updatedPage = await pool.runTransaction(`
       UPDATE pages SET
         full_code = $2,
         updated_at = $3
@@ -227,7 +233,7 @@ const updateScrapedData = async (slug, htmlContent, sections) => {
       await Promise.all(
         batch.map(async (section) => {
           try {
-            const res = await pool.query(`
+            const res = await pool.runTransaction(`
               UPDATE page_sections ps
               SET content = $3,
                   updated_at = $4
@@ -272,17 +278,19 @@ const updateScrapedData = async (slug, htmlContent, sections) => {
         section.updated_at,
       ]);
 
-      const res = await pool.query(`
+      const res = await pool.runTransaction(`
         INSERT INTO page_sections (page_id, section_key, content, updated_at)
         VALUES ${values.map(() => '(?, ?, ?, ?)').join(', ')}
         RETURNING
           page_sections.page_id AS page_id,
-          (SELECT slug FROM pages WHERE id = page_sections.page_id) AS page_slug,
-          (SELECT title FROM pages WHERE id = page_sections.page_id) AS page_title,
+          pages.slug AS page_slug,
+          pages.title AS page_title,
           page_sections.section_key AS sections_section_key,
           page_sections.content AS sections_content,
           page_sections.created_at AS sections_created_at,
           page_sections.updated_at AS sections_updated_at
+        FROM pages
+        WHERE pages.id = page_sections.page_id
       `, values.flat());
 
       updatedPageSections.push(...res.rows);

@@ -18,6 +18,7 @@ const pageRoutes = require('./pageRoutes');
 const founderMemberRoutes = require('./founderMemberRoutes');
 const chairmanHistoriesRoutes = require('./chairmanHistoryRoutes');
 
+
 const router = express.Router();
 
 router.use('/', authRoutes);

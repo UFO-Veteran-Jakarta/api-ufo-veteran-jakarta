@@ -4,18 +4,18 @@ exports.seed = async () => {
   // Users seeder
   await pool.query(`
     INSERT INTO users (username, password, created_at, updated_at, deleted_at)
-    VALUES ('john_doe', 'securepassword123', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL)
+    VALUES ('john_doe', 'securepassword123', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL);
   `);
 
   // Contents seeder
   await pool.query(`
-    INSERT INTO contents (link, created_at, updated_at, deleted_at)
+    INSERT INTO contents (link, caption, image, created_at, updated_at, deleted_at)
     VALUES 
-    ('https://example.com/content1', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
-    ('https://example.com/content2', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
-    ('https://example.com/content3', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
-    ('https://example.com/content4', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
-    ('https://example.com/content5', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL)
+    ('https://example.com/content1', 'Content #1', '/images/contents/content1.jpg', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    ('https://example.com/content2', 'Content #2', '/images/contents/content2.jpg', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    ('https://example.com/content3', 'Content #3', '/images/contents/content3.jpg', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    ('https://example.com/content4', 'Content #4', '/images/contents/content4.jpg', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    ('https://example.com/content5', 'Content #5', '/images/contents/content5.jpg', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL)
   `);
 
   // Events seeder
@@ -27,7 +27,7 @@ exports.seed = async () => {
     )
     VALUES 
     (
-      'tech-conference-2024', '/images/tech-conf.jpg', '/images/tech-conf-land.jpg',
+      'tech-conference-2024', '/images/events/tech-conf.jpg', '/images/events/tech-conf-land.jpg',
       'Tech Conference 2024', '2024-06-01', '2024-06-03', '09:00:00', '17:00:00',
       '2024-05-01', '2024-05-30', '00:00:00', '23:59:59',
       'Join us for the biggest tech conference of the year!',
@@ -35,7 +35,7 @@ exports.seed = async () => {
       'Jakarta Convention Center'
     ),
     (
-      'workshop-ai', '/images/ai-workshop.jpg', '/images/ai-workshop-land.jpg',
+      'workshop-ai', '/images/events/ai-workshop.jpg', '/images/events/ai-workshop-land.jpg',
       'AI Workshop', '2024-07-15', '2024-07-15', '13:00:00', '16:00:00',
       '2024-06-15', '2024-07-10', '00:00:00', '23:59:59',
       'Hands-on workshop about artificial intelligence',
@@ -43,7 +43,7 @@ exports.seed = async () => {
       'Online via Zoom'
     ),
     (
-      'hackathon-2024', '/images/hackathon.jpg', '/images/hackathon-land.jpg',
+      'hackathon-2024', '/images/events/hackathon.jpg', '/images/events/hackathon-land.jpg',
       'Annual Hackathon', '2024-08-20', '2024-08-22', '08:00:00', '20:00:00',
       '2024-07-20', '2024-08-15', '00:00:00', '23:59:59',
       '48-hour coding challenge for innovative solutions',
@@ -51,7 +51,7 @@ exports.seed = async () => {
       'Innovative Hub Jakarta'
     ),
     (
-      'web-dev-bootcamp', '/images/webdev.jpg', '/images/webdev-land.jpg',
+      'web-dev-bootcamp', '/images/events/webdev.jpg', '/images/events/webdev-land.jpg',
       'Web Development Bootcamp', '2024-09-10', '2024-09-12', '09:00:00', '16:00:00',
       '2024-08-10', '2024-09-05', '00:00:00', '23:59:59',
       'Intensive 3-day web development bootcamp',
@@ -59,7 +59,7 @@ exports.seed = async () => {
       'Digital Campus Jakarta'
     ),
     (
-      'tech-startup-summit', '/images/startup.jpg', '/images/startup-land.jpg',
+      'tech-startup-summit', '/images/events/startup.jpg', '/images/events/startup-land.jpg',
       'Tech Startup Summit', '2024-10-05', '2024-10-06', '10:00:00', '18:00:00',
       '2024-09-05', '2024-10-01', '00:00:00', '23:59:59',
       'Connect with investors and fellow entrepreneurs',
@@ -201,13 +201,24 @@ exports.seed = async () => {
   await pool.query(`
     INSERT INTO pages (slug, title, full_code, created_at, updated_at)
     VALUES
-    ('home-page', 'Home Page', '<html><div id="some-key">Some Content</div><div id="another-key">Another Content</div></html>', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ('home-page', 'Home Page', '<html><div id="some-key">Some Content</div><div id="another-key">Another Content</div></html>', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
   `);
 
   await pool.query(`
     INSERT INTO page_sections (page_id, section_key, content, created_at, updated_at)
     VALUES
     (1, 'some-key', 'Some Content', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-    (1, 'another-key', 'Another Content', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    (1, 'another-key', 'Another Content', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+  `);
+
+  await pool.query(`
+    INSERT INTO founder_members (name, image, created_at, updated_at, deleted_at)
+    VALUES 
+    ('John Doe', '/images/founder-members/Adhi.png', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    ('Jane Smith', '/images/founder-members/Adhi.png', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    ('Alice Johnson', '/images/founder-members/Adhi.png', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    ('Bob Williams', '/images/founder-members/Adhi.png', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    ('Charlie Brown', '/images/founder-members/Adhi.png', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    ('Adhi Ramadhan', '/images/founder-members/Adhi.png',  CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL);
   `);
 };

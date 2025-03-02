@@ -21,6 +21,8 @@ exports.createTable = async () => {
     CREATE TABLE IF NOT EXISTS contents (
       id SERIAL PRIMARY KEY,
       link VARCHAR(255) NOT NULL,
+      caption TEXT NOT NULL,
+      image VARCHAR(255) NOT NULL,
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       deleted_at TIMESTAMP
@@ -196,18 +198,16 @@ exports.createTable = async () => {
       updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )
   `);
-  await pool.query(
-    `
-          CREATE TABLE IF NOT EXISTS founder_members(
-            id SERIAL PRIMARY KEY,
-            name varchar(255) NOT NULL,
-            image text,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            updated_at TIMESTAMP,
-            deleted_at TIMESTAMP
-          )
-          `,
-  );
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS founder_members(
+      id SERIAL PRIMARY KEY,
+      name varchar(255) NOT NULL,
+      image text,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP,
+      deleted_at TIMESTAMP
+    )
+    `);
   await pool.query(`
     CREATE TABLE IF NOT EXISTS chairman_histories(
       id SERIAL PRIMARY KEY,
