@@ -172,7 +172,7 @@ const storeScrapedData = async (slug, htmlContent, sections) => {
     const title = slugToTitle(slug);
 
     // Step 1: Insert into `pages` and get the `id`
-    const pageResult = await pool.query(
+    const pageResult = await pool.runTransaction(
       `
       INSERT INTO pages (slug, title, full_code, updated_at)
       VALUES ($1, $2, $3, $4)
@@ -185,7 +185,7 @@ const storeScrapedData = async (slug, htmlContent, sections) => {
 
     // Step 2: Bulk insert into `page_sections` using `UNNEST`
     if (sections.length > 0) {
-      await pool.query(
+      await pool.runTransaction(
         `
         INSERT INTO page_sections (page_id, section_key, content, updated_at)
         SELECT $1, unnest($2::text[]), unnest($3::text[]), unnest($4::timestamp[])
@@ -233,7 +233,7 @@ const updateScrapedData = async (slug, htmlContent, sections) => {
       await Promise.all(
         batch.map(async (section) => {
           try {
-            const res = await pool.query(`
+            const res = await pool.runTransaction(`
               UPDATE page_sections ps
               SET content = $3,
                   updated_at = $4
@@ -278,7 +278,7 @@ const updateScrapedData = async (slug, htmlContent, sections) => {
         section.updated_at,
       ]);
 
-      const res = await pool.query(`
+      const res = await pool.runTransaction(`
         INSERT INTO page_sections (page_id, section_key, content, updated_at)
         VALUES ${values.map(() => '(?, ?, ?, ?)').join(', ')}
         RETURNING
