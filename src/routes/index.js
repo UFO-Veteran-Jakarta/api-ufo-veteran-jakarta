@@ -16,6 +16,8 @@ const articleRoutes = require('./articleRoutes');
 const userRoutes = require('./userRoutes');
 const pageRoutes = require('./pageRoutes');
 const founderMemberRoutes = require('./founderMemberRoutes');
+const chairmanHistoriesRoutes = require('./chairmanHistoryRoutes');
+
 
 const router = express.Router();
 
@@ -36,5 +38,6 @@ router.use('/category-gallery', categoryGalleryRoutes);
 router.use('/articles', articleRoutes);
 router.use('/pages', pageRoutes);
 router.use('/founder-members', founderMemberRoutes);
+router.use('/chairmen', chairmanHistoriesRoutes);
 
 module.exports = router;
