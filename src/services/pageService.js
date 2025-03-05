@@ -15,7 +15,7 @@ exports.getPageBySlug = async (slug) => {
     } else {
       // decide cache hit or miss
       const cacheLookup = await scraper.cacheLookup(result);
-      result = cacheLookup.pages;
+      result = cacheLookup?.pages;
     }
 
     return result;
