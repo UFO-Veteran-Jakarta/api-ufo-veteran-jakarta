@@ -279,18 +279,20 @@ const updateScrapedData = async (slug, htmlContent, sections) => {
       ]);
 
       const res = await pool.runTransaction(`
-        INSERT INTO page_sections (page_id, section_key, content, updated_at)
-        VALUES ${values.map(() => '(?, ?, ?, ?)').join(', ')}
-        RETURNING
-          page_sections.page_id AS page_id,
-          pages.slug AS page_slug,
-          pages.title AS page_title,
-          page_sections.section_key AS sections_section_key,
-          page_sections.content AS sections_content,
-          page_sections.created_at AS sections_created_at,
-          page_sections.updated_at AS sections_updated_at
-        FROM pages
-        WHERE pages.id = page_sections.page_id
+        WITH inserted AS (
+          INSERT INTO page_sections (page_id, section_key, content, updated_at)
+          VALUES ${values.map(() => '(?, ?, ?, ?)').join(', ')}
+          RETURNING page_id, section_key, content, updated_at
+        )
+        SELECT
+          i.page_id,
+          i.section_key,
+          i.content,
+          i.updated_at,
+          p.slug AS page_slug,
+          p.title AS page_title
+        FROM inserted i
+        JOIN pages p ON p.id = i.page_id
       `, values.flat());
 
       updatedPageSections.push(...res.rows);
