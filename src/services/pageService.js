@@ -41,7 +41,7 @@ exports.updatePageSectionBySlug = async (slug, data) => {
     const htmlContent = await scraper.fetchPageContent(slug);
     if (!htmlContent) return null;
 
-    const sections = data.sections;
+    const sections = data?.sections;
 
     const updatedHtml = await scraper.htmlContentUpdate(
       htmlContent, sections,
@@ -50,7 +50,7 @@ exports.updatePageSectionBySlug = async (slug, data) => {
     const updatedPage = await scraper.updateScrapedData(
       slug, updatedHtml, sections,
     );
-    const formattedResult = formatPageSections(updatedPage.pageSections);
+    const formattedResult = formatPageSections(updatedPage?.pageSections);
 
     return formattedResult;
   } catch (error) {
